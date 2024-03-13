@@ -1,4 +1,9 @@
 package com.fcst.student.RecycleRewards.repository;
 
-public interface TicketRepository {
+import com.fcst.student.RecycleRewards.model.Ticket;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TicketRepository extends JpaRepository<Ticket, Long> {
+    boolean existsByNumber(String number);
+
 }

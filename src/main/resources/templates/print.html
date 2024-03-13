@@ -6,11 +6,14 @@
 </head>
 <body>
 <div>
-    <h1>Your ticket with code YYYYYYYYY is printing now!</h1>
-    <h2>Take your ticket and register it in your profile at BRecycle app until DD/MM/YY TIME!</h2>
-    <a href="index">
-        <button>Exit</button>
-    </a>
+    <h1>Congratulations!</h1>
+    <h2>Today you recycled <span th:text="${bottlesCount}">0</span> bottles!</h2>
+    <h1>Your ticket with code <span th:text="${ticketNumber}">YYYYYYYY</span> is printing now!</h1>
+    <h2>Take your ticket and register it in your profile at BRecycle app until <span th:text="${expirationFormatted}">DD/MM/YY TIME</span>!
+    </h2>
+    <form action="/print" method="post">
+        <button type="submit">Exit</button>
+    </form>
 </div>
 </body>
 </html>
