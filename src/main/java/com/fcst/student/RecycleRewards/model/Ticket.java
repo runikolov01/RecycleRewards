@@ -12,16 +12,16 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
- //  @Column(nullable = false)
+    @Column(nullable = false)
     private String number;
 
-  //  @Column(nullable = false)
+    @Column(nullable = false)
     private LocalDateTime issued;
 
-    @Column(name = "active_until")
+    @Column(name = "active_until", nullable = false)
     private LocalDateTime activeUntil;
 
-   // @Column(nullable = false)
+    @Column(nullable = false)
     private Integer points;
 
     @Column(name = "id_user")
