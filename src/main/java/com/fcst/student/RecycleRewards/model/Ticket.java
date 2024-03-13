@@ -12,13 +12,16 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+ //  @Column(nullable = false)
     private String number;
 
+  //  @Column(nullable = false)
     private LocalDateTime issued;
 
     @Column(name = "active_until")
     private LocalDateTime activeUntil;
 
+   // @Column(nullable = false)
     private Integer points;
 
     @Column(name = "id_user")
@@ -28,6 +31,13 @@ public class Ticket {
     private LocalDateTime registeredOn;
 
     public Ticket() {
+    }
+
+    public Ticket(String number, LocalDateTime issued, LocalDateTime activeUntil, Integer points) {
+        this.number = number;
+        this.issued = issued;
+        this.activeUntil = activeUntil;
+        this.points = points;
     }
 
     public Long getId() {

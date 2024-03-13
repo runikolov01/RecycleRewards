@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Random;
 
 @Controller
@@ -30,36 +31,46 @@ public class PrintController {
         LocalDateTime expirationDateTime = issuedOn.plusHours(72);
 
 
+        String issuedOnFormatted = issuedOn.format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
         String expirationFormatted = expirationDateTime.format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
+
+        session.setAttribute("ticketNumber", ticketNumber);
+        session.setAttribute("issuedOnFormatted", issuedOnFormatted);
+        session.setAttribute("expirationFormatted", expirationFormatted);
 
         model.addAttribute("bottlesCount", bottlesCount);
         model.addAttribute("ticketNumber", ticketNumber);
-        LocalDateTime issuedOnDateTime = (LocalDateTime) session.getAttribute("issuedOn");
+        model.addAttribute("issuedOnFormatted", issuedOnFormatted);
         model.addAttribute("expirationFormatted", expirationFormatted);
 
         return "print";
     }
 
     @PostMapping("/print")
-    public String exitSession(HttpSession session, Model model) {
+    public String exitSession(HttpSession session) {
         Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
         String ticketNumber = (String) session.getAttribute("ticketNumber");
-        LocalDateTime issuedOnDateTime = (LocalDateTime) session.getAttribute("issuedOn");
-        LocalDateTime expirationDateTime = (LocalDateTime) session.getAttribute("expirationDateTime");
+        String issuedOnFormatted = (String) session.getAttribute("issuedOnFormatted");
+        String expirationFormatted = (String) session.getAttribute("expirationFormatted");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
+        LocalDateTime issuedOnDateTime = LocalDateTime.parse(issuedOnFormatted, formatter);
+        LocalDateTime expirationDateTime = LocalDateTime.parse(expirationFormatted, formatter);
 
         Ticket ticket = new Ticket();
+        ticket.setNumber(ticketNumber);
         ticket.setIssued(issuedOnDateTime);
         ticket.setActiveUntil(expirationDateTime);
         ticket.setPoints(bottlesCount);
-        ticket.setNumber(ticketNumber);
+
         ticketRepository.save(ticket);
 
-        session.invalidate();
-
         session.setAttribute("bottlesCount", 0);
+        session.invalidate();
 
         return "redirect:/index";
     }
+
 
 
     private String generateUniqueTicketNumber() {
@@ -78,7 +89,6 @@ public class PrintController {
             if (!ticketNumberExistsInDatabase(ticketNumber)) {
                 return ticketNumber;
             }
-
             ticketNumberBuilder.setLength(0);
         }
     }

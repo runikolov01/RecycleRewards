@@ -12,6 +12,10 @@
     <h2>Take your ticket and register it in your profile at BRecycle app until <span th:text="${expirationFormatted}">DD/MM/YY TIME</span>!
     </h2>
     <form action="/print" method="post">
+        <input type="hidden" name="bottlesCount" th:value="${bottlesCount}">
+        <input type="hidden" name="ticketNumber" th:value="${ticketNumber}">
+        <input type="hidden" name="issuedOnFormatted" th:value="${issuedOnFormatted}">
+        <input type="hidden" name="expirationFormatted" th:value="${expirationFormatted}">
         <button type="submit">Exit</button>
     </form>
 </div>

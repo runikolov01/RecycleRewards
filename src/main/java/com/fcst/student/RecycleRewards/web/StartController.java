@@ -28,6 +28,7 @@ public class StartController {
         bottlesCount++;
         session.setAttribute("bottlesCount", bottlesCount);
 
-        return "redirect:/start";
+
+       return "redirect:/start";
     }
 }
