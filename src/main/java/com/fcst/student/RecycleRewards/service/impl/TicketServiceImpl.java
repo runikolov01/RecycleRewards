@@ -28,9 +28,14 @@ public class TicketServiceImpl implements TicketService {
         LocalDateTime expirationDateTime = issuedOn.plusHours(72);
 
         Ticket ticket = new Ticket(ticketNumber, issuedOn, expirationDateTime, bottlesCount);
-        ticketRepository.save(ticket);
+        // ticketRepository.save(ticket);
 
         return ticket;
+    }
+
+    @Override
+    public Ticket saveTicket(Ticket ticket) {
+        return ticketRepository.save(ticket);
     }
 
     private String generateUniqueTicketNumber() {

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 public interface TicketService {
     Integer getDefaultBottlesCount(Integer bottlesCount);
     Ticket createTicket(Integer bottlesCount);
+    Ticket saveTicket(Ticket ticket);
 }

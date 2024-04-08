@@ -9,11 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Random;
 
 @Controller
 public class PrintController {
@@ -23,14 +19,7 @@ public class PrintController {
     @Autowired
     private TicketService ticketService;
 
-    @GetMapping("/print")
-    public String openPrintPage(HttpSession session, Model model) {
-        Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
-
-        bottlesCount = ticketService.getDefaultBottlesCount(bottlesCount);
-
-        Ticket ticket = ticketService.createTicket(bottlesCount);
-
+    private void setAttributesAndModel(HttpSession session, Model model, Ticket ticket, Integer bottlesCount) {
         String issuedOnFormatted = ticket.getIssued().format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
         String expirationFormatted = ticket.getActiveUntil().format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
 
@@ -42,14 +31,36 @@ public class PrintController {
         model.addAttribute("ticketNumber", ticket.getNumber());
         model.addAttribute("issuedOnFormatted", issuedOnFormatted);
         model.addAttribute("expirationFormatted", expirationFormatted);
+    }
+
+    @GetMapping("/print")
+    public String openPrintPage(HttpSession session, Model model) {
+        Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
+        bottlesCount = ticketService.getDefaultBottlesCount(bottlesCount);
+
+        Ticket ticket = ticketService.createTicket(bottlesCount);
+        setAttributesAndModel(session, model, ticket, bottlesCount);
 
         return "print";
     }
 
     @PostMapping("/print")
-    public String exitSession(HttpSession session) {
+    public String exitSession(HttpSession session, Model model) {
+        Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
+        bottlesCount = ticketService.getDefaultBottlesCount(bottlesCount);
+
+        Ticket ticket = ticketService.createTicket(bottlesCount);
+        setAttributesAndModel(session, model, ticket, bottlesCount);
+
+        ticketService.saveTicket(ticket);
         session.setAttribute("bottlesCount", 0);
         session.invalidate();
-        return "redirect:/index";
+
+        // Passing the alert message as a parameter
+        model.addAttribute("alertMessage", "Printing...");
+
+        return "print_with_alert";
     }
+
+
 }
