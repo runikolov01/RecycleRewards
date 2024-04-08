@@ -22,9 +22,10 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket createTicket(Integer bottlesCount) {
-        String ticketNumber = generateUniqueTicketNumber();
-
+    public Ticket createTicket(Integer bottlesCount, String ticketNumber) {
+        if (ticketNumber == null || ticketNumber.isEmpty()) {
+            ticketNumber = generateUniqueTicketNumber();
+        }
         LocalDateTime issuedOn = LocalDateTime.now();
         LocalDateTime expirationDateTime = issuedOn.plusHours(72);
 
@@ -33,6 +34,7 @@ public class TicketServiceImpl implements TicketService {
 
         return ticket;
     }
+
 
     @Override
     public void saveTicket(Ticket ticket) {
@@ -51,7 +53,7 @@ public class TicketServiceImpl implements TicketService {
         return this.ticketRepository.findById(Long.valueOf(id));
     }
 
-    private String generateUniqueTicketNumber() {
+     public String generateUniqueTicketNumber() {
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder ticketNumberBuilder = new StringBuilder();
         Random random = new Random();

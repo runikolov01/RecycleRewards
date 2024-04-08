@@ -37,22 +37,27 @@ public class PrintController {
     @GetMapping("/print")
     public String openPrintPage(HttpSession session, Model model) {
         Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
+        String ticketNumber = (String) session.getAttribute("ticketNumber");
         bottlesCount = ticketService.getDefaultBottlesCount(bottlesCount);
 
-        Ticket ticket = ticketService.createTicket(bottlesCount);
+        if (ticketNumber == null) {
+            ticketNumber = ticketService.generateUniqueTicketNumber(); // Generate a new ticket number if not already generated
+            session.setAttribute("ticketNumber", ticketNumber); // Store it in the session
+        }
+
+        Ticket ticket = ticketService.createTicket(bottlesCount, ticketNumber);
         setAttributesAndModel(session, model, ticket, bottlesCount);
 
         return "print";
     }
 
-    //TODO: Да оправя проблема със записването на номера на билета: в БД не се записва показания на екрана номер, а съвсем различен.
-
     @PostMapping("/print")
     public String exitSession(HttpSession session, Model model) {
         Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
         bottlesCount = ticketService.getDefaultBottlesCount(bottlesCount);
+        String ticketNumber = (String) session.getAttribute("ticketNumber"); // Retrieve the ticket number from the session
 
-        Ticket ticket = ticketService.createTicket(bottlesCount);
+        Ticket ticket = ticketService.createTicket(bottlesCount, ticketNumber); // Use the same ticket number
         setAttributesAndModel(session, model, ticket, bottlesCount);
 
         ticketService.saveTicket(ticket);
@@ -64,6 +69,4 @@ public class PrintController {
 
         return "print_with_alert";
     }
-
-
 }
