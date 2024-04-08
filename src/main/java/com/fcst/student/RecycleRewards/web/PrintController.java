@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import java.time.format.DateTimeFormatter;
 
 @Controller
@@ -43,6 +44,8 @@ public class PrintController {
 
         return "print";
     }
+
+    //TODO: Да оправя проблема със записването на номера на билета: в БД не се записва показания на екрана номер, а съвсем различен.
 
     @PostMapping("/print")
     public String exitSession(HttpSession session, Model model) {

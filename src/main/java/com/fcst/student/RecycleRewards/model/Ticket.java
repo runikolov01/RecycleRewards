@@ -33,6 +33,10 @@ public class Ticket {
     public Ticket() {
     }
 
+    public Ticket(String number) {
+        this.number = number;
+    }
+
     public Ticket(String number, LocalDateTime issued, LocalDateTime activeUntil, Integer points) {
         this.number = number;
         this.issued = issued;
