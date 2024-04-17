@@ -24,11 +24,12 @@ public class Ticket {
     @Column(nullable = false)
     private Integer points;
 
-    @Column(name = "id_user")
-    private Integer idUser;
-
-    @Column(name = "registered_on")
+    @Column(name = "registered_on", nullable = true)
     private LocalDateTime registeredOn;
+
+    @ManyToOne
+    @JoinColumn(name = "person_id")
+    private Person registeredBy;
 
     public Ticket() {
     }
@@ -42,6 +43,16 @@ public class Ticket {
         this.issued = issued;
         this.activeUntil = activeUntil;
         this.points = points;
+    }
+
+    public Ticket(Long id, String number, LocalDateTime issued, LocalDateTime activeUntil, Integer points, LocalDateTime registeredOn, Person registeredBy) {
+        this.id = id;
+        this.number = number;
+        this.issued = issued;
+        this.activeUntil = activeUntil;
+        this.points = points;
+        this.registeredOn = registeredOn;
+        this.registeredBy = registeredBy;
     }
 
     public Long getId() {
@@ -84,13 +95,6 @@ public class Ticket {
         this.points = points;
     }
 
-    public Integer getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(Integer idUser) {
-        this.idUser = idUser;
-    }
 
     public LocalDateTime getRegisteredOn() {
         return registeredOn;
@@ -98,5 +102,13 @@ public class Ticket {
 
     public void setRegisteredOn(LocalDateTime registeredOn) {
         this.registeredOn = registeredOn;
+    }
+
+    public Person getRegisteredBy() {
+        return registeredBy;
+    }
+
+    public void setRegisteredBy(Person registeredBy) {
+        this.registeredBy = registeredBy;
     }
 }
