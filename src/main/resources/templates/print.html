@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Printing ticket</title>
+    <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
 </head>
 <body>
 <div>
     <h1>Congratulations!</h1>
     <h2>Today you recycled <span th:text="${bottlesCount}">0</span> bottles!</h2>
-    <h1>Your ticket with code <span th:text="${ticketNumber}">YYYYYYYY</span> will be print after you click on "Print & Exit" button!</h1>
-    <h2>Take it and register it in your profile at BRecycle app until <span th:text="${expirationFormatted}">DD/MM/YY TIME</span> to collect <span th:text="${bottlesCount}">0</span> points!
+    <h1>Your ticket with code <span th:text="${ticketNumber}">YYYYYYYY</span> will be print after you click on "Print &
+        Exit" button!</h1>
+    <h2>Take it and register it in your profile at BRecycle app until <span th:text="${expirationFormatted}">DD/MM/YY TIME</span>
+        to collect <span th:text="${bottlesCount}">0</span> points!
     </h2>
     <form action="/print" method="post">
         <input type="hidden" name="bottlesCount" th:value="${bottlesCount}">
