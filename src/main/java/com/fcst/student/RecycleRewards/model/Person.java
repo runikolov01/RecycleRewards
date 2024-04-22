@@ -29,10 +29,10 @@ public class Person {
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String phone;
 
-    @Column(nullable = false)
+    @Column
     private LocalDate birthday;
 
     @Enumerated(EnumType.STRING)

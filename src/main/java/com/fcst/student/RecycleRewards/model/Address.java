@@ -9,22 +9,22 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String city;
 
-    @Column(nullable = false)
+    @Column
     private int postcode;
 
-    @Column(nullable = false)
+    @Column
     private String street;
 
-    @Column(nullable = false)
+    @Column
     private int number;
 
-    @Column(nullable = true)
+    @Column
     private int floor;
 
-    @Column(name = "apartment_number", nullable = true)
+    @Column(name = "apartment_number")
     private int apartmentNumber;
 
 
