@@ -1,6 +1,9 @@
 package com.fcst.student.RecycleRewards.web;
 
+import com.fcst.student.RecycleRewards.model.Person;
+import com.fcst.student.RecycleRewards.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +17,14 @@ public class RegisterController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/register")
     public String registerForm() {
         return "register";
     }
+
 
     @PostMapping("/register")
     public String registerSubmit(@RequestParam String firstName,
@@ -30,36 +37,57 @@ public class RegisterController {
                                  RedirectAttributes redirectAttributes) {
         // Check if passwords match
         if (!password.equals(confirmPassword)) {
-            // Passwords don't match, handle this scenario (e.g., return an error message)
             redirectAttributes.addFlashAttribute("error", "Passwords do not match");
+            redirectAttributes.addFlashAttribute("firstName", firstName);
+            redirectAttributes.addFlashAttribute("lastName", lastName);
+            redirectAttributes.addFlashAttribute("email", email);
+            redirectAttributes.addFlashAttribute("ageConfirmation", ageConfirmation);
+            redirectAttributes.addFlashAttribute("conditionsConfirmation", conditionsConfirmation);
+
             return "redirect:/register";
         }
 
         // Check if age confirmation is "yes"
         if (!"yes".equals(ageConfirmation)) {
-            // Age confirmation not accepted, handle this scenario
             redirectAttributes.addFlashAttribute("error", "Age confirmation not accepted");
+            redirectAttributes.addFlashAttribute("firstName", firstName);
+            redirectAttributes.addFlashAttribute("lastName", lastName);
+            redirectAttributes.addFlashAttribute("email", email);
+            redirectAttributes.addFlashAttribute("password", password);
+            redirectAttributes.addFlashAttribute("confirmPassword", confirmPassword);
+            redirectAttributes.addFlashAttribute("conditionsConfirmation", conditionsConfirmation);
+
             return "redirect:/register";
         }
 
         // Check if conditions confirmation is "yes"
         if (!"yes".equals(conditionsConfirmation)) {
-            // Conditions confirmation not accepted, handle this scenario
             redirectAttributes.addFlashAttribute("error", "Conditions confirmation not accepted");
+            redirectAttributes.addFlashAttribute("firstName", firstName);
+            redirectAttributes.addFlashAttribute("lastName", lastName);
+            redirectAttributes.addFlashAttribute("email", email);
+            redirectAttributes.addFlashAttribute("password", password);
+            redirectAttributes.addFlashAttribute("confirmPassword", confirmPassword);
+            redirectAttributes.addFlashAttribute("ageConfirmation", ageConfirmation);
+
             return "redirect:/register";
         }
 
-        // All validations passed, process the registration
-        // For simplicity, let's print the form data to the console
-        System.out.println("First Name: " + firstName);
-        System.out.println("Last Name: " + lastName);
-        System.out.println("Email: " + email);
-        // You might want to hash the password before storing it in the database
-        System.out.println("Password: " + password);
-        // Add success message
-        redirectAttributes.addFlashAttribute("success", "You have been registered successfully");
-        // Redirect to login page
-        return "redirect:/login";
-    }
+        // All validations passed, create a new Person object
+        Person person = new Person();
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+        person.setEmail(email);
+        person.setPassword(passwordEncoder.encode(password)); // Encode the password
 
+        // Save the user
+        try {
+            userService.saveUser(person);
+            redirectAttributes.addFlashAttribute("success", true);
+            return "redirect:/register";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error registering user");
+            return "redirect:/register";
+        }
+    }
 }

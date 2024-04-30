@@ -32,8 +32,6 @@ public class Person {
     @Column(unique = true)
     private String phone;
 
-    @Column
-    private LocalDate birthday;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -47,7 +45,7 @@ public class Person {
     public Person() {
     }
 
-    public Person(Long id, String firstName, String lastName, Address address, String email, String password, String phone, LocalDate birthday, Role role, List<Prize> prizes) {
+    public Person(Long id, String firstName, String lastName, Address address, String email, String password, String phone, Role role, List<Prize> prizes) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -55,12 +53,11 @@ public class Person {
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.birthday = birthday;
         this.role = role;
         this.prizes = prizes;
     }
 
-    public Person(Long id, String firstName, String lastName, Address address, String email, String password, String phone, LocalDate birthday, Role role) {
+    public Person(Long id, String firstName, String lastName, Address address, String email, String password, String phone, Role role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -68,7 +65,6 @@ public class Person {
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.birthday = birthday;
         this.role = role;
     }
 
@@ -128,13 +124,6 @@ public class Person {
         this.phone = phone;
     }
 
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
-    }
 
     public Role getRole() {
         return role;
