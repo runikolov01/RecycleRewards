@@ -2,36 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Регистрация</title>
-    <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>Регистрация</h1>
-<br>
-<form>
-    <label for="firstName">Име:</label>
-    <input type="text" id="first_ name" name="first_name">
-
-    <label for="lastName">Фамилия: </label>
-    <input type="text" id="last_name" name="last_name">
-
-    <label for="email">Email: </label>
-    <input type="text" id="email" name="email">
-
-    <label for="password">Парола:</label>
-    <input type="password" id="password" name="password">
-
-    <label for="confirm_password">Повтори паролата:</label>
-    <input type="confirm_password" id="confirm_password" name="confirm_password">
-
-    <label fot="confirm_age">Потвърждавам, че имам навършени 18 години.</label>
-    <input type="radio">
-
-    <label fot="confirm_conditions">Съгласявам се с условията</label>
-    <input type="radio">
-
-    <input type="submit" name="Регистрация">
-
-</form>
+<div class="container">
+    <h2>Registration Form</h2>
+    <form action="/register" method="post">
+        <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" required>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+        </div>
+        <div class="form-group">
+            <label>Confirm Age:</label><br>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="ageConfirmation" value="yes" required>Yes
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="ageConfirmation" value="no" required>No
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Confirm Conditions:</label><br>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="conditionsConfirmation" value="yes" required>Yes
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="conditionsConfirmation" value="no" required>No
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 </body>
 </html>

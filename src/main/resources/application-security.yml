@@ -1,0 +1,41 @@
+spring:
+  security:
+    user:
+      name: admin
+      password: ${ADMIN_PASSWORD:admin} # Default password is 'admin'
+    # Define custom security configurations here
+  jpa:
+    hibernate:
+      ddl-auto: update # Update the database schema automatically
+
+# Define the bcrypt encoder
+bcrypt:
+  strength: 10 # The strength of the bcrypt hashing algorithm
+
+# Configure the security for your application endpoints
+security:
+  basic:
+    enabled: true # Enable basic authentication
+  ignored: # Specify paths to be ignored by security filters
+    - /static/**
+    - /css/**
+    - /js/**
+    - /images/**
+    - /favicon.ico
+    - /error
+
+  # Define authentication providers
+  providers:
+    - user:
+        name: admin
+        password: ${ADMIN_PASSWORD:admin}
+        authorities: ROLE_ADMIN
+
+  # Define password encoding
+  passwords:
+    encoding: bcrypt # Use bcrypt to encode passwords
+
+# Define authorization rules
+authorize-requests:
+  - antMatchers("/admin/**").hasRole("ADMIN")
+  - antMatchers("/**").permitAll() # Allow access to all other paths

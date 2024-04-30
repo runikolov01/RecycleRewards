@@ -1,0 +1,39 @@
+h1 {
+    color: #0e4501;
+}
+
+hr {
+    height: 3px;
+    background-color: black;
+}
+
+.registration-div {
+    border: 5px outset #090240;
+    background-color: lightblue;
+    text-align: center;
+    border-radius: 20px;
+    margin: 80px;
+    padding: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 20px;
+}
+
+span {
+    display: inline-block;
+    width: 80px; /* Set width for the label */
+    text-align: right;
+    margin-right: 50px;
+}
+
+input {
+    display: inline-block;
+    width: 100px; /* Set width for the input field */
+}
+
+#reg-btn {
+    padding: 100px;
+    margin: 100px;
+}

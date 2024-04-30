@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <link rel="icon" type="image/png" href="../static/images/logo-removebg-preview.png">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:Regular,bold" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,500,1,200"/>
+    <link href="../static/css/test.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="registration-div">
+    <h1>Вход</h1>
+    <hr>
+    <form>
+        <label for="login_email">
+            <span>Email:</span>
+            <input type="email" id="login_email" name="login_email">
+        </label>
+
+        <label for="login_password">
+            <span>Парола:</span>
+            <input type="password" id="password" name="login_password">
+        </label>
+        <input type="submit" name="log-btn" value="Вход">
+    </form>
+</div>
+<div th:replace="~{fragments/footer}"></div>
+
+</body>
+</html>

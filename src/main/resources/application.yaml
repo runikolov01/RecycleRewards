@@ -30,3 +30,11 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
     open-in-view: true
+
+  # Thymeleaf Configuration
+  spring:
+    thymeleaf:
+      prefix: classpath:/templates/,classpath:/static/
+      suffix: .html
+      cache: false
+      mode: HTML
