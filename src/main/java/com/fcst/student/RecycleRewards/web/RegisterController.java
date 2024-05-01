@@ -3,7 +3,6 @@ package com.fcst.student.RecycleRewards.web;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,6 @@ public class RegisterController {
     public String registerForm() {
         return "register";
     }
-
 
     @PostMapping("/register")
     public String registerSubmit(@RequestParam String firstName,

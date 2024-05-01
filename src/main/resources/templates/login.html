@@ -8,24 +8,24 @@
 <body>
 
 <div class="container">
-    <h2>Login</h2>
+    <h2>Вход в профила</h2>
 
     <!-- Display error message if login fails -->
     <div th:if="${error}" class="alert alert-danger" role="alert">
-        Invalid username or password!
+        Невалиден email или парола! Опитайте отново!
     </div>
 
     <!-- Login form -->
-    <form action="/login" method="post">
+    <form action="/login" method="post" accept-charset="UTF-8">
         <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" name="username" required>
+            <label for="email">Email:</label>
+            <input type="text" class="form-control" id="email" name="email" required>
         </div>
         <div class="form-group">
-            <label for="password">Password:</label>
+            <label for="password">Парола:</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-primary">Вход</button>
     </form>
 </div>
 

@@ -1,5 +1,8 @@
 package com.fcst.student.RecycleRewards.web;
 
+import com.fcst.student.RecycleRewards.model.User;
+import com.fcst.student.RecycleRewards.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LoginController {
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/login")
     public String loginForm(@RequestParam(required = false) String error, Model model) {
@@ -18,15 +24,15 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String loginSubmit(@RequestParam String username, @RequestParam String password) {
-        // Implement your login logic here
-        // For simplicity, let's just check if the username and password are not empty
-        if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
-            // Redirect to success page if login is successful
-            return "redirect:/success";
+    public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model) {
+        User user = userService.getUserByEmail(email);
+        if (user != null && userService.verifyPassword(user, password)) {
+            // Authentication successful
+            return "redirect:/success"; // Redirect to dashboard/homepage
         } else {
-            // Redirect back to login page with error message if login fails
-            return "redirect:/login?error";
+            // Authentication failed
+            model.addAttribute("error", true);
+            return "redirect:/login?error"; // Redirect back to login page with error message
         }
     }
 
