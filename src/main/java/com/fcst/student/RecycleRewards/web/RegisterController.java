@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
+
 @Controller
 public class RegisterController {
 
@@ -58,6 +60,7 @@ public class RegisterController {
         user.setLastName(lastName);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password)); // Encode the password
+        user.setRegistrationDate(LocalDateTime.now());
 
         try {
             // Save the user
