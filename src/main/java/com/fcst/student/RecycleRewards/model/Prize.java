@@ -35,13 +35,13 @@ public class Prize {
     private LocalDateTime endDate;
 
     @ManyToMany(mappedBy = "prizes")
-    private List<Person> participants;
+    private List<User> participants;
 
     public Prize() {
 
     }
 
-    public Prize(Long id, String name, String description, int neededPointsToBuy, int totalTickets, int remainedTickets, LocalDateTime startDate, LocalDateTime endDate, List<Person> participants) {
+    public Prize(Long id, String name, String description, int neededPointsToBuy, int totalTickets, int remainedTickets, LocalDateTime startDate, LocalDateTime endDate, List<User> participants) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -117,11 +117,11 @@ public class Prize {
         this.endDate = endDate;
     }
 
-    public List<Person> getParticipants() {
+    public List<User> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<Person> participants) {
+    public void setParticipants(List<User> participants) {
         this.participants = participants;
     }
 }

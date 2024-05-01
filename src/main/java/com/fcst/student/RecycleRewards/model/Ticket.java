@@ -29,7 +29,7 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "person_id")
-    private Person registeredBy;
+    private User registeredBy;
 
     public Ticket() {
     }
@@ -45,7 +45,7 @@ public class Ticket {
         this.points = points;
     }
 
-    public Ticket(Long id, String number, LocalDateTime issued, LocalDateTime activeUntil, Integer points, LocalDateTime registeredOn, Person registeredBy) {
+    public Ticket(Long id, String number, LocalDateTime issued, LocalDateTime activeUntil, Integer points, LocalDateTime registeredOn, User registeredBy) {
         this.id = id;
         this.number = number;
         this.issued = issued;
@@ -104,11 +104,11 @@ public class Ticket {
         this.registeredOn = registeredOn;
     }
 
-    public Person getRegisteredBy() {
+    public User getRegisteredBy() {
         return registeredBy;
     }
 
-    public void setRegisteredBy(Person registeredBy) {
+    public void setRegisteredBy(User registeredBy) {
         this.registeredBy = registeredBy;
     }
 }

@@ -3,12 +3,11 @@ package com.fcst.student.RecycleRewards.model;
 import com.fcst.student.RecycleRewards.model.enums.Role;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "people")
-public class Person {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,10 +41,10 @@ public class Person {
             inverseJoinColumns = @JoinColumn(name = "prize_id"))
     private List<Prize> prizes;
 
-    public Person() {
+    public User() {
     }
 
-    public Person(Long id, String firstName, String lastName, Address address, String email, String password, String phone, Role role, List<Prize> prizes) {
+    public User(Long id, String firstName, String lastName, Address address, String email, String password, String phone, Role role, List<Prize> prizes) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,7 +56,7 @@ public class Person {
         this.prizes = prizes;
     }
 
-    public Person(Long id, String firstName, String lastName, Address address, String email, String password, String phone, Role role) {
+    public User(Long id, String firstName, String lastName, Address address, String email, String password, String phone, Role role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

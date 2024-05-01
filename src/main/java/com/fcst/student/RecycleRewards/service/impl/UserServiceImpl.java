@@ -1,6 +1,6 @@
 package com.fcst.student.RecycleRewards.service.impl;
 
-import com.fcst.student.RecycleRewards.model.Person;
+import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +17,13 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Person saveUser(Person person) {
+    public User saveUser(User person) {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         return userRepository.save(person);
     }
 
     @Override
-    public Person updateUser(Person person) {
+    public User updateUser(User person) {
         return userRepository.save(person);
     }
 
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Person findUserById(Long userId) {
+    public User findUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
 }

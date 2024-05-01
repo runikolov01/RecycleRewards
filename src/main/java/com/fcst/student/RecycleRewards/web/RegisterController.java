@@ -1,6 +1,6 @@
 package com.fcst.student.RecycleRewards.web;
 
-import com.fcst.student.RecycleRewards.model.Person;
+import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -74,7 +74,7 @@ public class RegisterController {
         }
 
         // All validations passed, create a new Person object
-        Person person = new Person();
+        User person = new User();
         person.setFirstName(firstName);
         person.setLastName(lastName);
         person.setEmail(email);
