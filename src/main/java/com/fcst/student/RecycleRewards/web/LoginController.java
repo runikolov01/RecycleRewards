@@ -15,6 +15,7 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping("/login")
     public String loginForm(@RequestParam(required = false) String error, Model model) {
         if (error != null) {
@@ -27,12 +28,12 @@ public class LoginController {
     public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model) {
         User user = userService.getUserByEmail(email);
         if (user != null && userService.verifyPassword(user, password)) {
-            // Authentication successful
-            return "redirect:/success"; // Redirect to dashboard/homepage
+            // Authentication successful, redirect to dashboard/homepage
+            return "redirect:/success";
         } else {
-            // Authentication failed
+            // Authentication failed, redirect back to login page with error message
             model.addAttribute("error", true);
-            return "redirect:/login?error"; // Redirect back to login page with error message
+            return "redirect:/login?error";
         }
     }
 

@@ -5,6 +5,7 @@ import com.fcst.student.RecycleRewards.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,57 +34,38 @@ public class RegisterController {
                                  @RequestParam String ageConfirmation,
                                  @RequestParam String conditionsConfirmation,
                                  RedirectAttributes redirectAttributes) {
-        // Check if passwords match
         if (!password.equals(confirmPassword)) {
+            // Passwords don't match, redirect back to registration form
             redirectAttributes.addFlashAttribute("error", "Passwords do not match");
-            redirectAttributes.addFlashAttribute("firstName", firstName);
-            redirectAttributes.addFlashAttribute("lastName", lastName);
-            redirectAttributes.addFlashAttribute("email", email);
-            redirectAttributes.addFlashAttribute("ageConfirmation", ageConfirmation);
-            redirectAttributes.addFlashAttribute("conditionsConfirmation", conditionsConfirmation);
-
             return "redirect:/register";
         }
 
-        // Check if age confirmation is "yes"
         if (!"yes".equals(ageConfirmation)) {
+            // Age confirmation not accepted, redirect back to registration form
             redirectAttributes.addFlashAttribute("error", "Age confirmation not accepted");
-            redirectAttributes.addFlashAttribute("firstName", firstName);
-            redirectAttributes.addFlashAttribute("lastName", lastName);
-            redirectAttributes.addFlashAttribute("email", email);
-            redirectAttributes.addFlashAttribute("password", password);
-            redirectAttributes.addFlashAttribute("confirmPassword", confirmPassword);
-            redirectAttributes.addFlashAttribute("conditionsConfirmation", conditionsConfirmation);
-
             return "redirect:/register";
         }
 
-        // Check if conditions confirmation is "yes"
         if (!"yes".equals(conditionsConfirmation)) {
+            // Conditions confirmation not accepted, redirect back to registration form
             redirectAttributes.addFlashAttribute("error", "Conditions confirmation not accepted");
-            redirectAttributes.addFlashAttribute("firstName", firstName);
-            redirectAttributes.addFlashAttribute("lastName", lastName);
-            redirectAttributes.addFlashAttribute("email", email);
-            redirectAttributes.addFlashAttribute("password", password);
-            redirectAttributes.addFlashAttribute("confirmPassword", confirmPassword);
-            redirectAttributes.addFlashAttribute("ageConfirmation", ageConfirmation);
-
             return "redirect:/register";
         }
 
-        // All validations passed, create a new Person object
-        User person = new User();
-        person.setFirstName(firstName);
-        person.setLastName(lastName);
-        person.setEmail(email);
-        person.setPassword(passwordEncoder.encode(password)); // Encode the password
+        // All validations passed, create a new User object
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password)); // Encode the password
 
-        // Save the user
         try {
-            userService.saveUser(person);
+            // Save the user
+            userService.saveUser(user);
             redirectAttributes.addFlashAttribute("success", true);
             return "redirect:/register";
         } catch (Exception e) {
+            // Error saving user, redirect back to registration form
             redirectAttributes.addFlashAttribute("error", "Error registering user");
             return "redirect:/register";
         }
