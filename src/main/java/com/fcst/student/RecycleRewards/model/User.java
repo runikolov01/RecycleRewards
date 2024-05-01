@@ -3,6 +3,7 @@ package com.fcst.student.RecycleRewards.model;
 import com.fcst.student.RecycleRewards.model.enums.Role;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -28,6 +29,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private LocalDateTime registrationDate;
+
     @Column(unique = true)
     private String phone;
 
@@ -51,6 +55,7 @@ public class User {
         this.address = address;
         this.email = email;
         this.password = password;
+        this.registrationDate = LocalDateTime.now();
         this.phone = phone;
         this.role = role;
         this.prizes = prizes;
@@ -63,6 +68,7 @@ public class User {
         this.address = address;
         this.email = email;
         this.password = password;
+        this.registrationDate = LocalDateTime.now();
         this.phone = phone;
         this.role = role;
     }
@@ -138,5 +144,13 @@ public class User {
 
     public void setPrizes(List<Prize> prizes) {
         this.prizes = prizes;
+    }
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDateTime registrationDate) {
+        this.registrationDate = registrationDate;
     }
 }
