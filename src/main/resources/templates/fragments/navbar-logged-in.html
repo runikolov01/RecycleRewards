@@ -5,6 +5,9 @@
     <li class="nav-item">
         <a class="nav-link" href="/prizes">Награди</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/myProfile">Точки: <span th:text="${totalPoints}"></span></a>
+    </li>
     <th:block th:if="${loggedIn}">
         <li class="nav-item">
             <form action="/logout" method="post">

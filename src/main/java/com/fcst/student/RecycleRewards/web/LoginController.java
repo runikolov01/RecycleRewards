@@ -76,15 +76,17 @@ public class LoginController {
                 // Get total points for the logged-in user
                 Integer totalPoints = ticketRepository.getTotalPointsByUser(user);
 
-                // Pass total points to the view
+                // Pass total points and loggedIn status to the view
                 model.addAttribute("totalPoints", totalPoints);
                 model.addAttribute("loggedUser", user);
+                model.addAttribute("loggedIn", true); // Set loggedIn to true
                 return "myProfile";
             }
         }
         // Handle case when user ID is not found or user is not found
         return "redirect:/login"; // or any other appropriate action
     }
+
 
     @PostMapping("/logout")
     public String logout(HttpSession session, HttpServletResponse response) {
