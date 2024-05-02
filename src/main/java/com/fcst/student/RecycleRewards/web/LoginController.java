@@ -4,6 +4,7 @@ import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.repository.TicketRepository;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -36,12 +37,20 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public String loginForm(@RequestParam(required = false) String error, Model model) {
+    public String loginForm(@RequestParam(required = false) String error, Model model, HttpSession session) {
+        // Check if the user is already logged in
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId != null) {
+            // User is already logged in, redirect to profile page
+            return "redirect:/myProfile";
+        }
+
         if (error != null) {
             model.addAttribute("error", true);
         }
         return "login";
     }
+
 
     @PostMapping("/login")
     public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
@@ -78,10 +87,12 @@ public class LoginController {
     }
 
     @PostMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session, HttpServletResponse response) {
         session.removeAttribute("userId");
         this.userService.logout();
         session.invalidate();
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // Prevent caching
         return "redirect:/home";
     }
+
 }

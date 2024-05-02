@@ -1,0 +1,15 @@
+<ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+        <a class="nav-link" href="/about">Информация</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/prizes">Награди</a>
+    </li>
+    <th:block th:if="${loggedIn}">
+        <li class="nav-item">
+            <form action="/logout" method="post">
+                <input type="submit" class="btn btn-link nav-link" value="Изход от профила">
+            </form>
+        </li>
+    </th:block>
+</ul>
