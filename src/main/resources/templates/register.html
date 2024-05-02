@@ -1,16 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация на билет</title>
-    <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Регистрация</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .password-strength {
+            color: #28a745;
+        }
+        .password-weak {
+            color: #dc3545;
+        }
+    </style>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">RecycleRewards</a>
+    <a class="navbar-brand" href="/home">RecycleRewards</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -22,58 +29,74 @@
                 <a class="nav-link" href="/about">Информация</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/register">Регистрация</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="/login">Вход</a>
             </li>
         </ul>
     </div>
 </nav>
 
-<div class="container mt-5">
-    <div class="jumbotron">
-        <h1 class="display-4">Регистрация на билет</h1>
-        <p class="lead">Не забравяйте, че всеки билет има срок на валидност 72 часа от издаването му!</p>
-        <hr class="my-4">
-        <form action="/registerTicket" method="patch" onsubmit="return validateTicket()">
-            <div class="form-group">
-                <label for="ticketNumber">Въведете уникалния код на билета:</label>
-                <input type="text" class="form-control" id="ticketNumber" name="ticketNumber">
-            </div>
-            <button type="submit" class="btn btn-primary">Добави точките към моя профил</button>
-            <div id="alertMessage" class="alert alert-danger mt-3" style="display: none;"></div>
-        </form>
-        <br>
-        <br>
-    </div>
-</div>
+<div class="container">
+    <h2>Форма за Регистрация</h2>
 
+    <!-- Add success message -->
+    <div th:if="${success}" class="alert alert-success" role="alert">
+        Вие се регистрирахте успешно. Можете да влезете в своя профил <a href="/login"> тук</a>.
+    </div>
+
+    <!-- Add error message -->
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Registration form -->
+    <form action="/register" method="post">
+        <div class="form-group">
+            <label for="firstName">Първо име:</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" required
+                   th:value="${firstName}">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Фамилия:</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" required
+                   th:value="${lastName}">
+        </div>
+        <div class="form-group">
+            <label for="email">Електронна поща:</label>
+            <input type="email" class="form-control" id="email" name="email" required
+                   th:value="${email}">
+        </div>
+        <div class="form-group">
+            <label for="password">Парола:</label>
+            <input type="password" class="form-control" id="password" name="password" required minlength="8">
+            <small class="password-strength">Паролата трябва да бъде поне 8 символа дълга.</small>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Повторете паролата:</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+        </div>
+        <div class="form-group">
+            <label>Потвърждавате ли, че сте навършили 18 години?</label><br>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" name="ageConfirmation" value="yes"> Да
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Съгласявате ли се с условията за участие?</label><br>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" name="conditionsConfirmation" value="yes" required> Да
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Подаване</button>
+    </form>
+</div>
 <footer class="footer mt-auto py-3 bg-light">
     <div class="container text-center">
         <span class="text-muted">© Румен Николов - 121220087 - ТУ-София</span>
     </div>
 </footer>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<script>
-    function validateTicket() {
-        var ticketNumber = document.getElementById('ticketNumber').value;
-
-        // Check if ticketNumber is empty
-        if (!ticketNumber.trim()) {
-            document.getElementById('alertMessage').innerText = 'Моля, въведете уникалния код на билета.';
-            document.getElementById('alertMessage').style.display = 'block';
-            return false;
-        }
-
-        // You can also add additional client-side validation if needed
-
-        return true;
-    }
-</script>
 </body>
 </html>
