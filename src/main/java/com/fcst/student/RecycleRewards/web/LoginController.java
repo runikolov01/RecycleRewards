@@ -1,6 +1,7 @@
 package com.fcst.student.RecycleRewards.web;
 
 import com.fcst.student.RecycleRewards.model.User;
+import com.fcst.student.RecycleRewards.repository.TicketRepository;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
 import jakarta.servlet.http.HttpSession;
@@ -23,12 +24,15 @@ public class LoginController {
     private final UserService userService;
     private final LoggedUser loggedUser;
     private final ModelMapper modelMapper;
+    private final TicketRepository ticketRepository;
+
 
     @Autowired
-    public LoginController(UserService userService, LoggedUser loggedUser, ModelMapper modelMapper) {
+    public LoginController(UserService userService, LoggedUser loggedUser, ModelMapper modelMapper, TicketRepository ticketRepository) {
         this.userService = userService;
         this.loggedUser = loggedUser;
         this.modelMapper = modelMapper;
+        this.ticketRepository = ticketRepository;
     }
 
     @GetMapping("/login")
@@ -60,6 +64,11 @@ public class LoginController {
             // Fetch user details from the database using the user ID
             User user = userService.getUserById(userId);
             if (user != null) {
+                // Get total points for the logged-in user
+                Integer totalPoints = ticketRepository.getTotalPointsByUser(user);
+
+                // Pass total points to the view
+                model.addAttribute("totalPoints", totalPoints);
                 model.addAttribute("loggedUser", user);
                 return "myProfile";
             }
