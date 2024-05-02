@@ -56,6 +56,8 @@ public class HomeController {
             User user = userService.getUserById(userId);
             if (user != null) {
                 model.addAttribute("loggedUser", user);
+                Integer totalPoints = ticketRepository.getTotalPointsByUser(user);
+                model.addAttribute("totalPoints", totalPoints);
             }
         }
         return "about";
