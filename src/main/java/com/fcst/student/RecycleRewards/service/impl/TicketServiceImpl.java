@@ -53,7 +53,7 @@ public class TicketServiceImpl implements TicketService {
         return this.ticketRepository.findById(Long.valueOf(id));
     }
 
-     public String generateUniqueTicketNumber() {
+    public String generateUniqueTicketNumber() {
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder ticketNumberBuilder = new StringBuilder();
         Random random = new Random();

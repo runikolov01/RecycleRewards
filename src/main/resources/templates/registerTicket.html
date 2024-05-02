@@ -36,14 +36,18 @@
         <h1 class="display-4">Регистрация на билет</h1>
         <p class="lead">Не забравяйте, че всеки билет има срок на валидност от 72 часа от издаването му!</p>
         <hr class="my-4">
-        <form action="/registerTicket" method="patch" onsubmit="return validateTicket()">
+
+        <form id="registerForm">
             <div class="form-group">
                 <label for="ticketNumber">Въведете уникалния код на билета:</label>
                 <input type="text" class="form-control" id="ticketNumber" name="ticketNumber">
+                <small id="ticketNumberError" class="text-danger" style="display: none;">Билетът не беше намерен. Моля, въведете валиден номер.</small>
             </div>
-            <button type="submit" class="btn btn-primary">Добави точките към моя профил</button>
-            <div id="alertMessage" class="alert alert-danger mt-3" style="display: none;"></div>
+            <button type="button" class="btn btn-primary" id="registerButton">Добави точките към моя профил</button>
         </form>
+
+        <div id="ticketMessage" class="mt-3"></div>
+
         <br>
         <br>
     </div>
@@ -58,22 +62,35 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 <script>
-    function validateTicket() {
-        var ticketNumber = document.getElementById('ticketNumber').value;
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("Document ready!"); // Check if document ready is called
 
-        // Check if ticketNumber is empty
-        if (!ticketNumber.trim()) {
-            document.getElementById('alertMessage').innerText = 'Моля, въведете уникалния код на билета.';
-            document.getElementById('alertMessage').style.display = 'block';
-            return false;
-        }
+        document.getElementById('registerButton').addEventListener('click', function () {
+            console.log("Button clicked!"); // Check if button click event is triggered
 
-        // You can also add additional client-side validation if needed
-
-        return true;
-    }
+            var ticketNumber = document.getElementById('ticketNumber').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/registerTicket', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById('ticketMessage').classList.remove('text-danger');
+                        document.getElementById('ticketMessage').classList.add('text-success');
+                        document.getElementById('ticketMessage').textContent = xhr.responseText;
+                    } else {
+                        document.getElementById('ticketMessage').classList.remove('text-success');
+                        document.getElementById('ticketMessage').classList.add('text-danger');
+                        document.getElementById('ticketMessage').textContent = xhr.responseText;
+                    }
+                }
+            };
+            xhr.send('ticketNumber=' + encodeURIComponent(ticketNumber));
+        });
+    });
 </script>
+
+
 </body>
 </html>

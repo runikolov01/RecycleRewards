@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LoggedUser {
+    private Long loggedUserId;
     private String loggedFirstName;
     private String loggedLastName;
     private String loggedEmail;
@@ -60,7 +61,16 @@ public class LoggedUser {
         this.loggedAddress = loggedAddress;
     }
 
+    public Long getLoggedUserId() {
+        return loggedUserId;
+    }
+
+    public void setLoggedUserId(Long loggedUserId) {
+        this.loggedUserId = loggedUserId;
+    }
+
     public void reset() {
+        setLoggedUserId(null);
         setLoggedFirstName(null);
         setLoggedLastName(null);
         setLoggedEmail(null);
