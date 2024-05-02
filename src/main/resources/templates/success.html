@@ -10,6 +10,7 @@
 <div class="container">
     <h2>Login Successful!</h2>
     <p>Welcome to the system.</p>
+    <p th:text="${loggedUser.loggedEmail == null ? 'no user' : loggedUser.loggedEmail}"></p>
 </div>
 
 </body>
