@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моят профил</title>
+    <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">RecycleRewards</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/about">Информация</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/myProfile">Точки: </a>
+            </li>
+            <li class="nav-item">
+                <form action="/logout" method="post">
+                    <input type="submit" value="Изход от профила">
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Профилът на <span
+                th:text="${loggedUser.loggedFirstName == null ? 'no user' : loggedUser.loggedFirstName}"></span> <span
+                th:text="${loggedUser.loggedLastName == null ? 'no user' : loggedUser.loggedLastName}"></span></h1>
+        <hr class="my-4">
+        <form action="/myProfile" method="patch">
+            <div class="form-group">
+                <label for="firstName">Първо име:</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" required
+                       th:value="${loggedUser.loggedFirstName}">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Фамилия:</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" required
+                       th:value="${loggedUser.loggedLastName}">
+            </div>
+            <div class="form-group">
+                <label for="email">Електронна поща:</label>
+                <input type="email" class="form-control" id="email" name="email" required
+                       th:value="${loggedUser.loggedEmail}">
+            </div>
+            <div class="form-group">
+                <label for="email">Телефонен номер:</label>
+                <input type="text" class="form-control" id="telephoneNumber" name="telephoneNumber"
+                       th:value="${loggedUser.loggedPhone}">
+            </div>
+            <button type="submit" class="btn btn-primary">Актуализиране на данните</button>
+        </form>
+    </div>
+</div>
+
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container text-center">
+        <span class="text-muted">© Румен Николов - 121220087 - ТУ-София</span>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

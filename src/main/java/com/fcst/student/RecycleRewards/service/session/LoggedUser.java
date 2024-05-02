@@ -8,6 +8,9 @@ public class LoggedUser {
     private String loggedLastName;
     private String loggedEmail;
     private String loggedPassword;
+    private String loggedPhone;
+    private String loggedAddress;
+
 
     public String getLoggedFirstName() {
         return loggedFirstName;
@@ -39,5 +42,28 @@ public class LoggedUser {
 
     public void setLoggedPassword(String loggedPassword) {
         this.loggedPassword = loggedPassword;
+    }
+
+    public String getLoggedPhone() {
+        return loggedPhone;
+    }
+
+    public void setLoggedPhone(String loggedPhone) {
+        this.loggedPhone = loggedPhone;
+    }
+
+    public String getLoggedAddress() {
+        return loggedAddress;
+    }
+
+    public void setLoggedAddress(String loggedAddress) {
+        this.loggedAddress = loggedAddress;
+    }
+
+    public void reset() {
+        setLoggedFirstName(null);
+        setLoggedLastName(null);
+        setLoggedEmail(null);
+        setLoggedPhone(null);
     }
 }

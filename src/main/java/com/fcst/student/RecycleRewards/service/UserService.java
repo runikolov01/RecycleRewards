@@ -13,4 +13,6 @@ public interface UserService {
 
     User getUserByEmail(String email);
     boolean verifyPassword(User user, String password);
+
+    void logout();
 }

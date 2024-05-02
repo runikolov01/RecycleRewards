@@ -3,6 +3,7 @@ package com.fcst.student.RecycleRewards.web;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
+import jakarta.servlet.http.HttpSession;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class LoginController {
@@ -46,7 +48,7 @@ public class LoginController {
             loggedUser.setLoggedFirstName(user.getFirstName());
             loggedUser.setLoggedLastName(user.getLastName());
             loggedUser.setLoggedPassword(user.getPassword());
-            return "redirect:/success";
+            return "redirect:/myProfile";
         } else {
             // Authentication failed, redirect back to login page with error message
             model.addAttribute("error", true);
@@ -54,9 +56,16 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/success")
-    public String successPage(Model model) {
+    @GetMapping("/myProfile")
+    public String openMyProfile(Model model) {
         model.addAttribute("loggedUser", loggedUser);
-        return "success";
+        return "myProfile";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+        this.userService.logout();
+        session.invalidate();
+        return "redirect:/home";
     }
 }
