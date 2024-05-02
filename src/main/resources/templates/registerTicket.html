@@ -41,7 +41,8 @@
             <div class="form-group">
                 <label for="ticketNumber">Въведете уникалния код на билета:</label>
                 <input type="text" class="form-control" id="ticketNumber" name="ticketNumber">
-                <small id="ticketNumberError" class="text-danger" style="display: none;">Билетът не беше намерен. Моля, въведете валиден номер.</small>
+                <small id="ticketNumberError" class="text-danger" style="display: none;">Билетът не беше намерен. Моля,
+                    въведете валиден номер.</small>
             </div>
             <button type="button" class="btn btn-primary" id="registerButton">Добави точките към моя профил</button>
         </form>
@@ -53,11 +54,7 @@
     </div>
 </div>
 
-<footer class="footer mt-auto py-3 bg-light">
-    <div class="container text-center">
-        <span class="text-muted">© Румен Николов - 121220087 - ТУ-София</span>
-    </div>
-</footer>
+<div th:replace="~{fragments/footer}"></div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -90,7 +87,6 @@
         });
     });
 </script>
-
 
 </body>
 </html>

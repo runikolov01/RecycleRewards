@@ -9,6 +9,7 @@
         .password-strength {
             color: #28a745;
         }
+
         .password-weak {
             color: #dc3545;
         }
@@ -86,17 +87,16 @@
             <label>Съгласявате ли се с условията за участие?</label><br>
             <div class="form-check-inline">
                 <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" name="conditionsConfirmation" value="yes" required> Да
+                    <input type="checkbox" class="form-check-input" name="conditionsConfirmation" value="yes" required>
+                    Да
                 </label>
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Подаване</button>
     </form>
 </div>
-<footer class="footer mt-auto py-3 bg-light">
-    <div class="container text-center">
-        <span class="text-muted">© Румен Николов - 121220087 - ТУ-София</span>
-    </div>
-</footer>
+
+<div th:replace="~{fragments/footer}"></div>
+
 </body>
 </html>
