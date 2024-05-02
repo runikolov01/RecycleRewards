@@ -40,14 +40,11 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model) {
+    public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
         User user = userService.getUserByEmail(email);
         if (user != null && userService.verifyPassword(user, password)) {
-            // Authentication successful, redirect to dashboard/homepage
-            loggedUser.setLoggedEmail(user.getEmail());
-            loggedUser.setLoggedFirstName(user.getFirstName());
-            loggedUser.setLoggedLastName(user.getLastName());
-            loggedUser.setLoggedPassword(user.getPassword());
+            // Authentication successful, store user ID in session
+            session.setAttribute("userId", user.getId());
             return "redirect:/myProfile";
         } else {
             // Authentication failed, redirect back to login page with error message
@@ -57,13 +54,23 @@ public class LoginController {
     }
 
     @GetMapping("/myProfile")
-    public String openMyProfile(Model model) {
-        model.addAttribute("loggedUser", loggedUser);
-        return "myProfile";
+    public String openMyProfile(Model model, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId != null) {
+            // Fetch user details from the database using the user ID
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                model.addAttribute("loggedUser", user);
+                return "myProfile";
+            }
+        }
+        // Handle case when user ID is not found or user is not found
+        return "redirect:/login"; // or any other appropriate action
     }
 
     @PostMapping("/logout")
     public String logout(HttpSession session) {
+        session.removeAttribute("userId");
         this.userService.logout();
         session.invalidate();
         return "redirect:/home";

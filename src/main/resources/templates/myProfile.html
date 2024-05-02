@@ -39,30 +39,34 @@
 
 <div class="container mt-5">
     <div class="jumbotron">
-        <h1 class="display-4">Профилът на <span
-                th:text="${loggedUser.loggedFirstName == null ? 'no user' : loggedUser.loggedFirstName}"></span> <span
-                th:text="${loggedUser.loggedLastName == null ? 'no user' : loggedUser.loggedLastName}"></span></h1>
+        <h1 class="display-4">Профилът на
+            <span th:if="${loggedUser != null && loggedUser.getFirstName() != null}"
+                  th:text="${loggedUser.getFirstName()}"></span>
+            <span th:if="${loggedUser != null && loggedUser.getLastName() != null}"
+                  th:text="${loggedUser.getLastName()}"></span>
+        </h1>
         <hr class="my-4">
-        <form action="/myProfile" method="patch">
+        <form action="/myProfile" method="post">
+            <input type="hidden" name="_method" value="patch"> <!-- This line overrides the method with PATCH -->
             <div class="form-group">
                 <label for="firstName">Първо име:</label>
                 <input type="text" class="form-control" id="firstName" name="firstName" required
-                       th:value="${loggedUser.loggedFirstName}">
+                       th:value="${loggedUser != null && loggedUser.getFirstName() != null ? loggedUser.getFirstName() : ''}">
             </div>
             <div class="form-group">
                 <label for="lastName">Фамилия:</label>
                 <input type="text" class="form-control" id="lastName" name="lastName" required
-                       th:value="${loggedUser.loggedLastName}">
+                       th:value="${loggedUser != null && loggedUser.getLastName() != null ? loggedUser.getLastName() : ''}">
             </div>
             <div class="form-group">
                 <label for="email">Електронна поща:</label>
                 <input type="email" class="form-control" id="email" name="email" required
-                       th:value="${loggedUser.loggedEmail}">
+                       th:value="${loggedUser != null && loggedUser.getEmail() != null ? loggedUser.getEmail()  : ''}">
             </div>
             <div class="form-group">
                 <label for="email">Телефонен номер:</label>
                 <input type="text" class="form-control" id="telephoneNumber" name="telephoneNumber"
-                       th:value="${loggedUser.loggedPhone}">
+                       th:value="${loggedUser != null && loggedUser.getPhone() != null ? loggedUser.getPhone()  : ''}">
             </div>
             <button type="submit" class="btn btn-primary">Актуализиране на данните</button>
         </form>

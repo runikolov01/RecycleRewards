@@ -3,6 +3,7 @@ package com.fcst.student.RecycleRewards.web;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
+import jakarta.servlet.http.HttpSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +26,9 @@ public class RegisterController {
     @Autowired
     private UserService userService;
 
-    LoggedUser loggedUser;
+    @Autowired
+    private LoggedUser loggedUser;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -42,7 +45,8 @@ public class RegisterController {
                                  @RequestParam String confirmPassword,
                                  @RequestParam String ageConfirmation,
                                  @RequestParam String conditionsConfirmation,
-                                 RedirectAttributes redirectAttributes) {
+                                 RedirectAttributes redirectAttributes,
+                                 HttpSession session) {
         if (!password.equals(confirmPassword)) {
             // Passwords don't match, redirect back to registration form
             redirectAttributes.addFlashAttribute("error", "Passwords do not match");
@@ -72,6 +76,8 @@ public class RegisterController {
         try {
             // Save the user
             userService.saveUser(user);
+            // Store user ID in session
+            session.setAttribute("userId", user.getId());
             redirectAttributes.addFlashAttribute("success", true);
             return "redirect:/register";
         } catch (Exception e) {
@@ -86,32 +92,33 @@ public class RegisterController {
                                 @RequestParam(required = false) String lastName,
                                 @RequestParam(required = false) String email,
                                 @RequestParam(required = false) String telephoneNumber,
-                                RedirectAttributes redirectAttributes) {
+                                RedirectAttributes redirectAttributes,
+                                HttpSession session) {
         try {
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId == null) {
+                // User ID not found in session, redirect to login
+                return "redirect:/login";
+            }
             // Retrieve the current user
-            User currentUser = userService.getUserByEmail(loggedUser.getLoggedEmail());
-            System.out.println(loggedUser.getLoggedEmail());
+            User currentUser = userService.getUserById(userId);
 
             // Update user data only if the parameters are not empty
             if (firstName != null && !firstName.isEmpty()) {
                 currentUser.setFirstName(firstName);
-                loggedUser.setLoggedFirstName(firstName);
             }
             if (lastName != null && !lastName.isEmpty()) {
                 currentUser.setLastName(lastName);
-                loggedUser.setLoggedLastName(lastName);
             }
             if (email != null && !email.isEmpty()) {
                 currentUser.setEmail(email);
-                loggedUser.setLoggedEmail(email);
             }
             if (telephoneNumber != null && !telephoneNumber.isEmpty()) {
                 currentUser.setPhone(telephoneNumber);
-                loggedUser.setLoggedPhone(telephoneNumber);
             }
 
             // Update the user in the database
-            User updatedUser = userService.updateUser(currentUser);
+            userService.updateUser(currentUser);
 
             redirectAttributes.addFlashAttribute("success", true);
             return "redirect:/myProfile";
@@ -120,5 +127,4 @@ public class RegisterController {
             return "redirect:/myProfile";
         }
     }
-
 }

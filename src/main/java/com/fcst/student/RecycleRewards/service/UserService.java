@@ -6,12 +6,19 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     void saveUser(User person);
+
     User updateUser(User person);
+
     void deleteUser(Long userId);
+
     User findUserById(Long userId);
+
     boolean existsByEmail(String email);
 
+    User getUserById(Long userId);
+
     User getUserByEmail(String email);
+
     boolean verifyPassword(User user, String password);
 
     void logout();

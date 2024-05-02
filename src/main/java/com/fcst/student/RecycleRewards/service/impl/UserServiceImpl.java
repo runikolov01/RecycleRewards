@@ -56,6 +56,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logout() {
-       loggedUser.reset();
+        loggedUser.reset();
+    }
+
+    @Override
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
     }
 }
