@@ -35,7 +35,12 @@ public class TicketController {
     public ResponseEntity<String> registerTicket(@RequestParam("ticketNumber") String ticketNumber) {
         Ticket ticket = ticketRepository.findByNumber(ticketNumber);
         if (ticket != null) {
-            // Your existing code
+            // Check if the ticket is already registered
+            if (ticket.getRegisteredOn() != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Кодът е вече регистриран. Моля опитайте с друг код.");
+            }
+
             // Update the ticket
             ticket.setRegisteredOn(LocalDateTime.now());
             // Set the currently logged-in user
@@ -49,6 +54,7 @@ public class TicketController {
                     .body("Билетът не беше намерен. Моля, въведете валиден номер.");
         }
     }
+
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
