@@ -8,11 +8,9 @@
     <li class="nav-item">
         <a class="nav-link" href="/myProfile">Точки: <span th:text="${totalPoints}"></span></a>
     </li>
-    <th:block th:if="${loggedIn}">
         <li class="nav-item">
             <form action="/logout" method="post">
                 <input type="submit" class="btn btn-link nav-link" value="Изход от профила">
             </form>
         </li>
-    </th:block>
 </ul>

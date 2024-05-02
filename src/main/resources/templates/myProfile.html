@@ -9,20 +9,21 @@
 </head>
 <body>
 
-<!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-<!--    <a class="navbar-brand" href="/home">RecycleRewards</a>-->
-<!--    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"-->
-<!--            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--        <span class="navbar-toggler-icon"></span>-->
-<!--    </button>-->
-
-<!--    <div class="collapse navbar-collapse" id="navbarSupportedContent">-->
-<!--        &lt;!&ndash; Use th:if instead of th:replace &ndash;&gt;-->
-<!--        <div th:if="${loggedIn}" th:include="fragments/navbar-logged-in :: navbar-logged-in"></div>-->
-<!--        <div th:if="${not loggedIn}" th:include="fragments/navbar-logged-out :: navbar-logged-out"></div>-->
-<!--    </div>-->
-<!--</nav>-->
-
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home">RecycleRewards</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <th:block th:if="${loggedUser != null}">
+            <div th:replace="~{fragments/navbar-logged-in}"></div>
+        </th:block>
+        <th:block th:unless="${loggedUser != null}">
+            <div th:replace="~{fragments/navbar-logged-out}"></div>
+        </th:block>
+    </div>
+</nav>
 
 
 <div class="container mt-5">
