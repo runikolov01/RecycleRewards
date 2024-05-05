@@ -6,37 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
     <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
-
-
-    <style>
-        body {
-            text-align: center;
-            margin: 50px 20px;
-            padding: 10px;
-        }
-
-        h1 {
-            background-color: lightgreen; /* Set background color of text to light green */
-            display: inline; /* Ensures the background covers only the text */
-            margin: 50px 20px;
-            padding: 10px; /* Add some padding for better appearance */
-        }
-
-        button {
-            padding: 10px 20px; /* Add padding to the button */
-            margin: 50px 20px;
-        }
-    </style>
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div>
-    <h1>Hello! If you want to recycle bottles, please click on the "Start" button:</h1>
 
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-1">1 бутилка = 1 точка</h1>
+        <hr class="my-4">
+        <img src="/images/logo.jpg" alt="Logo">
+        <h1 class="display-5">Натиснете бутона за стартиране.</h1>
+        <br>
+        <a class="btn btn-primary btn-lg" href="start" role="button">Започни рециклирането</a>
+    </div>
 </div>
-<a href="start">
-    <button>Start</button>
-</a>
+
 </body>
 <div th:replace="~{fragments/footer}"></div>
 </html>
