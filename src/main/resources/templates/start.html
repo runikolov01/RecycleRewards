@@ -2,26 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Start</title>
+    <title>Рециклиране на бутилки</title>
     <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div>
-    <h1>Click on "Add" button before every adding of new bottle.</h1>
-    <form action="/start" method="post">
-        <button type="submit">Add bottle</button>
-    </form>
 
-    <h1>You added <span th:text="${bottlesCount}">0</span> bottles. Good job!</h1>
-    <h2>If you are ready, click on "Print" button to take your ticket!</h2>
-
-    <a href="/print">
-        <button>Finish</button>
-    </a>
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Натиснете бутона преди всяко добавяне на нова бутилка.</h1>
+        <br>
+        <a class="btn btn-primary btn-lg" href="#" onclick="addBottle(event)">Добави бутилка</a>
+        <hr class="my-4">
+        <h1 class="display-5">Вие рециклирахте <span th:text="${bottlesCount}">0</span> бутилки. Успех!</h1>
+        <hr class="my-4">
+        <h1 class="display-4">Ако нямате повече бутилки за рециклиране, натиснете бутона:</h1>
+        <br>
+        <a class="btn btn-primary btn-lg" href="print" role="button">Приключи рециклирането!</a>
+    </div>
 </div>
-
 <div th:replace="~{fragments/footer}"></div>
+
+<script>
+    function addBottle(event) {
+        event.preventDefault(); // Предотвратява пренасочването към "#"
+
+        // Изпрати POST заявка към "/start"
+        fetch('/start', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: ''
+        })
+            .then(response => {
+                // Проверка за успешно изпращане на заявката
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // Пренасочване към страницата "/start" след успешната заявка
+                window.location.href = '/start';
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
+</script>
 
 </body>
 </html>
