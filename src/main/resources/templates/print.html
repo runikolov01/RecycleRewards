@@ -37,28 +37,5 @@
 
 <div th:replace="~{fragments/footer}"></div>
 
-<script>
-    function printAndExit(event) {
-        event.preventDefault(); // Предотвратява пренасочването към "#"
-
-        fetch('/print', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: ''
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                window.location.href = '/print_with_alert.html';
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-            });
-    }
-</script>
-
 </body>
 </html>
