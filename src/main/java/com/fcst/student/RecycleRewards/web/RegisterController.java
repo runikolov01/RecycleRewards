@@ -1,6 +1,7 @@
 package com.fcst.student.RecycleRewards.web;
 
 import com.fcst.student.RecycleRewards.model.User;
+import com.fcst.student.RecycleRewards.model.enums.Role;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
 import jakarta.servlet.http.HttpSession;
@@ -72,6 +73,7 @@ public class RegisterController {
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password)); // Encode the password
         user.setRegistrationDate(LocalDateTime.now());
+        user.setRole(Role.CLIENT);
 
         try {
             // Save the user
