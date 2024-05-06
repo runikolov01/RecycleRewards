@@ -11,21 +11,25 @@
 <div class="container mt-5">
     <div class="jumbotron">
         <div class="card-body">
-            <h1>Поздравления!</h1>
+            <h1 class="display-3">Поздравления!</h1>
             <hr>
-            <h2>Днес Вие рециклирахте <span th:text="${bottlesCount}">0</span> бутилки!</h2>
-            <h2>Вашият билет с код <span th:text="${ticketNumber}">YYYYYYYY</span> ще бъде изпринтен след като
+            <h1 class="display-5">Днес Вие рециклирахте <span th:text="${bottlesCount}">0</span> бутилки!</h1>
+            <br>
+            <h2 class="display-5">Вашият билет с код <span th:text="${ticketNumber}">TRYAGAIN</span> ще бъде изпринтен
+                след като
                 натиснете бутона.</h2>
-            <h2>Вземете билета и го регистрирайте в профила си до <span
+            <br>
+            <h2 class="display-5">Вземете билета и го регистрирайте в профила си до <span
                     th:text="${expirationFormatted}">DD/MM/YY TIME</span>,
                 за да спечелите <span th:text="${bottlesCount}">0</span> точки!</h2>
+            <br>
 
             <form id="printForm" action="/print" method="post">
                 <input type="hidden" name="bottlesCount" th:value="${bottlesCount}">
                 <input type="hidden" name="ticketNumber" th:value="${ticketNumber}">
                 <input type="hidden" name="issuedOnFormatted" th:value="${issuedOnFormatted}">
                 <input type="hidden" name="expirationFormatted" th:value="${expirationFormatted}">
-                <button type="submit" class="btn btn-primary btn-lg">Print & Exit</button>
+                <button type="submit" class="btn btn-primary btn-lg">Принтиране на билет</button>
             </form>
         </div>
     </div>
