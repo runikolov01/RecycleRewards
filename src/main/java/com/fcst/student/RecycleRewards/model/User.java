@@ -22,8 +22,11 @@ public class User {
     @Column(name = "total_points", nullable = false)
     private Integer totalPoints;
 
+    @Column(name = "address_id") // Mapping the address_id field
+    private Long addressId; // New field to hold the address_id
+
     @OneToOne
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id", insertable = false, updatable = false) // Mapping the relationship
     private Address address;
 
     @Column(unique = true, nullable = false)
@@ -38,7 +41,6 @@ public class User {
     @Column(unique = true)
     private String phone;
 
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -51,31 +53,18 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, Integer totalPoints, Address address, String email, String password, String phone, Role role, List<Prize> prizes) {
+    public User(Long id, String firstName, String lastName, Integer totalPoints, Long addressId, String email, String password, String phone, Role role, List<Prize> prizes) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.totalPoints = totalPoints;
-        this.address = address;
+        this.addressId = addressId;
         this.email = email;
         this.password = password;
         this.registrationDate = LocalDateTime.now();
         this.phone = phone;
         this.role = role;
         this.prizes = prizes;
-    }
-
-    public User(Long id, String firstName, String lastName, Integer totalPoints, Address address, String email, String password, String phone, Role role) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.totalPoints = totalPoints;
-        this.address = address;
-        this.email = email;
-        this.password = password;
-        this.registrationDate = LocalDateTime.now();
-        this.phone = phone;
-        this.role = role;
     }
 
     public Long getId() {
@@ -100,6 +89,22 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Integer getTotalPoints() {
+        return totalPoints;
+    }
+
+    public void setTotalPoints(Integer totalPoints) {
+        this.totalPoints = totalPoints;
+    }
+
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
     }
 
     public Address getAddress() {
@@ -134,7 +139,6 @@ public class User {
         this.phone = phone;
     }
 
-
     public Role getRole() {
         return role;
     }
@@ -157,13 +161,5 @@ public class User {
 
     public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
-    }
-
-    public Integer getTotalPoints() {
-        return totalPoints;
-    }
-
-    public void setTotalPoints(Integer totalPoints) {
-        this.totalPoints = totalPoints;
     }
 }
