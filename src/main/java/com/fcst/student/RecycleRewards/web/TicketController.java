@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Controller
 public class TicketController {
@@ -47,12 +48,21 @@ public class TicketController {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                                 .body("Кодът е вече регистриран. Моля опитайте с друг код.");
                     }
-                    // Update the ticket
+
+                    // Calculate the time difference
+                    LocalDateTime currentTime = LocalDateTime.now();
+                    LocalDateTime ticketIssuedTime = ticket.getIssued();
+                    long hoursDifference = ChronoUnit.HOURS.between(ticketIssuedTime, currentTime);
+
+                    if (hoursDifference > 72) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body("Времето за регистрация на този билет е изтекло. Моля, опитайте с друг билет.");
+                    }
+
                     ticket.setRegisteredOn(LocalDateTime.now());
                     ticket.setRegisteredBy(currentUser);
                     ticketRepository.save(ticket);
 
-                    // Update the user's total points
                     int pointsToAdd = ticket.getPoints();
                     int currentTotalPoints = currentUser.getTotalPoints();
                     currentUser.setTotalPoints(currentTotalPoints + pointsToAdd);
@@ -60,13 +70,11 @@ public class TicketController {
 
                     return ResponseEntity.ok(ticket.getPoints() + " точки са добавени успешно към Вашия профил");
                 } else {
-                    // Return a response indicating the ticket is not found
                     return ResponseEntity.status(HttpStatus.NOT_FOUND)
                             .body("Билетът не беше намерен. Моля, въведете валиден номер.");
                 }
             }
         }
-        // Handle case when user ID is not found or user is not found
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("Не сте оторизиран за тази операция. Моля, влезте в профила си и опитайте отново.");
     }
