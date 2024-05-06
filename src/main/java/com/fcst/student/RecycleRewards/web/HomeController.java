@@ -40,7 +40,7 @@ public class HomeController {
                 model.addAttribute("loggedUser", user);
 
                 // Fetch totalPoints for the logged-in user and add it to the model
-                Integer totalPoints = ticketRepository.getTotalPointsByUser(user);
+                Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
             }
         }
@@ -56,7 +56,7 @@ public class HomeController {
             User user = userService.getUserById(userId);
             if (user != null) {
                 model.addAttribute("loggedUser", user);
-                Integer totalPoints = ticketRepository.getTotalPointsByUser(user);
+                Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
             }
         }

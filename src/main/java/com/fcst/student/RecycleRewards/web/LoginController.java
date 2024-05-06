@@ -74,7 +74,7 @@ public class LoginController {
             User user = userService.getUserById(userId);
             if (user != null) {
                 // Get total points for the logged-in user
-                Integer totalPoints = ticketRepository.getTotalPointsByUser(user);
+                Integer totalPoints = user.getTotalPoints();
 
                 // Pass total points and loggedIn status to the view
                 model.addAttribute("totalPoints", totalPoints);

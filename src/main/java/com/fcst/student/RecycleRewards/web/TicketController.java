@@ -45,8 +45,12 @@ public class TicketController {
                 model.addAttribute("loggedUser", user);
 
                 // Fetch totalPoints for the logged-in user and add it to the model
-                Integer totalPoints = ticketRepository.getTotalPointsByUser(user);
+
+//                Integer totalPoints = ticketRepository.getTotalPointsByUser(user);
+//                model.addAttribute("totalPoints", totalPoints);
+                Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
+
             }
         }
         return "registerTicket";
