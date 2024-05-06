@@ -19,6 +19,9 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "total_points", nullable = false)
+    private Integer totalPoints;
+
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
@@ -48,10 +51,11 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, Address address, String email, String password, String phone, Role role, List<Prize> prizes) {
+    public User(Long id, String firstName, String lastName, Integer totalPoints, Address address, String email, String password, String phone, Role role, List<Prize> prizes) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.totalPoints = totalPoints;
         this.address = address;
         this.email = email;
         this.password = password;
@@ -61,10 +65,11 @@ public class User {
         this.prizes = prizes;
     }
 
-    public User(Long id, String firstName, String lastName, Address address, String email, String password, String phone, Role role) {
+    public User(Long id, String firstName, String lastName, Integer totalPoints, Address address, String email, String password, String phone, Role role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.totalPoints = totalPoints;
         this.address = address;
         this.email = email;
         this.password = password;
@@ -152,5 +157,13 @@ public class User {
 
     public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    public Integer getTotalPoints() {
+        return totalPoints;
+    }
+
+    public void setTotalPoints(Integer totalPoints) {
+        this.totalPoints = totalPoints;
     }
 }
