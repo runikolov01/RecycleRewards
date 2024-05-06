@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +30,25 @@ public class TicketController {
     }
 
     @GetMapping("/registerTicket")
-    public String registerTicket() {
+    public String registerTicket(Model model, HttpSession session) {
+        // Check if the user is logged in
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean loggedIn = authentication != null && authentication.isAuthenticated();
+
+        // Add the loggedIn attribute to the model
+        model.addAttribute("loggedIn", loggedIn);
+
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId != null) {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                model.addAttribute("loggedUser", user);
+
+                // Fetch totalPoints for the logged-in user and add it to the model
+                Integer totalPoints = ticketRepository.getTotalPointsByUser(user);
+                model.addAttribute("totalPoints", totalPoints);
+            }
+        }
         return "registerTicket";
     }
 

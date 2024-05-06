@@ -10,24 +10,19 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">RecycleRewards</a>
+    <a class="navbar-brand" href="/home">RecycleRewards</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/about">Информация</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/register">Регистрация</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/login">Вход</a>
-            </li>
-        </ul>
+        <th:block th:if="${loggedUser != null}">
+            <div th:replace="~{fragments/navbar-logged-in}"></div>
+        </th:block>
+        <th:block th:unless="${loggedUser != null}">
+            <div th:replace="~{fragments/navbar-logged-out}"></div>
+        </th:block>
     </div>
 </nav>
 
