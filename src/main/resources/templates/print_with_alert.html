@@ -6,39 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Printing</title>
     <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
-
-    <style>
-        /* Center the text vertically and horizontally */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        ul {
-            list-style-type: none;
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<ul>
-    <li><h1>Printing...</h1></li>
-    <li><img src="images/print.png" alt="Printing"></li>
-</ul>
-<br>
-<script>
-    // Redirect to "/index" after 3 seconds
-    setTimeout(function () {
-        window.location.href = "/index";
-    }, 3000);
-</script>
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-1">Билетът се принтира...</h1>
+        <hr class="my-4">
+        <img src="images/print.png" alt="Printing">
+    </div>
+</div>
 
 <div th:replace="~{fragments/footer}"></div>
 
+<script>
+    // Redirect to "/index" after 4 seconds
+    setTimeout(function () {
+        window.location.href = "/index";
+    }, 4000);
+</script>
 </body>
 </html>
