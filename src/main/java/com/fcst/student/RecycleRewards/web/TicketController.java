@@ -57,7 +57,7 @@ public class TicketController {
                     int currentTotalPoints = currentUser.getTotalPoints();
                     currentUser.setTotalPoints(currentTotalPoints + pointsToAdd);
                     userService.saveUser(currentUser);
-                    
+
                     return ResponseEntity.ok(ticket.getPoints() + " точки са добавени успешно към Вашия профил");
                 } else {
                     // Return a response indicating the ticket is not found

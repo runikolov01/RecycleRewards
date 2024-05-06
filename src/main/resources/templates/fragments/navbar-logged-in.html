@@ -1,5 +1,8 @@
 <ul class="navbar-nav ml-auto">
     <li class="nav-item">
+        <a class="nav-link" href="/registerTicket">Регистрация на билет</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="/about">Информация</a>
     </li>
     <li class="nav-item">
@@ -8,9 +11,9 @@
     <li class="nav-item">
         <a class="nav-link" href="/myProfile">Точки: <span th:text="${totalPoints}"></span></a>
     </li>
-        <li class="nav-item">
-            <form action="/logout" method="post">
-                <input type="submit" class="btn btn-link nav-link" value="Изход от профила">
-            </form>
-        </li>
+    <li class="nav-item">
+        <form action="/logout" method="post">
+            <input type="submit" class="btn btn-link nav-link" value="Изход от профила">
+        </form>
+    </li>
 </ul>
