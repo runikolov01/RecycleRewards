@@ -18,13 +18,13 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <th:block th:if="${loggedUser != null}">
-            <div th:replace="~{fragments/navbar-logged-in}"></div>
+            <div th:if="${loggedUser.getRole() == 'ADMIN'}" th:replace="~{fragments/navbar_admin}"></div>
+            <div th:if="${loggedUser.getRole() == 'CLIENT'}" th:replace="~{fragments/navbar-logged-in}"></div>
         </th:block>
-        <th:block th:unless="${loggedUser != null}">
+        <th:block th:if="${loggedUser == null}">
             <div th:replace="~{fragments/navbar-logged-out}"></div>
         </th:block>
     </div>
-
 </nav>
 
 <div class="container mt-5">

@@ -43,6 +43,7 @@ public class HomeController {
                 Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
             }
+            System.out.println(user.getRole());
         }
         return "home";
     }
