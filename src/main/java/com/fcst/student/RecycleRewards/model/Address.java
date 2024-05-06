@@ -12,14 +12,15 @@ public class Address {
     @Column
     private String city;
 
-    @Column
+    @Column(name = "street_number")
+
     private int postcode;
 
     @Column
     private String street;
 
-    @Column
-    private int number;
+    @Column(name = "street_number")
+    private int streetNumber;
 
     @Column
     private int floor;
@@ -31,22 +32,22 @@ public class Address {
     public Address() {
     }
 
-    public Address(Long id, String city, int postcode, String street, int number, int floor, int apartmentNumber) {
+    public Address(Long id, String city, int postcode, String street, int streetNumber, int floor, int apartmentNumber) {
         this.id = id;
         this.city = city;
         this.postcode = postcode;
         this.street = street;
-        this.number = number;
+        this.streetNumber = streetNumber;
         this.floor = floor;
         this.apartmentNumber = apartmentNumber;
     }
 
-    public Address(Long id, String city, int postcode, String street, int number) {
+    public Address(Long id, String city, int postcode, String street, int streetNumber) {
         this.id = id;
         this.city = city;
         this.postcode = postcode;
         this.street = street;
-        this.number = number;
+        this.streetNumber = streetNumber;
     }
 
     public Long getId() {
@@ -81,12 +82,12 @@ public class Address {
         this.street = street;
     }
 
-    public int getNumber() {
-        return number;
+    public int getStreetNumber() {
+        return streetNumber;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setStreetNumber(int streetNumber) {
+        this.streetNumber = streetNumber;
     }
 
     public int getFloor() {
