@@ -11,7 +11,11 @@ import java.util.List;
 @Service
 public class PrizeServiceImpl implements PrizeService {
     @Autowired
-    private PrizeRepository prizeRepository;
+    private final PrizeRepository prizeRepository;
+
+    public PrizeServiceImpl(PrizeRepository prizeRepository) {
+        this.prizeRepository = prizeRepository;
+    }
 
     @Override
     public void savePrize(Prize prize) {
@@ -25,7 +29,7 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     public List<Prize> getAllPrizes() {
-        return List.of();
+        return prizeRepository.findAll();
     }
 
     @Override

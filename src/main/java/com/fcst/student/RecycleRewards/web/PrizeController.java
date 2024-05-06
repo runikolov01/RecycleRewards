@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 public class PrizeController {
@@ -24,7 +26,9 @@ public class PrizeController {
     }
 
     @GetMapping("/prizes")
-    public String openPrizesPage() {
+    public String showPrizes(Model model) {
+        List<Prize> prizes = prizeService.getAllPrizes();
+        model.addAttribute("prizes", prizes);
         return "prizes";
     }
 

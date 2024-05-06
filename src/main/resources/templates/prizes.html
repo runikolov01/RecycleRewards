@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Награди</title>
@@ -32,8 +32,29 @@
         <h1 class="display-4">Награди</h1>
         <hr class="my-4">
         <br>
-        <br>
-        <a class="btn btn-primary btn-lg" href="about" role="button">Научете повече за RecycleRewards</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Награда</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Необходим брой точки</th>
+                <th scope="col">Крайна дата</th>
+                <th scope="col">Брой на оставащите билети</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="prize, rowStat : ${prizes}">
+                <td th:text="${rowStat.index + 1}"></td>
+                <td th:text="${prize.name}"></td>
+                <td th:text="${prize.description}"></td>
+                <td th:text="${prize.neededPointsToBuy}"></td>
+                <td th:text="${prize.endDate}"></td>
+                <td th:text="${prize.remainedTickets}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-primary btn-lg" href="#" role="button">Бутон</a>
     </div>
 </div>
 
