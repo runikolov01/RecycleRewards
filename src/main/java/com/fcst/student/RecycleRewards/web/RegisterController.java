@@ -7,6 +7,8 @@ import com.fcst.student.RecycleRewards.service.session.LoggedUser;
 import jakarta.servlet.http.HttpSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -90,18 +92,18 @@ public class RegisterController {
     }
 
     @PatchMapping("/myProfile")
-    public String updateProfile(@RequestParam(required = false) String firstName,
-                                @RequestParam(required = false) String lastName,
-                                @RequestParam(required = false) String email,
-                                @RequestParam(required = false) String telephoneNumber,
-                                RedirectAttributes redirectAttributes,
-                                HttpSession session) {
+    public ResponseEntity<String> updateProfile(@RequestParam(required = false) String firstName,
+                                                @RequestParam(required = false) String lastName,
+                                                @RequestParam(required = false) String email,
+                                                @RequestParam(required = false) String telephoneNumber,
+                                                HttpSession session) {
         try {
             Long userId = (Long) session.getAttribute("userId");
             if (userId == null) {
-                // User ID not found in session, redirect to login
-                return "redirect:/login";
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("User not authorized");
             }
+
             // Retrieve the current user
             User currentUser = userService.getUserById(userId);
 
@@ -122,11 +124,10 @@ public class RegisterController {
             // Update the user in the database
             userService.updateUser(currentUser);
 
-            redirectAttributes.addFlashAttribute("success", true);
-            return "redirect:/myProfile";
+            return ResponseEntity.ok("Данните са актуализирани успешно!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error updating profile: " + e.getMessage());
-            return "redirect:/myProfile";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating profile: " + e.getMessage());
         }
     }
 }

@@ -6,6 +6,15 @@
     <title>Моят профил</title>
     <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .success-message {
+            color: green;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 
@@ -35,8 +44,8 @@
                   th:text="${loggedUser.getLastName()}"></span>
         </h1>
         <hr class="my-4">
-        <form action="/myProfile" method="post">
-            <input type="hidden" name="_method" value="patch"> <!-- This line overrides the method with PATCH -->
+        <form action="/myProfile" method="post" id="profileForm">
+            <input type="hidden" name="_method" value="patch"> <!-- This line overrides the (method with PATCH -->
             <div class="form-group">
                 <label for="firstName">Първо име:</label>
                 <input type="text" class="form-control" id="firstName" name="firstName" required
@@ -58,11 +67,46 @@
                        th:value="${loggedUser != null && loggedUser.getPhone() != null ? loggedUser.getPhone()  : ''}">
             </div>
             <button type="submit" class="btn btn-primary">Актуализиране на данните</button>
+            <div id="messageArea"></div>
         </form>
     </div>
 </div>
 
 <div th:replace="~{fragments/footer}"></div>
 
+<script>
+    // Function to display success or error message
+    function showMessage(message, isError) {
+        const messageArea = document.getElementById('messageArea');
+        messageArea.innerText = message;
+        messageArea.className = isError ? 'error-message' : 'success-message';
+    }
+
+    // Submit form using AJAX to handle response dynamically
+    document.getElementById('profileForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: form.method,
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.text(); // Return response body if successful
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .then(data => {
+                showMessage(data, false); // Display success message
+            })
+            .catch(error => {
+                showMessage(error.message, true); // Display error message
+            });
+    });
+</script>
 </body>
 </html>
