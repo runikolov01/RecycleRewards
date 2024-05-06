@@ -29,13 +29,14 @@
 
 <div class="container mt-5">
     <div class="jumbotron">
-        <h1 class="display-4">Добре дошли в RecycleRewards!</h1>
-        <h1 class="display-4">Профилът на
+        <h1 class="display-4">
             <span th:if="${loggedUser != null && loggedUser.getFirstName() != null}"
                   th:text="${loggedUser.getFirstName()}"></span>
             <span th:if="${loggedUser != null && loggedUser.getLastName() != null}"
                   th:text="${loggedUser.getLastName()}"></span>
         </h1>
+        <h1 class="display-4">Добре дошли в RecycleRewards!</h1>
+
         <p class="lead">Тук с всяка рециклирана бутилка печелите!</p>
         <hr class="my-4">
         <p>Рециклирането е най-важното действие, ако искаме нашата скъпоценна планета да оцелее.</p>
