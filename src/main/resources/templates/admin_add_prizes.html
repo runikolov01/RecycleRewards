@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавяне на награди</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home">RecycleRewards</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <th:block th:if="${loggedUser != null}">
+            <div th:replace="~{fragments/navbar-logged-in}"></div>
+        </th:block>
+        <th:block th:unless="${loggedUser != null}">
+            <div th:replace="~{fragments/navbar-logged-out}"></div>
+        </th:block>
+    </div>
+
+</nav>
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Добавяне на награди - панел за админи</h1>
+        <hr class="my-4">
+        <br>
+        <form id="addPrizeForm" action="/admin_add_prizes" method="post">
+            <div class="form-group">
+                <label for="name">Име на наградата:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+
+                <label for="description">Описание: </label>
+                <input type="text" class="form-control" id="description" name="description" required>
+
+                <label for="neededPointsToBuy">Необходим брой точки за закупуване на 1 билет: </label>
+                <input type="number" class="form-control" id="neededPointsToBuy" name="neededPointsToBuy" required>
+
+                <label for="totalTickets">Общ брой на билетите: </label>
+                <input type="number" class="form-control" id="totalTickets" name="totalTickets" required>
+
+                <label for="startDateTime">Начален ден и час </label>
+                <input type="datetime-local" class="form-control" id="startDateTime" name="startDateTime" required>
+
+                <label for="endDateTime">Краен ден и час </label>
+                <input type="datetime-local" class="form-control" id="endDateTime" name="endDateTime" required>
+
+                <br>
+
+                <button type="submit" class="btn btn-primary btn-lg" id="addPrizeButton">Добавяне на наградата</button>
+
+                <div id="successMessageContainer" style="display: none; margin-top: 10px;">
+                    <p id="successMessage" class="text-success">You added the prize successfully</p>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer}"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("Document ready!");
+
+        document.getElementById('addPrizeForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+
+            fetch('/admin_add_prizes', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        throw new Error('Грешка при добавянето на наградата. Моля, опитайте отново!');
+                    }
+                })
+                .then(data => {
+                    document.getElementById('successMessage').textContent = data;
+                    document.getElementById('successMessageContainer').style.display = 'block';
+
+                    this.reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle error if needed
+                });
+        });
+    });
+
+</script>
+
+</body>
+</html>

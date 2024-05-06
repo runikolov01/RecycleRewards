@@ -20,13 +20,13 @@ public class Prize {
     private String description;
 
     @Column(name = "needed_points_to_buy", nullable = false)
-    private int neededPointsToBuy;
+    private Integer neededPointsToBuy;
 
     @Column(name = "total_tickets", nullable = false)
-    private int totalTickets;
+    private Integer totalTickets;
 
-    @Column(name = "remained_tickets", nullable = false)
-    private int remainedTickets;
+    @Column(name = "remained_tickets")
+    private Integer remainedTickets;
 
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
@@ -37,11 +37,15 @@ public class Prize {
     @ManyToMany(mappedBy = "prizes")
     private List<User> participants;
 
+    @Lob
+    private byte[] image;
+
+
     public Prize() {
 
     }
 
-    public Prize(Long id, String name, String description, int neededPointsToBuy, int totalTickets, int remainedTickets, LocalDateTime startDate, LocalDateTime endDate, List<User> participants) {
+    public Prize(Long id, String name, String description, Integer neededPointsToBuy, Integer totalTickets, Integer remainedTickets, LocalDateTime startDate, LocalDateTime endDate, List<User> participants) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -77,19 +81,19 @@ public class Prize {
         this.description = description;
     }
 
-    public int getNeededPointsToBuy() {
+    public Integer getNeededPointsToBuy() {
         return neededPointsToBuy;
     }
 
-    public void setNeededPointsToBuy(int neededPointsToBuy) {
+    public void setNeededPointsToBuy(Integer neededPointsToBuy) {
         this.neededPointsToBuy = neededPointsToBuy;
     }
 
-    public int getTotalTickets() {
+    public Integer getTotalTickets() {
         return totalTickets;
     }
 
-    public void setTotalTickets(int totalTickets) {
+    public void setTotalTickets(Integer totalTickets) {
         this.totalTickets = totalTickets;
     }
 
@@ -97,7 +101,7 @@ public class Prize {
         return remainedTickets;
     }
 
-    public void setRemainedTickets(int remainedTickets) {
+    public void setRemainedTickets(Integer remainedTickets) {
         this.remainedTickets = remainedTickets;
     }
 
@@ -123,5 +127,13 @@ public class Prize {
 
     public void setParticipants(List<User> participants) {
         this.participants = participants;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }
