@@ -12,8 +12,7 @@ public class Address {
     @Column
     private String city;
 
-    @Column(name = "street_number")
-
+    @Column(name = "postcode")
     private int postcode;
 
     @Column
