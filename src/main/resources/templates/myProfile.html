@@ -45,26 +45,62 @@
         </h1>
         <hr class="my-4">
         <form action="/myProfile" method="post" id="profileForm">
-            <input type="hidden" name="_method" value="patch"> <!-- This line overrides the (method with PATCH -->
+            <input type="hidden" name="_method" value="patch">
             <div class="form-group">
-                <label for="firstName">Първо име:</label>
+                <label for="firstName">Първо име: (*)</label>
                 <input type="text" class="form-control" id="firstName" name="firstName" required
                        th:value="${loggedUser != null && loggedUser.getFirstName() != null ? loggedUser.getFirstName() : ''}">
             </div>
             <div class="form-group">
-                <label for="lastName">Фамилия:</label>
+                <label for="lastName">Фамилия: (*)</label>
                 <input type="text" class="form-control" id="lastName" name="lastName" required
                        th:value="${loggedUser != null && loggedUser.getLastName() != null ? loggedUser.getLastName() : ''}">
             </div>
             <div class="form-group">
-                <label for="email">Електронна поща:</label>
+                <label for="email">Електронна поща: (*)</label>
                 <input type="email" class="form-control" id="email" name="email" required
                        th:value="${loggedUser != null && loggedUser.getEmail() != null ? loggedUser.getEmail()  : ''}">
             </div>
             <div class="form-group">
-                <label for="email">Телефонен номер:</label>
+                <label for="email">Телефонен номер: (*)</label>
                 <input type="text" class="form-control" id="telephoneNumber" name="telephoneNumber"
                        th:value="${loggedUser != null && loggedUser.getPhone() != null ? loggedUser.getPhone()  : ''}">
+            </div>
+            <h1 class="display-4">Личен дрес</h1>
+            <hr class="my-4">
+            <div class="form-group">
+                <label for="city">Град: (*)</label>
+                <input type="text" class="form-control" id="city" name="city"
+                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getCity() != null ? loggedUser.getAddress().getCity() : ''}">
+            </div>
+            <div class="form-group">
+                <label for="postCode">Пощенски код: (*)</label>
+                <input type="number" class="form-control" id="postCode" name="postCode"
+                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getPostcode() != null ? loggedUser.getAddress().getPostcode() : ''}">
+            </div>
+            <div class="form-group">
+                <label for="street">Улица: (*)</label>
+                <input type="text" class="form-control" id="street" name="street"
+                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getStreet() != null ? loggedUser.getAddress().getStreet() : ''}">
+
+            </div>
+            <div class="form-group">
+                <label for="streetNumber">Улица номер: (*)</label>
+                <input type="number" class="form-control" id="streetNumber" name="streetNumber"
+                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getStreetNumber() != null ? loggedUser.getAddress().getStreetNumber() : ''}">
+
+            </div>
+            <div class="form-group">
+                <label for="floor">Етаж:</label>
+                <input type="number" class="form-control" id="floor" name="floor"
+                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getFloor() != null ? loggedUser.getAddress().getFloor() : ''}">
+
+            </div>
+            <div class="form-group">
+                <label for="apartmentNumber">Апартамент номер:</label>
+                <input type="number" class="form-control" id="apartmentNumber" name="apartmentNumber"
+                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getApartmentNumber() != null ? loggedUser.getAddress().getApartmentNumber() : ''}">
+
             </div>
             <button type="submit" class="btn btn-primary">Актуализиране на данните</button>
             <div id="messageArea"></div>
@@ -97,11 +133,19 @@
                 if (response.ok) {
                     return response.text(); // Return response body if successful
                 } else {
-                    throw new Error('Network response was not ok');
+                    // Check if response status is 400 Bad Request
+                    if (response.status === 400) {
+                        // If status is 400, display the custom error message
+                        return response.text();
+                    } else {
+                        // For other error statuses, throw an error
+                        throw new Error('Network response was not ok');
+                    }
                 }
             })
             .then(data => {
-                showMessage(data, false); // Display success message
+                // Display success message or error message
+                showMessage(data, !data.startsWith("Данните са актуализирани успешно!"));
             })
             .catch(error => {
                 showMessage(error.message, true); // Display error message
