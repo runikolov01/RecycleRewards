@@ -123,6 +123,20 @@ public class UserController {
         return "edit-user";
     }
 
+    @PostMapping("/login")
+    public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
+        User user = userService.getUserByEmail(email);
+        if (user != null && userService.verifyPassword(user, password)) {
+            // Authentication successful, store user ID in session
+            session.setAttribute("userId", user.getId());
+            return "redirect:/myProfile";
+        } else {
+            // Authentication failed, redirect back to login page with error message
+            model.addAttribute("error", true);
+            return "redirect:/login?error";
+        }
+    }
+
     @PostMapping("/logout")
     public String logout(HttpSession session, HttpServletResponse response) {
         session.removeAttribute("userId");
