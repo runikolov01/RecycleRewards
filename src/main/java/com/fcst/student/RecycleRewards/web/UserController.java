@@ -20,13 +20,13 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    
+
     @GetMapping("/users")
     public String showUsers(Model model, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId != null) {
             User user = userService.getUserById(userId);
-            if (user != null) {
+            if (user.getRole().equals("ADMIN")) {
                 Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
                 model.addAttribute("loggedUser", user);
