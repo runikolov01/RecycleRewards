@@ -1,7 +1,10 @@
 package com.fcst.student.RecycleRewards.web;
 
 import com.fcst.student.RecycleRewards.model.Prize;
+import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.service.PrizeService;
+import com.fcst.student.RecycleRewards.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +20,26 @@ import java.util.List;
 
 @Controller
 public class PrizeController {
-
+    private final UserService userService;
     private final PrizeService prizeService;
 
     @Autowired
-    public PrizeController(PrizeService prizeService) {
+    public PrizeController(UserService userService, PrizeService prizeService) {
+        this.userService = userService;
         this.prizeService = prizeService;
     }
 
     @GetMapping("/prizes")
-    public String showPrizes(Model model) {
+    public String showPrizes(Model model, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId != null) {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                model.addAttribute("loggedUser", user);
+                Integer totalPoints = user.getTotalPoints();
+                model.addAttribute("totalPoints", totalPoints);
+            }
+        }
         List<Prize> prizes = prizeService.getAllPrizes();
         model.addAttribute("prizes", prizes);
         return "prizes";
