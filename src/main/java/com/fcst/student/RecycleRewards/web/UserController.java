@@ -26,19 +26,27 @@ public class UserController {
         Long userId = (Long) session.getAttribute("userId");
         if (userId != null) {
             User user = userService.getUserById(userId);
-            if (user.getRole().equals("ADMIN")) {
-                Integer totalPoints = user.getTotalPoints();
-                model.addAttribute("totalPoints", totalPoints);
-                model.addAttribute("loggedUser", user);
-                model.addAttribute("loggedIn", true);
+            if (user != null) {
+                String role = String.valueOf(user.getRole());
+                if (role != null && role.equals("ADMIN")) {
+                    Integer totalPoints = user.getTotalPoints();
+                    model.addAttribute("totalPoints", totalPoints);
+                    model.addAttribute("loggedUser", user);
+                    model.addAttribute("loggedIn", true);
 
-                List<User> users = userService.getAllUsers();
-                model.addAttribute("users", users);
-                return "users";
+                    List<User> users = userService.getAllUsers();
+                    model.addAttribute("users", users);
+                    return "users";
+                } else {
+                    System.out.println("User role: " + role);
+                }
+            } else {
+                System.out.println("User is null for userId: " + userId);
             }
         }
         return "redirect:/home";
     }
+
 
     @GetMapping("/delete/{userId}")
     public String deleteUser(@PathVariable("userId") Long userId) {
