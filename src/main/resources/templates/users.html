@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title>Потребители</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/home">RecycleRewards</a>
-    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-            class="navbar-toggler"
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
             data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -25,6 +25,7 @@
     </div>
 
 </nav>
+
 
 <div class="container mt-5">
     <div class="jumbotron">
@@ -72,7 +73,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Event handler for Edit button
         $(document).on('click', '.edit-btn', function () {
+            // Find the closest row
             var $row = $(this).closest('tr');
 
             // Enable editing for all cells
@@ -110,7 +113,7 @@
             var email = $row.find('td:eq(3) span').text();
             var phone = $row.find('td:eq(4) span').text();
 
-            // Send AJAX request to update user data
+// Send AJAX request to update user data
             $.ajax({
                 url: '/update/' + userId,
                 type: 'PATCH',
@@ -123,9 +126,11 @@
                     phone: phone
                 }),
                 success: function (response) {
+                    // Handle success response
                     console.log('User updated successfully');
                 },
                 error: function (xhr, status, error) {
+                    // Handle error response
                     console.error('Error updating user');
                 }
             });
@@ -134,87 +139,26 @@
 
         // Event handler for Delete button
         $(document).on('click', '.delete-btn', function () {
-            var userId = $(this).closest('tr').find('.edit-btn').data('user-id');
+            // Find the closest row
+            var $row = $(this).closest('tr');
+
+            // Extract user ID from the Edit button in the same row
+            var userId = $row.find('td:eq(0) span').text();
 
             // Send AJAX request to delete user
-            $(document).ready(function () {
-                // Event handler for Edit button
-                $(document).on('click', '.edit-btn', function () {
-                    var $row = $(this).closest('tr');
-
-                    // Enable editing for all cells
-                    $row.find('.editable').prop('contenteditable', true);
-
-                    $row.css('background-color', 'yellow');
-
-                    $row.find('.delete-btn').hide();
-                    $row.find('.save-btn').show();
-                    $(this).hide();
-                });
-
-                // Event handler for Save button
-                $(document).on('click', '.save-btn', function () {
-                    var $row = $(this).closest('tr');
-
-                    $row.find('.editable').prop('contenteditable', false);
-
-                    $row.css('background-color', 'white');
-
-                    // Show the Delete button and Edit button, hide the Save button
-                    $row.find('.delete-btn').show();
-                    $row.find('.edit-btn').show();
-                    $(this).hide();
-
-                    // Extract updated data from the row
-                    var userId = $row.find('td:eq(0) span').text();
-                    var firstName = $row.find('td:eq(1) span').text();
-                    var lastName = $row.find('td:eq(2) span').text();
-                    var email = $row.find('td:eq(3) span').text();
-                    var phone = $row.find('td:eq(4) span').text();
-                    var role = $row.find('td:eq(7) span').text(); // Added role
-
-                    // Send AJAX request to update user data
-                    $.ajax({
-                        url: '/update/' + userId,
-                        type: 'PATCH',
-                        contentType: 'application/json', // Set content type to JSON
-                        data: JSON.stringify({
-                            id: userId,
-                            firstName: firstName,
-                            lastName: lastName,
-                            email: email,
-                            phone: phone,
-                            role: role // Added role
-                        }),
-                        success: function (response) {
-                            // Handle success response
-                            console.log('User updated successfully');
-                        },
-                        error: function (xhr, status, error) {
-                            // Handle error response
-                            console.error('Error updating user');
-                        }
-                    });
-                });
-
-                // Event handler for Delete button
-                $(document).on('click', '.delete-btn', function () {
-                    var userId = $(this).closest('tr').find('td:eq(0) span').text();
-
-                    $.ajax({
-                        url: '/delete/' + userId,
-                        type: 'GET',
-                        success: function (response) {
-                            console.log('User deleted successfully');
-                            window.location.reload(); // Refresh the page
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error deleting user');
-                        }
-                    });
-                });
+            $.ajax({
+                url: '/delete/' + userId,
+                type: 'GET', // Change the request type to GET
+                success: function (response) {
+                    // Handle success response, maybe show a message or refresh the page
+                    console.log('User deleted successfully');
+                    window.location.reload(); // Refresh the page
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    console.error('Error deleting user');
+                }
             });
-
         });
     });
 </script>
