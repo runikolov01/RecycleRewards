@@ -46,8 +46,30 @@ public class PrizeController {
     }
 
     @GetMapping("/admin_add_prizes")
-    public String openAddPrizesPage() {
-        return "admin_add_prizes";
+    public String openAddPrizesPage(Model model, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId != null) {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                String role = String.valueOf(user.getRole());
+                if (role != null && role.equals("ADMIN")) {
+                    Integer totalPoints = user.getTotalPoints();
+                    model.addAttribute("totalPoints", totalPoints);
+                    model.addAttribute("loggedUser", user);
+                    model.addAttribute("loggedIn", true);
+                    model.addAttribute("loggedUser", user);
+
+                    return "admin_add_prizes";
+                } else {
+                    System.out.println("User role: " + role);
+                }
+            } else {
+                System.out.println("User is null for userId: " + userId);
+            }
+        }
+        List<Prize> prizes = prizeService.getAllPrizes();
+        model.addAttribute("prizes", prizes);
+        return "redirect:/home";
     }
 
     @PostMapping("/admin_add_prizes")
