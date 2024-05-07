@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Потребители</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home">RecycleRewards</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <th:block th:if="${loggedUser != null}">
+            <div th:replace="~{fragments/navbar-logged-in}"></div>
+        </th:block>
+        <th:block th:unless="${loggedUser != null}">
+            <div th:replace="~{fragments/navbar-logged-out}"></div>
+        </th:block>
+    </div>
+
+</nav>
+
+
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Потребители</h1>
+        <hr class="my-4">
+        <br>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Име</th>
+                <th scope="col">Фамилия</th>
+                <th scope="col">Имейл</th>
+                <th scope="col">Телефон</th>
+                <th scope="col">Дата на регистрация</th>
+                <th scope="col">Точки</th>
+                <th scope="col">Роля</th>
+                <th scope="col">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user, rowStat : ${users}">
+                <td><span th:text="${user.id}"></span></td>
+                <td><span th:text="${user.firstName}" class="editable" contenteditable="true"></span></td>
+                <td><span th:text="${user.lastName}" class="editable" contenteditable="true"></span></td>
+                <td><span th:text="${user.email}" class="editable" contenteditable="true"></span></td>
+                <td><span th:text="${user.phone}" class="editable" contenteditable="true"></span></td>
+                <td th:text="${user.registrationDate}"></td>
+                <td th:text="${user.totalPoints}"></td>
+                <td th:text="${user.role}" class="editable" contenteditable="true"></td>
+                <td>
+                    <button class="btn btn-primary btn-sm edit-btn">Edit</button>
+                    <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+                    <button class="btn btn-success btn-sm save-btn" style="display: none;">Save</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-primary btn-lg" href="#" role="button">Бутон</a>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer}"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Event handler for Edit button
+        $(document).on('click', '.edit-btn', function () {
+            // Find the closest row
+            var $row = $(this).closest('tr');
+
+            // Enable editing for all cells
+            $row.find('.editable').prop('contenteditable', true);
+
+            // Change background color of the row to yellow
+            $row.css('background-color', 'yellow');
+
+            // Hide the Delete button and show the Save button
+            $row.find('.delete-btn').hide();
+            $row.find('.save-btn').show();
+            $(this).hide();
+        });
+
+        // Event handler for Save button
+        $(document).on('click', '.save-btn', function () {
+            // Find the closest row
+            var $row = $(this).closest('tr');
+
+            // Disable editing for all cells
+            $row.find('.editable').prop('contenteditable', false);
+
+            // Revert background color of the row to white
+            $row.css('background-color', 'white');
+
+            // Show the Delete button and Edit button, hide the Save button
+            $row.find('.delete-btn').show();
+            $row.find('.edit-btn').show();
+            $(this).hide();
+
+            // Extract updated data from the row
+            var userId = $row.find('td:eq(0) span').text();
+            var firstName = $row.find('td:eq(1) span').text();
+            var lastName = $row.find('td:eq(2) span').text();
+            var email = $row.find('td:eq(3) span').text();
+            var phone = $row.find('td:eq(4) span').text();
+
+// Send AJAX request to update user data
+            $.ajax({
+                url: '/update/' + userId,
+                type: 'PATCH',
+                contentType: 'application/json', // Set content type to JSON
+                data: JSON.stringify({
+                    id: userId,
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    phone: phone
+                }),
+                success: function (response) {
+                    // Handle success response
+                    console.log('User updated successfully');
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    console.error('Error updating user');
+                }
+            });
+
+        });
+
+        // Event handler for Delete button
+        $(document).on('click', '.delete-btn', function () {
+            // Extract user ID from the Edit button in the same row
+            var userId = $(this).closest('tr').find('.edit-btn').data('user-id');
+
+            // Send AJAX request to delete user
+            // ...
+        });
+    });
+</script>
+
+</body>
+</html>

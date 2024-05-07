@@ -3,6 +3,8 @@ package com.fcst.student.RecycleRewards.service;
 import com.fcst.student.RecycleRewards.model.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface UserService {
     void saveUser(User person);
@@ -22,4 +24,6 @@ public interface UserService {
     boolean verifyPassword(User user, String password);
 
     void logout();
+
+    List<User> getAllUsers();
 }
