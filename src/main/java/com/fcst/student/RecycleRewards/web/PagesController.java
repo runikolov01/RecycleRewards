@@ -117,9 +117,9 @@ public class PagesController {
     public String exitSession(HttpSession session, Model model) {
         Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
         bottlesCount = ticketService.getDefaultBottlesCount(bottlesCount);
-        String ticketNumber = (String) session.getAttribute("ticketNumber"); // Retrieve the ticket number from the session
+        String ticketNumber = (String) session.getAttribute("ticketNumber");
 
-        Ticket ticket = ticketService.createTicket(bottlesCount, ticketNumber); // Use the same ticket number
+        Ticket ticket = ticketService.createTicket(bottlesCount, ticketNumber);
         setAttributesAndModel(session, model, ticket, bottlesCount);
 
         ticketService.saveTicket(ticket);

@@ -29,10 +29,9 @@ public class TicketServiceImpl implements TicketService {
         LocalDateTime issuedOn = LocalDateTime.now();
         LocalDateTime expirationDateTime = issuedOn.plusHours(72);
 
-        Ticket ticket = new Ticket(ticketNumber, issuedOn, expirationDateTime, bottlesCount);
-        // ticketRepository.save(ticket);
+        Integer points = bottlesCount * 5;
 
-        return ticket;
+        return new Ticket(ticketNumber, issuedOn, expirationDateTime, bottlesCount, points);
     }
 
 

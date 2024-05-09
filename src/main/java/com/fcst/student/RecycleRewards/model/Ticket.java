@@ -21,6 +21,9 @@ public class Ticket {
     @Column(name = "active_until", nullable = false)
     private LocalDateTime activeUntil;
 
+    @Column
+    private Integer bottles;
+
     @Column(nullable = false)
     private Integer points;
 
@@ -38,18 +41,20 @@ public class Ticket {
         this.number = number;
     }
 
-    public Ticket(String number, LocalDateTime issued, LocalDateTime activeUntil, Integer points) {
+    public Ticket(String number, LocalDateTime issued, LocalDateTime activeUntil, Integer bottles, Integer points) {
         this.number = number;
         this.issued = issued;
         this.activeUntil = activeUntil;
+        this.bottles = bottles;
         this.points = points;
     }
 
-    public Ticket(Long id, String number, LocalDateTime issued, LocalDateTime activeUntil, Integer points, LocalDateTime registeredOn, User registeredBy) {
+    public Ticket(Long id, String number, LocalDateTime issued, LocalDateTime activeUntil, Integer bottles, Integer points, LocalDateTime registeredOn, User registeredBy) {
         this.id = id;
         this.number = number;
         this.issued = issued;
         this.activeUntil = activeUntil;
+        this.bottles = bottles;
         this.points = points;
         this.registeredOn = registeredOn;
         this.registeredBy = registeredBy;
@@ -110,5 +115,13 @@ public class Ticket {
 
     public void setRegisteredBy(User registeredBy) {
         this.registeredBy = registeredBy;
+    }
+
+    public Integer getBottles() {
+        return bottles;
+    }
+
+    public void setBottles(Integer bottles) {
+        this.bottles = bottles;
     }
 }
