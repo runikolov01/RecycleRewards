@@ -3,7 +3,6 @@ package com.fcst.student.RecycleRewards.web;
 import com.fcst.student.RecycleRewards.model.Address;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.model.enums.Role;
-import com.fcst.student.RecycleRewards.repository.TicketRepository;
 import com.fcst.student.RecycleRewards.service.AddressService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;

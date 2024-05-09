@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Machine Locations</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <title>Старт</title>
+        <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBre-86uFZSf1ld88qvLeza7FMb2pJwnIY&callback=initMap"></script>
+    <script>
+        var map;
+
+        function initMap() {
+            var mapOptions = {
+                center: {lat: 42.6977, lng: 23.3219}, // Center of Sofia
+                zoom: 12, // Zoom level to display Sofia in detail
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+            // Place pins on specific locations in Sofia
+            var locations = [
+                {lat: 42.6977, lng: 23.3219, title: 'Sofia City Center', description: 'Central area'},
+                {lat: 42.6854, lng: 23.3167, title: 'National Palace of Culture', description: 'Cultural center'},
+            ];
+
+            locations.forEach(function (location) {
+                var marker = new google.maps.Marker({
+                    position: {lat: location.lat, lng: location.lng},
+                    map: map,
+                    title: location.title,
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                });
+
+                // Optional: Add info window
+                var infoWindow = new google.maps.InfoWindow({
+                    content: location.title + '<br>' + location.description
+                });
+
+                marker.addListener('click', function () {
+                    infoWindow.open(map, marker);
+                });
+            });
+        }
+
+
+    </script>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home">RecycleRewards</a>
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler"
+            data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <th:block th:if="${loggedUser != null}">
+            <div th:if="${loggedUser.getRole() == 'ADMIN'}" th:replace="~{fragments/navbar_admin}"></div>
+            <div th:if="${loggedUser.getRole() == 'CLIENT'}" th:replace="~{fragments/navbar-logged-in}"></div>
+        </th:block>
+        <th:block th:if="${loggedUser == null}">
+            <div th:replace="~{fragments/navbar-logged-out}"></div>
+        </th:block>
+    </div>
+
+</nav>
+
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Локации</h1>
+        <hr class="my-4">
+        <p>Рециклирането е най-важното действие, ако искаме нашата скъпоценна планета да оцелее.</p>
+        <img alt="Logo" height="200" src="/images/logo.jpg" width="200">
+        <br>
+        <br>
+        <a class="btn btn-primary btn-lg" href="about" role="button">Научете повече за RecycleRewards</a>
+        <div id="map" style="height: 400px; width: 100%;"></div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer}"></div>
+
+</body>
+</html>
