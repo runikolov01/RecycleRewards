@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Machine Locations</title>
+    <title>Локации</title>
     <head>
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -18,16 +18,18 @@
 
         function initMap() {
             var mapOptions = {
-                center: {lat: 42.6977, lng: 23.3219}, // Center of Sofia
-                zoom: 12, // Zoom level to display Sofia in detail
+                center: {lat: 42.6977, lng: 23.3219},
+                zoom: 11.6,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-            // Place pins on specific locations in Sofia
+
             var locations = [
-                {lat: 42.6977, lng: 23.3219, title: 'Sofia City Center', description: 'Central area'},
-                {lat: 42.6854, lng: 23.3167, title: 'National Palace of Culture', description: 'Cultural center'},
+                {lat:  42.6418715, lng: 23.3361706, title: 'Кауфланд - Малинова долина', description: 'ж.к. Малинова долина, ул. „Проф. д-р Иван Странски“ 20, 1000 София'},
+                {lat:  42.6458327, lng: 23.3791261, title: 'Кауфланд - Младост', description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712 София'},
+                {lat:  42.670452, lng: 23.2734864, title: 'Кауфланд - Витоша', description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712 София'},
+
             ];
 
             locations.forEach(function (location) {
@@ -48,8 +50,6 @@
                 });
             });
         }
-
-
     </script>
 <body>
 
@@ -76,13 +76,47 @@
 <div class="container mt-5">
     <div class="jumbotron">
         <h1 class="display-4">Локации</h1>
+        <p class="lead">Ето къде можете да рециклирате своите бутилки:</p>
+
         <hr class="my-4">
-        <p>Рециклирането е най-важното действие, ако искаме нашата скъпоценна планета да оцелее.</p>
-        <img alt="Logo" height="200" src="/images/logo.jpg" width="200">
         <br>
+        <div id="map" style="height: 400px; width: 100%;"></div>
+        <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Име</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Имейл</th>
+                    <th scope="col">Телефон</th>
+                    <th scope="col">Дата на регистрация</th>
+                    <th scope="col">Точки</th>
+                    <th scope="col">Роля</th>
+                    <th scope="col">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user, rowStat : ${users}">
+                    <td><span th:text="${user.id}"></span></td>
+                    <td><span class="editable" contenteditable="true" th:text="${user.firstName}"></span></td>
+                    <td><span class="editable" contenteditable="true" th:text="${user.lastName}"></span></td>
+                    <td><span class="editable" contenteditable="true" th:text="${user.email}"></span></td>
+                    <td><span class="editable" contenteditable="true" th:text="${user.phone}"></span></td>
+                    <td th:text="${user.registrationDate}"></td>
+                    <td th:text="${user.totalPoints}"></td>
+                    <td class="editable" contenteditable="true" th:text="${user.role}"></td>
+                    <td>
+                        <button class="btn btn-primary btn-sm edit-btn">Edit</button>
+                        <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+                        <button class="btn btn-success btn-sm save-btn" style="display: none;">Save</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <br>
         <a class="btn btn-primary btn-lg" href="about" role="button">Научете повече за RecycleRewards</a>
-        <div id="map" style="height: 400px; width: 100%;"></div>
     </div>
 </div>
 
