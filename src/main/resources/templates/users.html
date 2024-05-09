@@ -4,7 +4,19 @@
     <meta charset="UTF-8">
     <title>Потребители</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        th {
+            cursor: pointer; /* Change cursor to pointer to indicate clickable */
+            padding: 10px; /* Add padding for better appearance */
+            border: none; /* Remove default border */
+            background-color: #f2f2f2; /* Add background color */
+            transition: background-color 0.3s; /* Add transition effect */
+        }
 
+        th:hover {
+            background-color: #e2e2e2; /* Change background color on hover */
+        }
+    </style>
 </head>
 <body>
 
@@ -76,6 +88,47 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Event handler for sorting by column
+        var sortOrders = {}; // Object to track sorting orders for each column
+
+        $('th').on('click', function () {
+            var columnIndex = $(this).index(); // Get the index of the clicked column
+
+            // Toggle sorting order or set to ascending if not already set
+            sortOrders[columnIndex] = (sortOrders[columnIndex] === 'asc') ? 'desc' : 'asc';
+
+            // Get the table body
+            var $tbody = $('table tbody');
+
+            // Sort the rows based on the clicked column
+            var rows = $tbody.find('tr').toArray();
+            rows.sort(function (a, b) {
+                var valueA = $(a).find('td:eq(' + columnIndex + ') span').text(); // Get the value of the cell
+                var valueB = $(b).find('td:eq(' + columnIndex + ') span').text(); // Get the value of the cell
+
+                // Custom parsing for specific columns
+                if (columnIndex === 5) { // Date column (index 5)
+                    valueA = new Date(valueA);
+                    valueB = new Date(valueB);
+                } else if (columnIndex === 6) { // Points column (index 6)
+                    valueA = parseFloat(valueA.replace(/,/g, '')); // Remove comma and parse as float
+                    valueB = parseFloat(valueB.replace(/,/g, '')); // Remove comma and parse as float
+                }
+
+                if (sortOrders[columnIndex] === 'asc') {
+                    return (valueA < valueB) ? -1 : (valueA > valueB) ? 1 : 0;
+                } else {
+                    return (valueA > valueB) ? -1 : (valueA < valueB) ? 1 : 0;
+                }
+            });
+
+            // Reorder the rows in the table
+            $.each(rows, function (index, row) {
+                $tbody.append(row);
+            });
+        });
+
+
         // Event handler for Edit button
         $(document).on('click', '.edit-btn', function () {
             // Find the closest row
