@@ -10,7 +10,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/home">RecycleRewards</a>
-    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler"
             data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -32,38 +33,40 @@
         <h1 class="display-4">Потребители</h1>
         <hr class="my-4">
         <br>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Име</th>
-                <th scope="col">Фамилия</th>
-                <th scope="col">Имейл</th>
-                <th scope="col">Телефон</th>
-                <th scope="col">Дата на регистрация</th>
-                <th scope="col">Точки</th>
-                <th scope="col">Роля</th>
-                <th scope="col">Действия</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user, rowStat : ${users}">
-                <td><span th:text="${user.id}"></span></td>
-                <td><span class="editable" contenteditable="true" th:text="${user.firstName}"></span></td>
-                <td><span class="editable" contenteditable="true" th:text="${user.lastName}"></span></td>
-                <td><span class="editable" contenteditable="true" th:text="${user.email}"></span></td>
-                <td><span class="editable" contenteditable="true" th:text="${user.phone}"></span></td>
-                <td th:text="${user.registrationDate}"></td>
-                <td th:text="${user.totalPoints}"></td>
-                <td class="editable" contenteditable="true" th:text="${user.role}"></td>
-                <td>
-                    <button class="btn btn-primary btn-sm edit-btn">Edit</button>
-                    <button class="btn btn-danger btn-sm delete-btn">Delete</button>
-                    <button class="btn btn-success btn-sm save-btn" style="display: none;">Save</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Име</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Имейл</th>
+                    <th scope="col">Телефон</th>
+                    <th scope="col">Дата на регистрация</th>
+                    <th scope="col">Точки</th>
+                    <th scope="col">Роля</th>
+                    <th scope="col">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user, rowStat : ${users}">
+                    <td><span th:text="${user.id}"></span></td>
+                    <td><span class="editable" contenteditable="true" th:text="${user.firstName}"></span></td>
+                    <td><span class="editable" contenteditable="true" th:text="${user.lastName}"></span></td>
+                    <td><span class="editable" contenteditable="true" th:text="${user.email}"></span></td>
+                    <td><span class="editable" contenteditable="true" th:text="${user.phone}"></span></td>
+                    <td th:text="${user.registrationDate}"></td>
+                    <td th:text="${user.totalPoints}"></td>
+                    <td class="editable" contenteditable="true" th:text="${user.role}"></td>
+                    <td>
+                        <button class="btn btn-primary btn-sm edit-btn">Edit</button>
+                        <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+                        <button class="btn btn-success btn-sm save-btn" style="display: none;">Save</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <a class="btn btn-primary btn-lg" href="#" role="button">Бутон</a>
     </div>
 </div>
