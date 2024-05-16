@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Printing ticket</title>
-    <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -24,12 +24,14 @@
                 за да спечелите <span th:text="${bottlesCount}">0</span> точки!</h2>
             <br>
 
-            <form id="printForm" action="/print" method="post">
-                <input type="hidden" name="bottlesCount" th:value="${bottlesCount}">
-                <input type="hidden" name="ticketNumber" th:value="${ticketNumber}">
-                <input type="hidden" name="issuedOnFormatted" th:value="${issuedOnFormatted}">
-                <input type="hidden" name="expirationFormatted" th:value="${expirationFormatted}">
-                <button type="submit" class="btn btn-primary btn-lg">Принтиране на билет</button>
+            <form action="/print" id="printForm" method="post">
+                <input name="bottlesCount" th:value="${bottlesCount}" type="hidden">
+                <input name="ticketNumber" th:value="${ticketNumber}" type="hidden">
+                <input name="issuedOnFormatted" th:value="${issuedOnFormatted}" type="hidden">
+                <input name="expirationFormatted" th:value="${expirationFormatted}" type="hidden">
+                <button class="btn btn-primary btn-lg" style="background-color: green; border-color: green;"
+                        type="submit">Принтиране на билет
+                </button>
             </form>
         </div>
     </div>

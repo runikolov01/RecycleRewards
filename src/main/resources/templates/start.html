@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Рециклиране на бутилки</title>
-    <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -12,13 +12,15 @@
     <div class="jumbotron">
         <h1 class="display-4">Натиснете бутона преди всяко добавяне на нова бутилка:</h1>
         <br>
-        <a class="btn btn-primary btn-lg" href="#" onclick="addBottle(event)">Добави бутилка</a>
+        <a class="btn btn-primary btn-lg" href="#" onclick="addBottle(event)"
+           style="background-color: green; border-color: green;">Добави бутилка</a>
         <hr class="my-4">
         <h1 class="display-5">Вие рециклирахте <span th:text="${bottlesCount}">0</span> бутилки. Успех! 🍀</h1>
         <hr class="my-4">
         <h1 class="display-4">Ако нямате повече бутилки за рециклиране, натиснете бутона:</h1>
         <br>
-        <a class="btn btn-primary btn-lg" href="print" role="button">Приключи рециклирането!</a>
+        <a class="btn btn-primary btn-lg" href="print" role="button"
+           style="background-color: green; border-color: green;">Приключи рециклирането!</a>
     </div>
 </div>
 <div th:replace="~{fragments/footer}"></div>
