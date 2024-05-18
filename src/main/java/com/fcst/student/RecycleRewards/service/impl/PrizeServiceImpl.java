@@ -1,12 +1,17 @@
 package com.fcst.student.RecycleRewards.service.impl;
 
 import com.fcst.student.RecycleRewards.model.Prize;
+import com.fcst.student.RecycleRewards.model.Purchase;
+import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.model.enums.PrizeType;
 import com.fcst.student.RecycleRewards.repository.PrizeRepository;
+import com.fcst.student.RecycleRewards.repository.PurchaseRepository;
+import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.PrizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +19,14 @@ import java.util.Optional;
 public class PrizeServiceImpl implements PrizeService {
     @Autowired
     private final PrizeRepository prizeRepository;
+
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PurchaseRepository purchaseRepository;
+
 
     public PrizeServiceImpl(PrizeRepository prizeRepository) {
         this.prizeRepository = prizeRepository;
@@ -41,5 +54,38 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     public void deletePrizeById(int id) {
+    }
+
+    @Override
+    public boolean purchasePrize(Long userId, Long prizeId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        Optional<Prize> prizeOpt = prizeRepository.findById(prizeId);
+
+        if (!userOpt.isPresent() || !prizeOpt.isPresent()) {
+            return false; // Either user or prize not found
+        }
+
+        User user = userOpt.get();
+        Prize prize = prizeOpt.get();
+        int remainedTicketsForThisPrize = prize.getRemainedTickets();
+
+        if (user.getTotalPoints() < prize.getNeededPointsToBuy() || remainedTicketsForThisPrize <= 0) {
+            return false; // Not enough points
+        }
+
+        // Deduct points
+        user.setTotalPoints(user.getTotalPoints() - prize.getNeededPointsToBuy());
+        prize.setRemainedTickets(remainedTicketsForThisPrize - 1);
+        prizeRepository.save(prize);
+        userRepository.save(user);
+
+        // Record purchase (assuming you have a Purchase entity and repository)
+        Purchase purchase = new Purchase();
+        purchase.setUser(user);
+        purchase.setPrize(prize);
+        purchase.setPurchaseDate(LocalDateTime.now());
+        purchaseRepository.save(purchase);
+
+        return true; // Purchase successful
     }
 }
