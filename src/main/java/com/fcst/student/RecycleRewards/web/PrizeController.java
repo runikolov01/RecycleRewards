@@ -80,50 +80,36 @@ public class PrizeController {
         return "redirect:/home";
     }
 
-    @PostMapping("/prizes")
-    public ResponseEntity<String> buyPrize() {
-        return ResponseEntity.status(HttpStatus.CREATED).body("Вие купихте билет успешно!");
-
-    }
-
     @PostMapping("/prizes/buy")
     public ResponseEntity<String> buyPrize(@RequestParam Long prizeId, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
+        Integer totalPoints = (Integer) session.getAttribute("totalPoints");
+
         if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You need to log in to buy a ticket for this prize");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Влезте в своя профил, за да продължите напред.");
         }
 
         Optional<Prize> optionalPrize = prizeService.getPrizeById(prizeId);
-        if (optionalPrize.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Prize not found");
+        if (!optionalPrize.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Наградата не е намерена.");
         }
 
         Prize prize = optionalPrize.get();
-        User user = userService.getUserById(userId);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        Integer neededPoints = prize.getNeededPointsToBuy();
+
+        if (totalPoints < neededPoints) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Нямате достатъчно точки, за да купите билет за тази награда.");
         }
 
-        if (user.getTotalPoints() < prize.getNeededPointsToBuy()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You don't have enough points to buy a ticket for this prize");
+        boolean purchaseSuccessful = prizeService.purchasePrize(userId, prizeId);
+
+        if (purchaseSuccessful) {
+            session.setAttribute("totalPoints", totalPoints - neededPoints);
+            return ResponseEntity.ok("Билетът за тази награда е купен успешно!");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Възникна грешка, моля опитайте отново!");
         }
-
-        // Deduct points from user's total points
-        user.setTotalPoints(user.getTotalPoints() - prize.getNeededPointsToBuy());
-
-        // Deduct 1 from remaining tickets for the prize
-        prize.setRemainedTickets(prize.getRemainedTickets() - 1);
-
-        // Add user as a participant to the prize
-        prize.getParticipants().add(user);
-
-        // Save updated entities
-        userService.saveUser(user);
-        prizeService.savePrize(prize);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("Ticket purchased successfully!");
     }
-
 
 
     @PostMapping("/admin_add_prizes")

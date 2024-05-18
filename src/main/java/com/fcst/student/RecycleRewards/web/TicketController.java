@@ -134,13 +134,9 @@ public class TicketController {
             if (user != null) {
                 model.addAttribute("loggedUser", user);
 
-                // Fetch totalPoints for the logged-in user and add it to the model
-
-//                Integer totalPoints = ticketRepository.getTotalPointsByUser(user);
-//                model.addAttribute("totalPoints", totalPoints);
                 Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
-
+                session.setAttribute("totalPoints", totalPoints);
             }
         }
         return "registerTicket";
@@ -208,8 +204,12 @@ public class TicketController {
 
                     int pointsToAdd = ticket.getPoints();
                     int currentTotalPoints = currentUser.getTotalPoints();
-                    currentUser.setTotalPoints(currentTotalPoints + pointsToAdd);
+                    int totalPoints = currentTotalPoints + pointsToAdd;
+                    currentUser.setTotalPoints(totalPoints);
                     userService.saveUser(currentUser);
+
+                    session.setAttribute("totalPoints", totalPoints);
+
 
                     return ResponseEntity.ok(ticket.getPoints() + " точки са добавени успешно към Вашия профил");
                 } else {
@@ -221,19 +221,4 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("Не сте оторизиран за тази операция. Моля, влезте в профила си и опитайте отново.");
     }
-
-    private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            String email = authentication.getName(); // Assuming email is used as the principal
-            return userService.getUserByEmail(email); // Assuming you have a method to find a user by email
-        } else {
-            // Handle the case where there is no authenticated user
-            // You might want to return a default user or throw an exception
-            // Here, we'll return null for simplicity, but adjust this according to your application's logic
-            return null;
-        }
-    }
-
-
 }

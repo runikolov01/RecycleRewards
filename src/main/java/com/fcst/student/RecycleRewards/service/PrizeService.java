@@ -16,5 +16,9 @@ public interface PrizeService {
     List<Prize> getAllPrizes();
 
     List<Prize> getPrizesByType(PrizeType type);
+
     void deletePrizeById(int id);
+
+    boolean purchasePrize(Long userId, Long prizeId);
+
 }
