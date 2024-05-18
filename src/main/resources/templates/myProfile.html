@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Моят профил</title>
-    <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .success-message {
             color: green;
@@ -20,8 +20,9 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/home">RecycleRewards</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler"
+            data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -34,7 +35,6 @@
     </div>
 </nav>
 
-
 <div class="container mt-5">
     <div class="jumbotron">
         <h1 class="display-4">Профилът на
@@ -44,113 +44,147 @@
                   th:text="${loggedUser.getLastName()}"></span>
         </h1>
         <hr class="my-4">
-        <form action="/myProfile" method="post" id="profileForm">
-            <input type="hidden" name="_method" value="patch">
-            <div class="form-group">
-                <label for="firstName">Първо име: (*)</label>
-                <input type="text" class="form-control" id="firstName" name="firstName" required
-                       th:value="${loggedUser != null && loggedUser.getFirstName() != null ? loggedUser.getFirstName() : ''}">
-            </div>
-            <div class="form-group">
-                <label for="lastName">Фамилия: (*)</label>
-                <input type="text" class="form-control" id="lastName" name="lastName" required
-                       th:value="${loggedUser != null && loggedUser.getLastName() != null ? loggedUser.getLastName() : ''}">
-            </div>
-            <div class="form-group">
-                <label for="email">Електронна поща: (*)</label>
-                <input type="email" class="form-control" id="email" name="email" required
-                       th:value="${loggedUser != null && loggedUser.getEmail() != null ? loggedUser.getEmail()  : ''}">
-            </div>
-            <div class="form-group">
-                <label for="email">Телефонен номер: (*)</label>
-                <input type="text" class="form-control" id="telephoneNumber" name="telephoneNumber"
-                       th:value="${loggedUser != null && loggedUser.getPhone() != null ? loggedUser.getPhone()  : ''}">
-            </div>
-            <h1 class="display-4">Личен дрес</h1>
-            <hr class="my-4">
-            <div class="form-group">
-                <label for="city">Град: (*)</label>
-                <input type="text" class="form-control" id="city" name="city"
-                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getCity() != null ? loggedUser.getAddress().getCity() : ''}">
-            </div>
-            <div class="form-group">
-                <label for="postCode">Пощенски код: (*)</label>
-                <input type="number" class="form-control" id="postCode" name="postCode"
-                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getPostcode() != null ? loggedUser.getAddress().getPostcode() : ''}">
-            </div>
-            <div class="form-group">
-                <label for="street">Улица: (*)</label>
-                <input type="text" class="form-control" id="street" name="street"
-                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getStreet() != null ? loggedUser.getAddress().getStreet() : ''}">
 
-            </div>
-            <div class="form-group">
-                <label for="streetNumber">Улица номер: (*)</label>
-                <input type="number" class="form-control" id="streetNumber" name="streetNumber"
-                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getStreetNumber() != null ? loggedUser.getAddress().getStreetNumber() : ''}">
+        <div class="form-group">
+            <label for="filter">Филтър:</label>
+            <select class="form-control" id="filter">
+                <option value="personal">Моите лични данни</option>
+                <option value="tickets">Закупени билети за томбола</option>
+                <option value="prizes">Печалби</option>
+            </select>
+        </div>
 
-            </div>
-            <div class="form-group">
-                <label for="floor">Етаж:</label>
-                <input type="number" class="form-control" id="floor" name="floor"
-                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getFloor() != null ? loggedUser.getAddress().getFloor() : ''}">
+        <hr class="my-4">
 
-            </div>
-            <div class="form-group">
-                <label for="apartmentNumber">Апартамент номер:</label>
-                <input type="number" class="form-control" id="apartmentNumber" name="apartmentNumber"
-                       th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getApartmentNumber() != null ? loggedUser.getAddress().getApartmentNumber() : ''}">
+        <div id="personalData" style="display: block;">
+            <form action="/myProfile" id="profileForm" method="post">
+                <input name="_method" type="hidden" value="patch">
+                <div class="form-group">
+                    <label for="firstName">Първо име: (*)</label>
+                    <input class="form-control" id="firstName" name="firstName" required
+                           th:value="${loggedUser != null && loggedUser.getFirstName() != null ? loggedUser.getFirstName() : ''}"
+                           type="text">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Фамилия: (*)</label>
+                    <input class="form-control" id="lastName" name="lastName" required
+                           th:value="${loggedUser != null && loggedUser.getLastName() != null ? loggedUser.getLastName() : ''}"
+                           type="text">
+                </div>
+                <div class="form-group">
+                    <label for="email">Електронна поща: (*)</label>
+                    <input class="form-control" id="email" name="email" required
+                           th:value="${loggedUser != null && loggedUser.getEmail() != null ? loggedUser.getEmail()  : ''}"
+                           type="email">
+                </div>
+                <div class="form-group">
+                    <label for="email">Телефонен номер: (*)</label>
+                    <input class="form-control" id="telephoneNumber" name="telephoneNumber"
+                           th:value="${loggedUser != null && loggedUser.getPhone() != null ? loggedUser.getPhone()  : ''}"
+                           type="text">
+                </div>
+                <h1 class="display-4">Личен дрес</h1>
+                <hr class="my-4">
+                <div class="form-group">
+                    <label for="city">Град: (*)</label>
+                    <input class="form-control" id="city" name="city"
+                           th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getCity() != null ? loggedUser.getAddress().getCity() : ''}"
+                           type="text">
+                </div>
+                <div class="form-group">
+                    <label for="postCode">Пощенски код: (*)</label>
+                    <input class="form-control" id="postCode" name="postCode"
+                           th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getPostcode() != null ? loggedUser.getAddress().getPostcode() : ''}"
+                           type="number">
+                </div>
+                <div class="form-group">
+                    <label for="street">Улица: (*)</label>
+                    <input class="form-control" id="street" name="street"
+                           th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getStreet() != null ? loggedUser.getAddress().getStreet() : ''}"
+                           type="text">
 
+                </div>
+                <div class="form-group">
+                    <label for="streetNumber">Улица номер: (*)</label>
+                    <input class="form-control" id="streetNumber" name="streetNumber"
+                           th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getStreetNumber() != null ? loggedUser.getAddress().getStreetNumber() : ''}"
+                           type="number">
+
+                </div>
+                <div class="form-group">
+                    <label for="floor">Етаж:</label>
+                    <input class="form-control" id="floor" name="floor"
+                           th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getFloor() != null ? loggedUser.getAddress().getFloor() : ''}"
+                           type="number">
+
+                </div>
+                <div class="form-group">
+                    <label for="apartmentNumber">Апартамент номер:</label>
+                    <input class="form-control" id="apartmentNumber" name="apartmentNumber"
+                           th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getApartmentNumber() != null ? loggedUser.getAddress().getApartmentNumber() : ''}"
+                           type="number">
+
+                </div>
+                <button class="btn btn-primary" type="submit">Актуализиране на данните</button>
+                <div id="messageArea"></div>
+            </form>
+            <div id="boughtTickets" style="display: none;">
+                <!-- Display bought tickets for raffle -->
             </div>
-            <button type="submit" class="btn btn-primary">Актуализиране на данните</button>
-            <div id="messageArea"></div>
-        </form>
+
+            <div id="wonPrizes" style="display: none;">
+                <!-- Display won prizes -->
+            </div>
+        </div>
     </div>
-</div>
 
-<div th:replace="~{fragments/footer}"></div>
+    <div th:replace="~{fragments/footer}"></div>
 
-<script>
-    // Function to display success or error message
-    function showMessage(message, isError) {
-        const messageArea = document.getElementById('messageArea');
-        messageArea.innerText = message;
-        messageArea.className = isError ? 'error-message' : 'success-message';
-    }
+    <script>
+        // Function to show/hide sections based on selected filter
+        document.getElementById('filter').addEventListener('change', function () {
+            const filter = this.value;
+            document.getElementById('personalData').style.display = filter === 'personal' ? 'block' : 'none';
+            document.getElementById('boughtTickets').style.display = filter === 'tickets' ? 'block' : 'none';
+            document.getElementById('wonPrizes').style.display = filter === 'prizes' ? 'block' : 'none';
+        });
 
-    // Submit form using AJAX to handle response dynamically
-    document.getElementById('profileForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent default form submission
+        // Function to display success or error message
+        function showMessage(message, isError) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.innerText = message;
+            messageArea.className = isError ? 'error-message' : 'success-message';
+        }
 
-        const form = event.target;
-        const formData = new FormData(form);
+        // Submit form using AJAX to handle response dynamically
+        document.getElementById('profileForm').addEventListener('submit', function (event) {
+            event.preventDefault();
 
-        fetch(form.action, {
-            method: form.method,
-            body: formData
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.text(); // Return response body if successful
-                } else {
-                    // Check if response status is 400 Bad Request
-                    if (response.status === 400) {
-                        // If status is 400, display the custom error message
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
                         return response.text();
                     } else {
-                        // For other error statuses, throw an error
-                        throw new Error('Network response was not ok');
+                        if (response.status === 400) {
+                            return response.text();
+                        } else {
+                            throw new Error('Network response was not ok');
+                        }
                     }
-                }
-            })
-            .then(data => {
-                // Display success message or error message
-                showMessage(data, !data.startsWith("Данните са актуализирани успешно!"));
-            })
-            .catch(error => {
-                showMessage(error.message, true); // Display error message
-            });
-    });
-</script>
+                })
+                .then(data => {
+                    showMessage(data, !data.startsWith("Данните са актуализирани успешно!"));
+                })
+                .catch(error => {
+                    showMessage(error.message, true);
+                });
+        });
+    </script>
 </body>
 </html>
