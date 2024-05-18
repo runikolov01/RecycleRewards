@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/home">RecycleRewards</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+            data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -30,21 +30,21 @@
     <h2>Вход в профила</h2>
 
     <!-- Display error message if login fails -->
-    <div th:if="${error}" class="alert alert-danger" role="alert">
+    <div class="alert alert-danger" role="alert" th:if="${error}">
         Невалиден email или парола! Опитайте отново!
     </div>
 
     <!-- Login form -->
-    <form action="/login" method="post" accept-charset="UTF-8">
+    <form accept-charset="UTF-8" action="/login" method="post">
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="text" class="form-control" id="email" name="email" required>
+            <input class="form-control" id="email" name="email" required type="text">
         </div>
         <div class="form-group">
             <label for="password">Парола:</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+            <input class="form-control" id="password" name="password" required type="password">
         </div>
-        <button type="submit" class="btn btn-primary">Вход</button>
+        <button class="btn btn-primary" type="submit">Вход</button>
     </form>
 </div>
 
