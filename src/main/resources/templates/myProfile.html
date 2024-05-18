@@ -132,31 +132,33 @@
         </div>
 
         <div id="boughtTickets" style="display: none;">
-            <h2>Закупени билети за томбола</h2>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">ID покупка</th>
-                    <th scope="col">Дата на покупка</th>
-                    <th scope="col">ID Награда</th>
-                    <th scope="col">Награда</th>
-                    <th scope="col">Описание</th>
-                    <th scope="col">Начална дата</th>
-                    <th scope="col">Крайна дата</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="purchase : ${purchases}">
-                    <td th:text="${purchase.id}"></td>
-                    <td th:text="${purchase.purchaseDate}"></td>
-                    <td th:text="${purchase.prize.getId()}"></td>
-                    <td th:text="${purchase.prize.getName()}"></td>
-                    <td th:text="${purchase.prize.getDescription()}"></td>
-                    <td th:text="${purchase.prize.getStartDate()}"></td>
-                    <td th:text="${purchase.prize.getEndDate()}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
+                <h2>Закупени билети за томбола</h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID покупка</th>
+                        <th scope="col">Дата на покупка</th>
+                        <th scope="col">ID Награда</th>
+                        <th scope="col">Награда</th>
+                        <th scope="col">Описание</th>
+                        <th scope="col">Начална дата</th>
+                        <th scope="col">Крайна дата</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="purchase : ${purchases}">
+                        <td th:text="${purchase.id}"></td>
+                        <td th:text="${purchase.purchaseDate}"></td>
+                        <td th:text="${purchase.prize.getId()}"></td>
+                        <td th:text="${purchase.prize.getName()}"></td>
+                        <td th:text="${purchase.prize.getDescription()}"></td>
+                        <td th:text="${purchase.prize.getStartDate()}"></td>
+                        <td th:text="${purchase.prize.getEndDate()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="wonPrizes" style="display: none;">
