@@ -34,7 +34,11 @@ public class Prize {
     @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;
 
-    @ManyToMany(mappedBy = "prizes")
+
+    @ManyToMany
+    @JoinTable(name = "prize_participants",
+            joinColumns = @JoinColumn(name = "prize_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> participants;
 
     @Enumerated(EnumType.STRING)

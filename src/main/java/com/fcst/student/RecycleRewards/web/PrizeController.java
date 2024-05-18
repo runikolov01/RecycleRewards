@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class PrizeController {
@@ -78,6 +79,52 @@ public class PrizeController {
         model.addAttribute("prizes", prizes);
         return "redirect:/home";
     }
+
+    @PostMapping("/prizes")
+    public ResponseEntity<String> buyPrize() {
+        return ResponseEntity.status(HttpStatus.CREATED).body("Вие купихте билет успешно!");
+
+    }
+
+    @PostMapping("/prizes/buy")
+    public ResponseEntity<String> buyPrize(@RequestParam Long prizeId, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You need to log in to buy a ticket for this prize");
+        }
+
+        Optional<Prize> optionalPrize = prizeService.getPrizeById(prizeId);
+        if (optionalPrize.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Prize not found");
+        }
+
+        Prize prize = optionalPrize.get();
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        if (user.getTotalPoints() < prize.getNeededPointsToBuy()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You don't have enough points to buy a ticket for this prize");
+        }
+
+        // Deduct points from user's total points
+        user.setTotalPoints(user.getTotalPoints() - prize.getNeededPointsToBuy());
+
+        // Deduct 1 from remaining tickets for the prize
+        prize.setRemainedTickets(prize.getRemainedTickets() - 1);
+
+        // Add user as a participant to the prize
+        prize.getParticipants().add(user);
+
+        // Save updated entities
+        userService.saveUser(user);
+        prizeService.savePrize(prize);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Ticket purchased successfully!");
+    }
+
+
 
     @PostMapping("/admin_add_prizes")
     public ResponseEntity<String> savePrize(@RequestParam String name,

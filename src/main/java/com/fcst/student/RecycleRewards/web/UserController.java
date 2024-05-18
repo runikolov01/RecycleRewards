@@ -128,6 +128,13 @@ public class UserController {
         if (user != null && userService.verifyPassword(user, password)) {
             // Authentication successful, store user ID in session
             session.setAttribute("userId", user.getId());
+
+            // Fetch total points for the logged-in user
+            Integer totalPoints = user.getTotalPoints();
+
+            // Set total points as a session attribute
+            session.setAttribute("totalPoints", totalPoints);
+
             return "redirect:/myProfile";
         } else {
             // Authentication failed, redirect back to login page with error message
@@ -135,6 +142,7 @@ public class UserController {
             return "redirect:/login?error";
         }
     }
+
 
     @PostMapping("/logout")
     public String logout(HttpSession session, HttpServletResponse response) {

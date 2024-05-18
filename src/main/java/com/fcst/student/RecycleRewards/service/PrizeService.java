@@ -5,12 +5,13 @@ import com.fcst.student.RecycleRewards.model.enums.PrizeType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface PrizeService {
     void savePrize(Prize prize);
 
-    Prize getPrizeById(int id);
+    Optional<Prize> getPrizeById(Long id);
 
     List<Prize> getAllPrizes();
 

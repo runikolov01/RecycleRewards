@@ -73,7 +73,9 @@
                                     <br>
                                     <div class="product-list-item-btn dynamic-button">
                                         <button class="btn btn-primary"
-                                                th:text="${prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).INSTANT ? 'Обменям точки за наградата' : (prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE ? 'Купувам 1 билет за участие в томболата' : 'Unknown')}"></button>
+                                                onclick="checkLoginAndProceed('${prize.id}', '${prize.neededPointsToBuy}')">
+                                            <span th:text="${prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).INSTANT ? 'Обменям точки за наградата' : (prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE ? 'Купувам 1 билет за участие в томболата' : 'Unknown')}"></span>
+                                        </button>
                                     </div>
                                 </footer>
                             </div>
@@ -112,6 +114,47 @@
     function filterPrizes() {
         const filter = document.getElementById('prizeTypeFilter').value;
         window.location.href = `/prizes?type=${filter}`;
+    }
+
+
+    function checkLoginAndProceed(prizeId, neededPoints) {
+        const userId = sessionStorage.getItem('userId');
+        const totalPoints = parseInt(sessionStorage.getItem('totalPoints')); // Parse as integer
+
+        if (!userId) {
+            // User not logged in
+            const errorMessage = document.createElement('div');
+            errorMessage.textContent = 'You should log in to continue';
+            errorMessage.style.color = 'red';
+            document.getElementById('prizeContainer').appendChild(errorMessage);
+        } else if (totalPoints < neededPoints) {
+            // User doesn't have enough points
+            const errorMessage = document.createElement('div');
+            errorMessage.textContent = "You don't have enough points to buy a ticket for this prize";
+            errorMessage.style.color = 'red';
+            document.getElementById('prizeContainer').appendChild(errorMessage);
+        } else {
+            // User is logged in and has enough points, proceed with purchasing
+            fetch(`/prizes/buy?prizeId=${prizeId}`, {
+                method: 'POST',
+                credentials: 'same-origin' // Send cookies along with the request
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text(); // Assuming the response is text
+                })
+                .then(data => {
+                    // Handle success response from the server
+                    alert(data); // Show a success message to the user
+                })
+                .catch(error => {
+                    // Handle error response from the server
+                    console.error('There was a problem with the fetch operation:', error);
+                    alert('An error occurred while processing your request. Please try again later.');
+                });
+        }
     }
 </script>
 </body>
