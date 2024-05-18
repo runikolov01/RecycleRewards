@@ -14,12 +14,6 @@
         .error-message {
             color: red;
         }
-
-        .transparent-background {
-            background-color: rgba(255, 255, 255, 0.5);
-            padding: 10px;
-            border-radius: 5px;
-        }
     </style>
 </head>
 <body>
@@ -49,12 +43,12 @@
                   th:text="${loggedUser.getLastName()}"></span>
         </h1>
         <hr class="my-4">
-        <div class="form-group transparent-background">
+        <div class="form-group">
             <label for="filter">Филтър:</label>
             <select class="form-control" id="filter">
                 <option value="personal">Моите лични данни</option>
                 <option value="tickets">Закупени билети за томбола</option>
-                <option value="prizes">Печалби</option>
+                <option value="prizes">Спечелени награди</option>
             </select>
         </div>
         <hr class="my-4">
