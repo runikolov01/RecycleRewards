@@ -14,10 +14,15 @@
         .error-message {
             color: red;
         }
+
+        .transparent-background {
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/home">RecycleRewards</a>
     <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
@@ -44,8 +49,7 @@
                   th:text="${loggedUser.getLastName()}"></span>
         </h1>
         <hr class="my-4">
-
-        <div class="form-group">
+        <div class="form-group transparent-background">
             <label for="filter">Филтър:</label>
             <select class="form-control" id="filter">
                 <option value="personal">Моите лични данни</option>
@@ -53,9 +57,7 @@
                 <option value="prizes">Печалби</option>
             </select>
         </div>
-
         <hr class="my-4">
-
         <div id="personalData" style="display: block;">
             <h2>Моите лични данни</h2>
             <form action="/myProfile" id="profileForm" method="post">
@@ -103,47 +105,77 @@
                     <input class="form-control" id="street" name="street"
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getStreet() != null ? loggedUser.getAddress().getStreet() : ''}"
                            type="text">
-
                 </div>
                 <div class="form-group">
                     <label for="streetNumber">Улица номер: (*)</label>
                     <input class="form-control" id="streetNumber" name="streetNumber"
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getStreetNumber() != null ? loggedUser.getAddress().getStreetNumber() : ''}"
                            type="number">
-
                 </div>
                 <div class="form-group">
                     <label for="floor">Етаж:</label>
                     <input class="form-control" id="floor" name="floor"
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getFloor() != null ? loggedUser.getAddress().getFloor() : ''}"
                            type="number">
-
                 </div>
                 <div class="form-group">
                     <label for="apartmentNumber">Апартамент номер:</label>
                     <input class="form-control" id="apartmentNumber" name="apartmentNumber"
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getApartmentNumber() != null ? loggedUser.getAddress().getApartmentNumber() : ''}"
                            type="number">
-
                 </div>
                 <button class="btn btn-primary" type="submit">Актуализиране на данните</button>
                 <div id="messageArea"></div>
             </form>
         </div>
-
         <div id="boughtTickets" style="display: none;">
             <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
                 <h2>Закупени билети за томбола</h2>
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">ID покупка</th>
-                        <th scope="col">Дата на покупка</th>
-                        <th scope="col">ID Награда</th>
-                        <th scope="col">Награда</th>
-                        <th scope="col">Описание</th>
-                        <th scope="col">Начална дата</th>
-                        <th scope="col">Крайна дата</th>
+                        <th scope="col">
+                            ID покупка
+                            <select class="filter-select" data-column="0">
+                                <option value="">Всички</option>
+                            </select>
+                        </th>
+                        <th scope="col">
+                            Дата на покупка
+                            <select class="filter-select" data-column="1">
+                                <option value="">Всички</option>
+                            </select>
+                        </th>
+                        <th scope="col">
+                            ID Награда
+                            <select class="filter-select" data-column="2">
+                                <option value="">Всички</option>
+                            </select>
+                        </th>
+                        <th scope="col">
+                            Награда
+                            <select class="filter-select" data-column="3">
+                                <option value="">Всички</option>
+                            </select>
+                        </th>
+                        <th scope="col">
+                            Описание
+                            <select class="filter-select" data-column="4">
+                                <option value="">Всички</option>
+                            </select>
+                        </th>
+                        <th scope="col">
+                            Начална дата
+                            <select class="filter-select" data-column="5">
+                                <option value="">Всички</option>
+                            </select>
+                        </th>
+                        <th scope="col">
+                            Крайна дата
+                            <select class="filter-select" data-column="6">
+                                <option value="">Всички</option>
+                            </select>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -160,7 +192,6 @@
                 </table>
             </div>
         </div>
-
         <div id="wonPrizes" style="display: none;">
             <h2>Спечелени награди</h2>
         </div>
@@ -170,7 +201,6 @@
 <div th:replace="~{fragments/footer}"></div>
 
 <script>
-    // Function to show/hide sections based on selected filter
     document.getElementById('filter').addEventListener('change', function () {
         const filter = this.value;
         document.getElementById('personalData').style.display = filter === 'personal' ? 'block' : 'none';
@@ -178,17 +208,14 @@
         document.getElementById('wonPrizes').style.display = filter === 'prizes' ? 'block' : 'none';
     });
 
-    // Function to display success or error message
     function showMessage(message, isError) {
         const messageArea = document.getElementById('messageArea');
         messageArea.innerText = message;
         messageArea.className = isError ? 'error-message' : 'success-message';
     }
 
-    // Submit form using AJAX to handle response dynamically
     document.getElementById('profileForm').addEventListener('submit', function (event) {
         event.preventDefault();
-
         const form = event.target;
         const formData = new FormData(form);
 
@@ -213,6 +240,50 @@
             .catch(error => {
                 showMessage(error.message, true);
             });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const table = document.querySelector('.table');
+        const rows = table.querySelectorAll('tbody tr');
+        const selects = document.querySelectorAll('.filter-select');
+
+        const filterTable = () => {
+            const filters = Array.from(selects).map(select => select.value);
+
+            rows.forEach(row => {
+                const cells = Array.from(row.cells);
+                const shouldDisplay = cells.every((cell, index) => {
+                    return filters[index] === '' || cell.innerText === filters[index];
+                });
+
+                row.style.display = shouldDisplay ? '' : 'none';
+            });
+        };
+
+        selects.forEach(select => {
+            select.addEventListener('change', filterTable);
+        });
+
+        const populateFilters = () => {
+            selects.forEach(select => {
+                const columnIndex = select.getAttribute('data-column');
+                const uniqueValues = new Set();
+
+                rows.forEach(row => {
+                    const cellValue = row.cells[columnIndex].innerText;
+                    uniqueValues.add(cellValue);
+                });
+
+                uniqueValues.forEach(value => {
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.textContent = value;
+                    select.appendChild(option);
+                });
+            });
+        };
+
+        populateFilters();
     });
 </script>
 </body>
