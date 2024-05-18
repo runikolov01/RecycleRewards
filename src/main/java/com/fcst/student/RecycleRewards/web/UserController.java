@@ -226,7 +226,7 @@ public class UserController {
     public ResponseEntity<String> updateProfile(@RequestParam(required = false) String firstName,
                                                 @RequestParam(required = false) String lastName,
                                                 @RequestParam(required = false) String email,
-                                                @RequestParam(required = false) String telephoneNumber,
+                                                @RequestParam(required = false) Integer telephoneNumber,
                                                 @RequestParam(required = false) String city,
                                                 @RequestParam(required = false) Integer postCode,
                                                 @RequestParam(required = false) String street,

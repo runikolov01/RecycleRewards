@@ -39,7 +39,7 @@ public class User {
     private LocalDateTime registrationDate;
 
     @Column(unique = true)
-    private String phone;
+    private Integer phone;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -53,7 +53,7 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, Integer totalPoints, Long addressId, String email, String password, String phone, Role role, List<Prize> prizes) {
+    public User(Long id, String firstName, String lastName, Integer totalPoints, Long addressId, String email, String password, Integer phone, Role role, List<Prize> prizes) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -131,11 +131,11 @@ public class User {
         this.password = password;
     }
 
-    public String getPhone() {
+    public Integer getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(Integer phone) {
         this.phone = phone;
     }
 
