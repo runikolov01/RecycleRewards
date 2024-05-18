@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Награди</title>
+    <link href="templates/style.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .product-list-item-box {
@@ -70,9 +71,9 @@
                                          th:text="${prize.neededPointsToBuy + ' точки'}">Необходим брой точки
                                     </div>
                                     <br>
-                                    <div class="product-list-item-btn">
+                                    <div class="product-list-item-btn dynamic-button">
                                         <button class="btn btn-primary"
-                                                th:text="${prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).INSTANT ? 'Обменям точки за наградата' : (prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE ? 'Купувам 1 билет за участие в томболата' : 'Unknown')}"
+                                                th:text="${prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).INSTANT ? 'Обменям точки за наградата' : (prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE ? 'Купувам 1 билет за участие в томболата' : 'Unknown')}"></button>
                                     </div>
                                 </footer>
                             </div>
