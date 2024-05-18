@@ -2,7 +2,7 @@
 <html lang="bg">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Регистрация</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -19,8 +19,9 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/home">RecycleRewards</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler"
+            data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -40,12 +41,12 @@
     <h2>Форма за Регистрация</h2>
 
     <!-- Add success message -->
-    <div th:if="${success}" class="alert alert-success" role="alert">
+    <div class="alert alert-success" role="alert" th:if="${success}">
         Вие се регистрирахте успешно. Можете да влезете в своя профил <a href="/login"> тук</a>.
     </div>
 
     <!-- Add error message -->
-    <div th:if="${error}" class="alert alert-danger" role="alert">
+    <div class="alert alert-danger" role="alert" th:if="${error}">
         <span th:text="${error}"></span>
     </div>
 
@@ -53,33 +54,33 @@
     <form action="/register" method="post">
         <div class="form-group">
             <label for="firstName">Първо име:</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" required
-                   th:value="${firstName}">
+            <input class="form-control" id="firstName" name="firstName" required th:value="${firstName}"
+                   type="text">
         </div>
         <div class="form-group">
             <label for="lastName">Фамилия:</label>
-            <input type="text" class="form-control" id="lastName" name="lastName" required
-                   th:value="${lastName}">
+            <input class="form-control" id="lastName" name="lastName" required th:value="${lastName}"
+                   type="text">
         </div>
         <div class="form-group">
             <label for="email">Електронна поща:</label>
-            <input type="email" class="form-control" id="email" name="email" required
-                   th:value="${email}">
+            <input class="form-control" id="email" name="email" required th:value="${email}"
+                   type="email">
         </div>
         <div class="form-group">
             <label for="password">Парола:</label>
-            <input type="password" class="form-control" id="password" name="password" required minlength="8">
+            <input class="form-control" id="password" minlength="8" name="password" required type="password">
             <small class="password-strength">Паролата трябва да бъде поне 8 символа дълга.</small>
         </div>
         <div class="form-group">
             <label for="confirmPassword">Повторете паролата:</label>
-            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+            <input class="form-control" id="confirmPassword" name="confirmPassword" required type="password">
         </div>
         <div class="form-group">
             <label>Потвърждавате ли, че сте навършили 18 години?</label><br>
             <div class="form-check-inline">
                 <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" name="ageConfirmation" value="yes"> Да
+                    <input class="form-check-input" name="ageConfirmation" type="checkbox" value="yes"> Да
                 </label>
             </div>
         </div>
@@ -87,12 +88,14 @@
             <label>Съгласявате ли се с условията за участие?</label><br>
             <div class="form-check-inline">
                 <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" name="conditionsConfirmation" value="yes" required>
+                    <input class="form-check-input" name="conditionsConfirmation" required type="checkbox" value="yes">
                     Да
                 </label>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Регистрация</button>
+        <button class="btn btn-primary" style="background-color: green; border-color: green;"
+                type="submit">Регистрация
+        </button>
     </form>
 </div>
 
