@@ -1,8 +1,8 @@
 package com.fcst.student.RecycleRewards.model;
 
+import com.fcst.student.RecycleRewards.model.enums.PrizeType;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,6 +37,9 @@ public class Prize {
     @ManyToMany(mappedBy = "prizes")
     private List<User> participants;
 
+    @Enumerated(EnumType.STRING)
+    private PrizeType type;
+
     @Lob
     private byte[] image;
 
@@ -45,7 +48,7 @@ public class Prize {
 
     }
 
-    public Prize(Long id, String name, String description, Integer neededPointsToBuy, Integer totalTickets, Integer remainedTickets, LocalDateTime startDate, LocalDateTime endDate, List<User> participants) {
+    public Prize(Long id, String name, String description, Integer neededPointsToBuy, Integer totalTickets, Integer remainedTickets, LocalDateTime startDate, LocalDateTime endDate, List<User> participants, PrizeType type) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -55,6 +58,7 @@ public class Prize {
         this.startDate = startDate;
         this.endDate = endDate;
         this.participants = participants;
+        this.type = type;
     }
 
     public Long getId() {
@@ -135,5 +139,13 @@ public class Prize {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public PrizeType getType() {
+        return type;
+    }
+
+    public void setType(PrizeType type) {
+        this.type = type;
     }
 }

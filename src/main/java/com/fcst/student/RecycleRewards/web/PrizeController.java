@@ -2,6 +2,7 @@ package com.fcst.student.RecycleRewards.web;
 
 import com.fcst.student.RecycleRewards.model.Prize;
 import com.fcst.student.RecycleRewards.model.User;
+import com.fcst.student.RecycleRewards.model.enums.PrizeType;
 import com.fcst.student.RecycleRewards.service.PrizeService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -58,6 +59,7 @@ public class PrizeController {
                     model.addAttribute("loggedUser", user);
                     model.addAttribute("loggedIn", true);
                     model.addAttribute("loggedUser", user);
+                    model.addAttribute("prizeTypes", PrizeType.values());
 
                     return "admin_add_prizes";
                 } else {
@@ -78,7 +80,8 @@ public class PrizeController {
                                             @RequestParam Integer neededPointsToBuy,
                                             @RequestParam Integer totalTickets,
                                             @RequestParam String startDateTime,
-                                            @RequestParam String endDateTime) {
+                                            @RequestParam String endDateTime,
+                                            @RequestParam PrizeType type) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
@@ -93,6 +96,7 @@ public class PrizeController {
         prize.setStartDate(startDate);
         prize.setEndDate(endDate);
         prize.setRemainedTickets(totalTickets);
+        prize.setType(type);
 
         prizeService.savePrize(prize);
 

@@ -4,14 +4,27 @@
     <meta charset="UTF-8">
     <title>Награди</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .product-list-item-box {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: var(--bg-color);
+        }
 
+        .product-list-item-description {
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/home">RecycleRewards</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler"
+            data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -26,39 +39,53 @@
 
 </nav>
 
-
 <div class="container mt-5">
     <div class="jumbotron">
         <h1 class="display-4">Награди</h1>
         <hr class="my-4">
         <br>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Награда</th>
-                <th scope="col">Описание</th>
-                <th scope="col">Необходим брой точки</th>
-                <th scope="col">Крайна дата</th>
-                <th scope="col">Брой на оставащите билети</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="prize, rowStat : ${prizes}">
-                <td th:text="${rowStat.index + 1}"></td>
-                <td th:text="${prize.name}"></td>
-                <td th:text="${prize.description}"></td>
-                <td th:text="${prize.neededPointsToBuy}"></td>
-                <td th:text="${prize.endDate}"></td>
-                <td th:text="${prize.remainedTickets}"></td>
-            </tr>
-            </tbody>
-        </table>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Бутон</a>
+        <div class="row" id="prizeContainer">
+            <div class="col-md-4 mb-4" th:each="prize : ${prizes}">
+                <div class="product-list-item-bg--outer">
+                    <div class="product-list-item-bg--inner">
+                        <article class="product-list-item">
+                            <div class="product-list-item-box flexible d-flex flex-column">
+                                <header class="product-list-item-content flexible">
+                                    <h2 class="product-list-item-title" th:text="${prize.name}">Име награда</h2>
+                                    <p class="product-list-item-description" th:text="${prize.description}">Описание на
+                                        награда</p>
+                                </header>
+                                <footer class="product-list-item--footer">
+                                    <div class="product-list-item-point"
+                                         th:text="${prize.neededPointsToBuy + ' точки'}">Необходим брой точки
+                                    </div>
+                                    <br>
+                                    <div class="product-list-item-btn"><a class="btn btn-primary" href="#"
+                                                                          style="background-color: green; border-color: green;">Искам</a>
+                                    </div>
+                                </footer>
+                            </div>
+                            <div class="product-list-item-cnt" th:text="'Оставащи бройки: ' + ${prize.remainedTickets}">
+                                Оставащи бройки: yy/zz
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <div th:replace="~{fragments/footer}"></div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const prizeBoxes = document.querySelectorAll(".product-list-item-box");
+        prizeBoxes.forEach(box => {
+            const randomColor = `hsl(${Math.random() * 360}, 100%, 90%)`;
+            box.style.setProperty('--bg-color', randomColor);
+        });
+    });
+</script>
 </body>
 </html>
