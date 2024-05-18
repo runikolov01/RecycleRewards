@@ -16,6 +16,7 @@ public class PurchaseController {
     @Autowired
     private PurchaseService purchaseService;
 
+
     @GetMapping("/userPurchasedTickets")
     public ResponseEntity<List<Purchase>> getUserPurchasedTickets(HttpServletRequest request) {
         Long userId = (Long) request.getSession().getAttribute("userId"); // Get user ID from session
@@ -23,6 +24,7 @@ public class PurchaseController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         List<Purchase> purchasedTickets = purchaseService.getUserPurchasedTickets(userId);
+
         return ResponseEntity.ok(purchasedTickets);
     }
 }

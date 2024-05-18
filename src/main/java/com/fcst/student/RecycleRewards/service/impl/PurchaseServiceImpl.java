@@ -17,4 +17,9 @@ public class PurchaseServiceImpl implements PurchaseService {
     public List<Purchase> getUserPurchasedTickets(Long userId) {
         return purchaseRepository.findByUserId(userId);
     }
+
+    @Override
+    public List<Purchase> getPurchasesByUserId(Long userId) {
+        return purchaseRepository.findByUserId(userId);
+    }
 }

@@ -133,41 +133,30 @@
 
         <div id="boughtTickets" style="display: none;">
             <h2>Закупени билети за томбола</h2>
-            <div class="row" id="prizeContainer">
-                <div class="col-md-4 mb-4" th:each="prize : ${prizes}">
-                    <div class="product-list-item-bg--outer">
-                        <div class="product-list-item-bg--inner">
-                            <article class="product-list-item">
-                                <div class="product-list-item-box flexible d-flex flex-column">
-                                    <header class="product-list-item-content flexible">
-                                        <h2 class="product-list-item-title" th:text="${prize.name}">Име награда</h2>
-                                        <p class="product-list-item-description" th:text="${prize.description}">Описание
-                                            на
-                                            награда</p>
-                                    </header>
-                                    <footer class="product-list-item--footer">
-                                        <div class="product-list-item-point"
-                                             th:text="${prize.neededPointsToBuy + ' точки'}">Необходим брой точки
-                                        </div>
-                                        <br>
-                                        <div class="product-list-item-btn dynamic-button">
-                                            <button class="btn btn-primary"
-                                                    th:onclick="'checkLoginAndProceed(' + ${prize.id} + ', ' + ${prize.neededPointsToBuy} + ')'">
-                                                <span th:text="${prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).INSTANT ? 'Обменям точки за наградата' : (prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE ? 'Купувам 1 билет за участие в томболата' : 'Unknown')}"></span>
-                                            </button>
-
-                                        </div>
-                                    </footer>
-                                </div>
-                                <div class="product-list-item-cnt"
-                                     th:text="'Оставащи бройки: ' + ${prize.remainedTickets}">
-                                    Оставащи бройки: yy/zz
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID покупка</th>
+                    <th scope="col">Дата на покупка</th>
+                    <th scope="col">ID Награда</th>
+                    <th scope="col">Награда</th>
+                    <th scope="col">Описание</th>
+                    <th scope="col">Начална дата</th>
+                    <th scope="col">Крайна дата</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="purchase : ${purchases}">
+                    <td th:text="${purchase.id}"></td>
+                    <td th:text="${purchase.purchaseDate}"></td>
+                    <td th:text="${purchase.prize.getId()}"></td>
+                    <td th:text="${purchase.prize.getName()}"></td>
+                    <td th:text="${purchase.prize.getDescription()}"></td>
+                    <td th:text="${purchase.prize.getStartDate()}"></td>
+                    <td th:text="${purchase.prize.getEndDate()}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
         <div id="wonPrizes" style="display: none;">

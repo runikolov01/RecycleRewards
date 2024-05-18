@@ -1,9 +1,11 @@
 package com.fcst.student.RecycleRewards.web;
 
 import com.fcst.student.RecycleRewards.model.Address;
+import com.fcst.student.RecycleRewards.model.Purchase;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.model.enums.Role;
 import com.fcst.student.RecycleRewards.service.AddressService;
+import com.fcst.student.RecycleRewards.service.PurchaseService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,6 +34,9 @@ public class UserController {
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private PurchaseService purchaseService;
 
     @Autowired
     public UserController(UserService userService, LoggedUser loggedUser, ModelMapper modelMapper) {
@@ -74,6 +79,10 @@ public class UserController {
                 model.addAttribute("totalPoints", totalPoints);
                 model.addAttribute("loggedUser", user);
                 model.addAttribute("loggedIn", true); // Set loggedIn to true
+
+                List<Purchase> purchases = purchaseService.getPurchasesByUserId(userId);
+                model.addAttribute("purchases", purchases);
+
                 return "myProfile";
             }
         }
