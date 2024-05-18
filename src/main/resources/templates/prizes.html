@@ -44,6 +44,16 @@
         <h1 class="display-4">Награди</h1>
         <hr class="my-4">
         <br>
+        <!-- Filter Dropdown -->
+        <div class="form-group">
+            <label for="prizeTypeFilter">Филтър по тип награда:</label>
+            <select class="form-control" id="prizeTypeFilter" name="prizeTypeFilter" onchange="filterPrizes()">
+                <option value="">Всички награди</option>
+                <option value="INSTANT">Моментна награда</option>
+                <option value="RAFFLE">Томбола</option>
+            </select>
+        </div>
+        <br>
         <div class="row" id="prizeContainer">
             <div class="col-md-4 mb-4" th:each="prize : ${prizes}">
                 <div class="product-list-item-bg--outer">
@@ -86,6 +96,11 @@
             box.style.setProperty('--bg-color', randomColor);
         });
     });
+
+    function filterPrizes() {
+        const filter = document.getElementById('prizeTypeFilter').value;
+        window.location.href = `/prizes?type=${filter}`;
+    }
 </script>
 </body>
 </html>

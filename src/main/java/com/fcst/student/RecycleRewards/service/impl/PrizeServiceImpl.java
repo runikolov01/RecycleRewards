@@ -1,6 +1,7 @@
 package com.fcst.student.RecycleRewards.service.impl;
 
 import com.fcst.student.RecycleRewards.model.Prize;
+import com.fcst.student.RecycleRewards.model.enums.PrizeType;
 import com.fcst.student.RecycleRewards.repository.PrizeRepository;
 import com.fcst.student.RecycleRewards.service.PrizeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,11 @@ public class PrizeServiceImpl implements PrizeService {
     @Override
     public List<Prize> getAllPrizes() {
         return prizeRepository.findAll();
+    }
+
+    @Override
+    public List<Prize> getPrizesByType(PrizeType type) {
+        return prizeRepository.findByType(type);
     }
 
     @Override

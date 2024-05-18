@@ -1,6 +1,7 @@
 package com.fcst.student.RecycleRewards.service;
 
 import com.fcst.student.RecycleRewards.model.Prize;
+import com.fcst.student.RecycleRewards.model.enums.PrizeType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,5 +14,6 @@ public interface PrizeService {
 
     List<Prize> getAllPrizes();
 
+    List<Prize> getPrizesByType(PrizeType type);
     void deletePrizeById(int id);
 }
