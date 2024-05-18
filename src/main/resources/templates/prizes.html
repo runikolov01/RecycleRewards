@@ -70,8 +70,9 @@
                                          th:text="${prize.neededPointsToBuy + ' точки'}">Необходим брой точки
                                     </div>
                                     <br>
-                                    <div class="product-list-item-btn"><a class="btn btn-primary" href="#"
-                                                                          style="background-color: green; border-color: green;">Искам</a>
+                                    <div class="product-list-item-btn">
+                                        <button class="btn btn-primary"
+                                                th:text="${prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).INSTANT ? 'Обменям точки за наградата' : (prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE ? 'Купувам 1 билет за участие в томболата' : 'Unknown')}"
                                     </div>
                                 </footer>
                             </div>
@@ -95,7 +96,17 @@
             const randomColor = `hsl(${Math.random() * 360}, 100%, 90%)`;
             box.style.setProperty('--bg-color', randomColor);
         });
+
+        updateSelectedOption();
     });
+
+    function updateSelectedOption() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const filter = urlParams.get('type');
+        if (filter) {
+            document.getElementById('prizeTypeFilter').value = filter;
+        }
+    }
 
     function filterPrizes() {
         const filter = document.getElementById('prizeTypeFilter').value;

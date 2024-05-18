@@ -31,7 +31,7 @@ public class PrizeController {
     }
 
     @GetMapping("/prizes")
-    public String showPrizes(Model model, HttpSession session) {
+    public String showPrizes(Model model, HttpSession session, @RequestParam(value = "type", required = false) PrizeType type) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId != null) {
             User user = userService.getUserById(userId);
@@ -41,7 +41,12 @@ public class PrizeController {
                 model.addAttribute("totalPoints", totalPoints);
             }
         }
-        List<Prize> prizes = prizeService.getAllPrizes();
+        List<Prize> prizes;
+        if (type != null) {
+            prizes = prizeService.getPrizesByType(type);
+        } else {
+            prizes = prizeService.getAllPrizes();
+        }
         model.addAttribute("prizes", prizes);
         return "prizes";
     }
