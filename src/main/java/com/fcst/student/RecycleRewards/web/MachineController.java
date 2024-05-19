@@ -5,8 +5,6 @@ import com.fcst.student.RecycleRewards.service.MachineService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,22 +24,28 @@ public class MachineController {
 
     @GetMapping("/machines")
     public String showMachines(Model model, HttpSession session) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean loggedIn = authentication != null && authentication.isAuthenticated();
-
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+        session.setAttribute("loggedIn", loggedIn);
         model.addAttribute("loggedIn", loggedIn);
 
         Long userId = (Long) session.getAttribute("userId");
+
         if (userId != null) {
             User user = userService.getUserById(userId);
             if (user != null) {
+                session.setAttribute("loggedUser", user);
                 model.addAttribute("loggedUser", user);
 
                 Integer totalPoints = user.getTotalPoints();
+                session.setAttribute("totalPoints", totalPoints);
                 model.addAttribute("totalPoints", totalPoints);
             }
             System.out.println(user.getRole());
         }
+
         return "machines";
     }
 }

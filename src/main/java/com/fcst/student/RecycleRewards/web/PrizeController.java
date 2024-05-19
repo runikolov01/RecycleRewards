@@ -33,13 +33,23 @@ public class PrizeController {
 
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session, @RequestParam(value = "type", required = false) PrizeType type) {
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+        session.setAttribute("loggedIn", loggedIn);
+        model.addAttribute("loggedIn", loggedIn);
+
         Long userId = (Long) session.getAttribute("userId");
+
         if (userId != null) {
             User user = userService.getUserById(userId);
             if (user != null) {
-                model.addAttribute("loggedUser", user);
                 session.setAttribute("loggedUser", user);
+                model.addAttribute("loggedUser", user);
+
                 Integer totalPoints = user.getTotalPoints();
+                session.setAttribute("totalPoints", totalPoints);
                 model.addAttribute("totalPoints", totalPoints);
             }
         }
@@ -49,24 +59,36 @@ public class PrizeController {
         } else {
             prizes = prizeService.getAllPrizes();
         }
+        session.setAttribute("prizes", prizes);
         model.addAttribute("prizes", prizes);
+
         return "prizes";
     }
 
     @GetMapping("/admin_add_prizes")
     public String openAddPrizesPage(Model model, HttpSession session) {
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+        session.setAttribute("loggedIn", loggedIn);
+        model.addAttribute("loggedIn", loggedIn);
+
         Long userId = (Long) session.getAttribute("userId");
+
         if (userId != null) {
             User user = userService.getUserById(userId);
             if (user != null) {
                 String role = String.valueOf(user.getRole());
                 if (role != null && role.equals("ADMIN")) {
                     Integer totalPoints = user.getTotalPoints();
+                    session.setAttribute("loggedUser", user);
+                    session.setAttribute("totalPoints", totalPoints);
+
                     model.addAttribute("totalPoints", totalPoints);
                     model.addAttribute("loggedUser", user);
                     model.addAttribute("loggedIn", true);
                     model.addAttribute("prizeTypes", PrizeType.values());
-                    session.setAttribute("loggedUser", user);
 
                     return "admin_add_prizes";
                 } else {

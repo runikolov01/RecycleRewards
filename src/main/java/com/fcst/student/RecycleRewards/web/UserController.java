@@ -46,7 +46,14 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String registerForm() {
+    public String registerForm(Model model, HttpSession session) {
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+
+        model.addAttribute("loggedIn", loggedIn);
+
         return "register";
     }
 

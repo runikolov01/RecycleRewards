@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,7 +83,7 @@ public class TicketController {
         if (loggedIn == null) {
             loggedIn = false;
         }
-
+        session.setAttribute("loggedIn", loggedIn);
         model.addAttribute("loggedIn", loggedIn);
 
         Long userId = (Long) session.getAttribute("userId");
@@ -112,7 +110,7 @@ public class TicketController {
         if (loggedIn == null) {
             loggedIn = false;
         }
-
+        session.setAttribute("loggedIn", loggedIn);
         model.addAttribute("loggedIn", loggedIn);
 
         Long userId = (Long) session.getAttribute("userId");
@@ -131,11 +129,11 @@ public class TicketController {
 
     @GetMapping("/registerTicket")
     public String registerTicket(Model model, HttpSession session) {
-        // Check if the user is logged in
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean loggedIn = authentication != null && authentication.isAuthenticated();
-
-        // Add the loggedIn attribute to the model
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+        session.setAttribute("loggedIn", loggedIn);
         model.addAttribute("loggedIn", loggedIn);
 
         Long userId = (Long) session.getAttribute("userId");
