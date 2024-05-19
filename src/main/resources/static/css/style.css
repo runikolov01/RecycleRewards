@@ -18,6 +18,10 @@
     border-color: green;
 }
 
+.btn:hover {
+    background-color: #15bd06;
+}
+
 /* Override green background for the logout button */
 .logout-button {
     background-color: initial;
@@ -34,4 +38,20 @@ th {
 
 th:hover {
     background-color: #e2e2e2;
+}
+
+.success-message {
+    color: green;
+}
+
+.error-message {
+    color: red;
+}
+
+.password-strength {
+    color: #28a745;
+}
+
+.password-weak {
+    color: #dc3545;
 }
