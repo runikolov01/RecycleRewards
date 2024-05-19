@@ -53,6 +53,7 @@ public class PrizeController {
                 model.addAttribute("totalPoints", totalPoints);
             }
         }
+
         List<Prize> prizes;
         if (type != null) {
             prizes = prizeService.getPrizesByType(type);
@@ -62,8 +63,20 @@ public class PrizeController {
         session.setAttribute("prizes", prizes);
         model.addAttribute("prizes", prizes);
 
+        // If type is specified, fetch participants for each prize
+        if (type != null) {
+            for (Prize prize : prizes) {
+                List<User> participants = userService.getParticipantsByPrizeId(prize.getId());
+                // Add participants to the model multiple times based on the number of purchases
+                for (User participant : participants) {
+                    model.addAttribute("participant", participant);
+                }
+            }
+        }
+
         return "prizes";
     }
+
 
     @GetMapping("/admin_add_prizes")
     public String openAddPrizesPage(Model model, HttpSession session) {
@@ -186,12 +199,7 @@ public class PrizeController {
 
 
     @PostMapping("/admin_add_prizes")
-    public ResponseEntity<String> savePrize(@RequestParam String name,
-                                            @RequestParam String description,
-                                            @RequestParam Integer neededPointsToBuy,
-                                            @RequestParam Integer totalTickets,
-                                            @RequestParam String startDateTime,
-                                            @RequestParam PrizeType type) {
+    public ResponseEntity<String> savePrize(@RequestParam String name, @RequestParam String description, @RequestParam Integer neededPointsToBuy, @RequestParam Integer totalTickets, @RequestParam String startDateTime, @RequestParam PrizeType type) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 

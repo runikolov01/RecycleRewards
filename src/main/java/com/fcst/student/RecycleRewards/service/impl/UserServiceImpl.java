@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
 //    }
 
     public List<User> getParticipantsByPrizeId(Long prizeId) {
-        return userRepository.findAllById(prizeId);
+        return userRepository.findAllByPrizeId(prizeId);
     }
 
 }
