@@ -38,6 +38,7 @@ public class PrizeController {
             User user = userService.getUserById(userId);
             if (user != null) {
                 model.addAttribute("loggedUser", user);
+                session.setAttribute("loggedUser", user);
                 Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
             }
@@ -64,8 +65,8 @@ public class PrizeController {
                     model.addAttribute("totalPoints", totalPoints);
                     model.addAttribute("loggedUser", user);
                     model.addAttribute("loggedIn", true);
-                    model.addAttribute("loggedUser", user);
                     model.addAttribute("prizeTypes", PrizeType.values());
+                    session.setAttribute("loggedUser", user);
 
                     return "admin_add_prizes";
                 } else {

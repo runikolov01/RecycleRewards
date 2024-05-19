@@ -78,6 +78,7 @@ public class UserController {
                 // Pass total points and loggedIn status to the view
                 model.addAttribute("totalPoints", totalPoints);
                 model.addAttribute("loggedUser", user);
+                session.setAttribute("loggedUser", user);
                 model.addAttribute("loggedIn", true); // Set loggedIn to true
 
                 List<Purchase> purchases = purchaseService.getPurchasesByUserId(userId);
@@ -102,6 +103,8 @@ public class UserController {
                     Integer totalPoints = user.getTotalPoints();
                     model.addAttribute("totalPoints", totalPoints);
                     model.addAttribute("loggedUser", user);
+                    session.setAttribute("loggedUser", user);
+
                     model.addAttribute("loggedIn", true);
 
                     List<User> users = userService.getAllUsers();
@@ -135,8 +138,10 @@ public class UserController {
     public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
         User user = userService.getUserByEmail(email);
         if (user != null && userService.verifyPassword(user, password)) {
-            // Authentication successful, store user ID in session
+            // Authentication successful, store user ID and login status in session
             session.setAttribute("userId", user.getId());
+            session.setAttribute("loggedIn", true);
+            session.setAttribute("userRole", user.getRole());
 
             // Fetch total points for the logged-in user
             Integer totalPoints = user.getTotalPoints();

@@ -82,26 +82,30 @@ public class TicketController {
     @GetMapping("/home")
     public String home(Model model, HttpSession session) {
         // Check if the user is logged in
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean loggedIn = authentication != null && authentication.isAuthenticated();
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
 
         // Add the loggedIn attribute to the model
         model.addAttribute("loggedIn", loggedIn);
 
         Long userId = (Long) session.getAttribute("userId");
-        if (userId != null) {
+        if (loggedIn && userId != null) {
             User user = userService.getUserById(userId);
             if (user != null) {
                 model.addAttribute("loggedUser", user);
+                session.setAttribute("loggedUser", user);
 
                 // Fetch totalPoints for the logged-in user and add it to the model
                 Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
+                System.out.println("User Role: " + user.getRole());
             }
-            System.out.println(user.getRole());
         }
         return "home";
     }
+
 
     @GetMapping("/about")
     public String about(Model model, HttpSession session) {
@@ -111,6 +115,7 @@ public class TicketController {
             User user = userService.getUserById(userId);
             if (user != null) {
                 model.addAttribute("loggedUser", user);
+                session.setAttribute("loggedUser", user);
                 Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
             }
@@ -133,6 +138,7 @@ public class TicketController {
             User user = userService.getUserById(userId);
             if (user != null) {
                 model.addAttribute("loggedUser", user);
+                session.setAttribute("loggedUser", user);
 
                 Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
