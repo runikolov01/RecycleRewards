@@ -23,3 +23,15 @@
     background-color: initial;
     border-color: transparent;
 }
+
+th {
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    background-color: #f2f2f2;
+    transition: background-color 0.3s;
+}
+
+th:hover {
+    background-color: #e2e2e2;
+}
