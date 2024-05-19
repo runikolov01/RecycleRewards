@@ -21,7 +21,7 @@
             <hr>
             <h2 class="display-5">Вземете билета и го регистрирайте в профила си до <span
                     th:text="${expirationFormatted}">DD/MM/YY TIME</span>,
-                за да спечелите <span th:text="${bottlesCount}">0</span> точки!</h2>
+                за да спечелите <span th:text="${bottlesCount*5}">0</span> точки!</h2>
             <br>
 
             <form action="/print" id="printForm" method="post">
