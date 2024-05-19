@@ -31,6 +31,6 @@ public interface UserService {
 //
 //    void awardPrize(User user, Long prizeId);
 //
-//    List<User> getParticipantsByPrizeId(Long prizeId);
+    List<User> getParticipantsByPrizeId(Long prizeId);
 
 }

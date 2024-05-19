@@ -129,10 +129,10 @@ public class PrizeController {
         List<Prize> prizes = prizeService.getPrizesByType(PrizeType.RAFFLE);
         model.addAttribute("prizes", prizes);
 
-//        if (prizeId != null) {
-//                  List<User> participants = userService.getParticipantsByPrizeId(prizeId);
-//                 model.addAttribute("participants", participants);
-//        }
+        if (prizeId != null) {
+            List<User> participants = userService.getParticipantsByPrizeId(prizeId);
+            model.addAttribute("participants", participants);
+        }
 
         return "admin_raffle";
     }

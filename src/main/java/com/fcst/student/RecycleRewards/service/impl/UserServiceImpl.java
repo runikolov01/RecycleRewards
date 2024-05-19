@@ -1,8 +1,8 @@
 package com.fcst.student.RecycleRewards.service.impl;
 
-import com.fcst.student.RecycleRewards.model.Prize;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.repository.PrizeRepository;
+import com.fcst.student.RecycleRewards.repository.PurchaseRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,6 +26,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PrizeRepository prizeRepository;
+    @Autowired
+    private PurchaseRepository purchaseRepository;
 
     @Override
     public void saveUser(User person) {
@@ -94,8 +95,8 @@ public class UserServiceImpl implements UserService {
 //        }
 //    }
 
-//    @Override
-//    public List<User> getParticipantsByPrizeId(Long prizeId) {
-//        return userRepository.findUsersByPrizeId(prizeId);
-//    }
+    public List<User> getParticipantsByPrizeId(Long prizeId) {
+        return userRepository.findAllById(prizeId);
+    }
+
 }
