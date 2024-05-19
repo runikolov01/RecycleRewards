@@ -6,27 +6,12 @@
     <title>Начална страница</title>
     <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/home">RecycleRewards</a>
-    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-            class="navbar-toggler"
-            data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <th:block th:if="${loggedUser != null}">
-            <div th:if="${loggedUser.getRole() == 'ADMIN'}" th:replace="~{fragments/navbar_admin}"></div>
-            <div th:if="${loggedUser.getRole() == 'CLIENT'}" th:replace="~{fragments/navbar-logged-in}"></div>
-        </th:block>
-        <th:block th:if="${loggedUser == null}">
-            <div th:replace="~{fragments/navbar-logged-out}"></div>
-        </th:block>
-    </div>
-</nav>
+<!-- Navbar included from a separate fragment -->
+<div th:replace="~{fragments/navbar}"></div>
 
 <div class="container mt-5">
     <div class="jumbotron">
@@ -37,13 +22,11 @@
                   th:text="${loggedUser.getLastName()}"></span>
         </h1>
         <h1 class="display-4">Добре дошли в RecycleRewards!</h1>
-
         <p class="lead">Тук с всяка рециклирана бутилка печелите!</p>
         <hr class="my-4">
         <p>Рециклирането е най-важното действие, ако искаме нашата скъпоценна планета да оцелее.</p>
         <img alt="Logo" height="200" src="/images/logo.jpg" width="200">
-        <br>
-        <br>
+        <br><br>
         <a class="btn btn-primary btn-lg" href="about" role="button"
            style="background-color: green; border-color: green;">Научете повече за RecycleRewards</a>
     </div>
@@ -51,5 +34,8 @@
 
 <div th:replace="~{fragments/footer}"></div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
