@@ -8,8 +8,8 @@
         <title>Старт</title>
         <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/style.css" rel="stylesheet">
     </head>
-
 
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBre-86uFZSf1ld88qvLeza7FMb2pJwnIY&callback=initMap"></script>
@@ -26,9 +26,24 @@
 
 
             var locations = [
-                {lat:  42.6418715, lng: 23.3361706, title: 'Кауфланд - Малинова долина', description: 'ж.к. Малинова долина, ул. „Проф. д-р Иван Странски“ 20, 1000 София'},
-                {lat:  42.6458327, lng: 23.3791261, title: 'Кауфланд - Младост', description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712 София'},
-                {lat:  42.670452, lng: 23.2734864, title: 'Кауфланд - Витоша', description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712 София'},
+                {
+                    lat: 42.6418715,
+                    lng: 23.3361706,
+                    title: 'Кауфланд - Малинова долина',
+                    description: 'ж.к. Малинова долина, ул. „Проф. д-р Иван Странски“ 20, 1000 София'
+                },
+                {
+                    lat: 42.6458327,
+                    lng: 23.3791261,
+                    title: 'Кауфланд - Младост',
+                    description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712 София'
+                },
+                {
+                    lat: 42.670452,
+                    lng: 23.2734864,
+                    title: 'Кауфланд - Витоша',
+                    description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712 София'
+                },
 
             ];
 
@@ -53,25 +68,8 @@
     </script>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/home">RecycleRewards</a>
-    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-            class="navbar-toggler"
-            data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<div th:replace="~{fragments/navbar}"></div>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <th:block th:if="${loggedUser != null}">
-            <div th:if="${loggedUser.getRole() == 'ADMIN'}" th:replace="~{fragments/navbar_admin}"></div>
-            <div th:if="${loggedUser.getRole() == 'CLIENT'}" th:replace="~{fragments/navbar-logged-in}"></div>
-        </th:block>
-        <th:block th:if="${loggedUser == null}">
-            <div th:replace="~{fragments/navbar-logged-out}"></div>
-        </th:block>
-    </div>
-
-</nav>
 
 <div class="container mt-5">
     <div class="jumbotron">
@@ -121,6 +119,10 @@
 </div>
 
 <div th:replace="~{fragments/footer}"></div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

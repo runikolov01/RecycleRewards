@@ -2,29 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Регистрация на билет</title>
-    <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/home">RecycleRewards</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<div th:replace="~{fragments/navbar}"></div>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <th:block th:if="${loggedUser != null}">
-            <div th:replace="~{fragments/navbar-logged-in}"></div>
-        </th:block>
-        <th:block th:unless="${loggedUser != null}">
-            <div th:replace="~{fragments/navbar-logged-out}"></div>
-        </th:block>
-    </div>
-</nav>
 
 <div class="container mt-5">
     <div class="jumbotron">
@@ -35,14 +22,14 @@
         <form id="registerForm">
             <div class="form-group">
                 <label for="ticketNumber">Въведете уникалния код на билета:</label>
-                <input type="text" class="form-control" id="ticketNumber" name="ticketNumber">
-                <small id="ticketNumberError" class="text-danger" style="display: none;">Билетът не беше намерен. Моля,
+                <input class="form-control" id="ticketNumber" name="ticketNumber" type="text">
+                <small class="text-danger" id="ticketNumberError" style="display: none;">Билетът не беше намерен. Моля,
                     въведете валиден номер.</small>
             </div>
-            <button type="button" class="btn btn-primary" id="registerButton">Добави точките към моя профил</button>
+            <button class="btn btn-primary" id="registerButton" type="button">Добави точките към моя профил</button>
         </form>
 
-        <div id="ticketMessage" class="mt-3"></div>
+        <div class="mt-3" id="ticketMessage"></div>
 
         <br>
         <br>

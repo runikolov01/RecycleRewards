@@ -55,3 +55,15 @@ th:hover {
 .password-weak {
     color: #dc3545;
 }
+
+.product-list-item-box {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: var(--bg-color);
+}
+
+.product-list-item-description {
+    font-style: italic;
+}
