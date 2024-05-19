@@ -52,10 +52,16 @@ public class UserController {
 
     @GetMapping("/login")
     public String loginForm(@RequestParam(required = false) String error, Model model, HttpSession session) {
-        // Check if the user is already logged in
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+
+        model.addAttribute("loggedIn", loggedIn);
+
         Long userId = (Long) session.getAttribute("userId");
+
         if (userId != null) {
-            // User is already logged in, redirect to profile page
             return "redirect:/myProfile";
         }
 

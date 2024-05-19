@@ -81,16 +81,15 @@ public class TicketController {
 
     @GetMapping("/home")
     public String home(Model model, HttpSession session) {
-        // Check if the user is logged in
         Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
         if (loggedIn == null) {
             loggedIn = false;
         }
 
-        // Add the loggedIn attribute to the model
         model.addAttribute("loggedIn", loggedIn);
 
         Long userId = (Long) session.getAttribute("userId");
+
         if (loggedIn && userId != null) {
             User user = userService.getUserById(userId);
             if (user != null) {
@@ -109,9 +108,15 @@ public class TicketController {
 
     @GetMapping("/about")
     public String about(Model model, HttpSession session) {
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+
+        model.addAttribute("loggedIn", loggedIn);
+
         Long userId = (Long) session.getAttribute("userId");
         if (userId != null) {
-            // Fetch user details from the database using the user ID
             User user = userService.getUserById(userId);
             if (user != null) {
                 model.addAttribute("loggedUser", user);
