@@ -1,0 +1,25 @@
+/* Custom styling for nav items */
+.navbar-nav .nav-item {
+    border: 2px solid darkgreen;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+/* Ensure buttons with the dark-grey border class have the intended styles */
+.dark-grey-border {
+    border-color: #333333;
+    border-width: 50px;
+    color: white;
+}
+
+/* General Button Styling */
+.btn {
+    background-color: green;
+    border-color: green;
+}
+
+/* Override green background for the logout button */
+.logout-button {
+    background-color: initial;
+    border-color: transparent;
+}

@@ -1,0 +1,56 @@
+<!-- fragments/navbar.html -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="navbar">
+    <a class="navbar-brand" href="/home">RecycleRewards</a>
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+            data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <!-- Links for ADMIN role -->
+            <li class="nav-item"
+                th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
+                <a class="nav-link dark-grey-border" href="/admin_add_prizes">Добавяне на награди</a>
+            </li>
+            <li class="nav-item"
+                th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
+                <a class="nav-link dark-grey-border" href="/users">Редакция на потребителите</a>
+            </li>
+
+            <!-- Common links for all users -->
+            <li class="nav-item">
+                <a class="nav-link" href="/about">Информация</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/prizes">Награди</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/machines">Локации</a>
+            </li>
+
+            <!-- Display registration and login links only if user is not logged in -->
+            <li class="nav-item" th:unless="${loggedIn}">
+                <a class="nav-link" href="/register">Регистрация</a>
+            </li>
+            <li class="nav-item" th:unless="${loggedIn}">
+                <a class="nav-link" href="/login">Вход</a>
+            </li>
+
+            <!-- Links for logged IN users -->
+            <li class="nav-item" th:if="${loggedIn}">
+                <a class="nav-link" href="/registerTicket">Регистрация на билет</a>
+            </li>
+            <li class="nav-item" th:if="${loggedIn}">
+                <a class="nav-link" href="/myProfile">Моят профил</a>
+            </li>
+            <li class="nav-item" th:if="${loggedIn}">
+                <a class="nav-link">Точки: <span th:text="${totalPoints}"></span></a>
+            </li>
+            <li class="nav-item" th:if="${loggedIn}">
+                <form action="/logout" method="post">
+                    <input class="btn btn-link nav-link logout-button" type="submit" value="Изход от профила">
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
