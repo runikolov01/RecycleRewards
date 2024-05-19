@@ -91,5 +91,15 @@ public class PrizeServiceImpl implements PrizeService {
         return true; // Purchase successful
     }
 
+    @Override
+    public void setWinnerForPrize(Long prizeId, Long userId) {
+        Optional<Prize> optionalPrize = prizeRepository.findById(prizeId);
+        if (optionalPrize.isPresent()) {
+            Prize prize = optionalPrize.get();
+        //    prize.setWinnerId(userId);
+            prizeRepository.save(prize);
+        }
+    }
+
 
 }

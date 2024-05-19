@@ -1,7 +1,8 @@
 <!-- fragments/navbar.html -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="navbar">
     <a class="navbar-brand" href="/home">RecycleRewards</a>
-    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler"
             data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -15,6 +16,10 @@
             <li class="nav-item"
                 th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
                 <a class="nav-link dark-grey-border" href="/users">Редакция на потребителите</a>
+            </li>
+            <li class="nav-item"
+                th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
+                <a class="nav-link dark-grey-border" href="/admin_raffle">Теглене на победителите</a>
             </li>
 
             <!-- Common links for all users -->

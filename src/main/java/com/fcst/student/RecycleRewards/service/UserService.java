@@ -26,4 +26,11 @@ public interface UserService {
     void logout();
 
     List<User> getAllUsers();
+
+//    List<User> getUsersByPrize(Long prizeId);
+//
+//    void awardPrize(User user, Long prizeId);
+//
+//    List<User> getParticipantsByPrizeId(Long prizeId);
+
 }

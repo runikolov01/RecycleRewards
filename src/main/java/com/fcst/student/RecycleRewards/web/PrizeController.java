@@ -103,6 +103,56 @@ public class PrizeController {
         return "redirect:/home";
     }
 
+    @GetMapping("/admin_raffle")
+    public String openRafflePage(Model model, HttpSession session, @RequestParam(value = "prizeId", required = false) Long prizeId) {
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+        session.setAttribute("loggedIn", loggedIn);
+        model.addAttribute("loggedIn", loggedIn);
+
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId != null) {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                session.setAttribute("loggedUser", user);
+                model.addAttribute("loggedUser", user);
+
+                Integer totalPoints = user.getTotalPoints();
+                session.setAttribute("totalPoints", totalPoints);
+                model.addAttribute("totalPoints", totalPoints);
+            }
+        }
+
+        List<Prize> prizes = prizeService.getPrizesByType(PrizeType.RAFFLE);
+        model.addAttribute("prizes", prizes);
+
+//        if (prizeId != null) {
+//                  List<User> participants = userService.getParticipantsByPrizeId(prizeId);
+//                 model.addAttribute("participants", participants);
+//        }
+
+        return "admin_raffle";
+    }
+
+//    @PostMapping("/draw_winner")
+//    @ResponseBody
+//    public ResponseEntity<User> drawWinner(@RequestParam Long prizeId, @RequestParam int randomNumber) {
+//        List<User> participants = userService.getParticipantsByPrizeId(prizeId);
+//        if (participants.size() < randomNumber) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        User winner = participants.get(randomNumber - 1); // Assuming the participants are 0-indexed
+//
+//        // Update the winner information in the database
+//        prizeService.setWinnerForPrize(prizeId, winner.getId());
+//
+//        return ResponseEntity.ok(winner);
+//    }
+
+
     @PostMapping("/prizes/buy")
     public ResponseEntity<String> buyPrize(@RequestParam Long prizeId, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");

@@ -1,6 +1,8 @@
 package com.fcst.student.RecycleRewards.service.impl;
 
+import com.fcst.student.RecycleRewards.model.Prize;
 import com.fcst.student.RecycleRewards.model.User;
+import com.fcst.student.RecycleRewards.repository.PrizeRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
@@ -9,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,8 +21,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private LoggedUser loggedUser;
+
+    @Autowired
+    private PrizeRepository prizeRepository;
 
     @Override
     public void saveUser(User person) {
@@ -66,8 +73,29 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+
     @Override
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
+
+//    @Override
+//    public List<User> getUsersByPrize(Long prizeId) {
+//        return userRepository.findUsersByPrizeId(prizeId);
+//    }
+
+//    @Override
+//    public void awardPrize(User user, Long prizeId) {
+//        Optional<Prize> optionalPrize = prizeRepository.findById(prizeId);
+//        if (optionalPrize.isPresent()) {
+//            Prize prize = optionalPrize.get();
+//            user.getPrizes().add(prize);
+//            userRepository.save(user);
+//        }
+//    }
+
+//    @Override
+//    public List<User> getParticipantsByPrizeId(Long prizeId) {
+//        return userRepository.findUsersByPrizeId(prizeId);
+//    }
 }

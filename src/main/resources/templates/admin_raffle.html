@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Теглене на победителите</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar}"></div>
+
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Теглене на победителите - панел за админи</h1>
+        <form method="get" th:action="@{/admin_raffle}">
+            <div class="form-group">
+                <label for="prizeSelect">Изберете награда</label>
+                <select class="form-control" id="prizeSelect" name="prizeId" required>
+                    <option th:each="prize : ${prizes}"
+                            th:text="${prize.name} + ' ' + ${prize.description}"
+                            th:value="${prize.id}">Prize Name
+                    </option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Покажи участниците</button>
+        </form>
+    </div>
+
+    <div class="mt-3" th:if="${participants != null}">
+        <h2>Участници</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Име</th>
+                <th scope="col">Фамилия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="participant : ${participants}">
+                <th scope="row" th:text="${participant.id}">1</th>
+                <td th:text="${participant.firstName}">Иван</td>
+                <td th:text="${participant.lastName}">Иванов</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-3" th:if="${participants != null}">
+        <h2>Изтегли печелившия</h2>
+        <div class="form-group">
+            <label for="participantCounter">Брояч</label>
+            <input class="form-control" id="participantCounter" readonly
+                   th:value="${participants.size()}" type="number">
+        </div>
+        <button class="btn btn-success" id="drawWinnerBtn">Изтегли печелившия</button>
+        <div class="mt-3">
+            <h3>Печеливш участник</h3>
+            <p id="winnerDetails"></p>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer}"></div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById("drawWinnerBtn").addEventListener("click", function () {
+        let maxNumber = document.getElementById("participantCounter").value;
+        let randomNumber = Math.floor(Math.random() * maxNumber) + 1;
+
+        $.ajax({
+            url: '/draw_winner',
+            type: 'POST',
+            data: {prizeId: $('#prizeSelect').val(), randomNumber: randomNumber},
+            success: function (data) {
+                document.getElementById("winnerDetails").innerText = `Победителят е: ${data.firstName} ${data.lastName}`;
+            },
+            error: function () {
+                alert("Възникна грешка, моля опитайте отново.");
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -21,4 +21,6 @@ public interface PrizeService {
 
     boolean purchasePrize(Long userId, Long prizeId);
 
+    void setWinnerForPrize(Long prizeId, Long userId);
+
 }
