@@ -31,7 +31,7 @@ public class Prize {
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
 
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
     private LocalDateTime endDate;
 
 
@@ -44,15 +44,12 @@ public class Prize {
     @Enumerated(EnumType.STRING)
     private PrizeType type;
 
-    @Lob
-    private byte[] image;
-
 
     public Prize() {
 
     }
 
-    public Prize(Long id, String name, String description, Integer neededPointsToBuy, Integer totalTickets, Integer remainedTickets, LocalDateTime startDate, LocalDateTime endDate, List<User> participants, PrizeType type) {
+    public Prize(Long id, String name, String description, Integer neededPointsToBuy, Integer totalTickets, Integer remainedTickets, LocalDateTime startDate, List<User> participants, PrizeType type) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -60,7 +57,6 @@ public class Prize {
         this.totalTickets = totalTickets;
         this.remainedTickets = remainedTickets;
         this.startDate = startDate;
-        this.endDate = endDate;
         this.participants = participants;
         this.type = type;
     }
@@ -135,14 +131,6 @@ public class Prize {
 
     public void setParticipants(List<User> participants) {
         this.participants = participants;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 
     public PrizeType getType() {

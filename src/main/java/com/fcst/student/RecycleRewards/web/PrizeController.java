@@ -141,13 +141,11 @@ public class PrizeController {
                                             @RequestParam Integer neededPointsToBuy,
                                             @RequestParam Integer totalTickets,
                                             @RequestParam String startDateTime,
-                                            @RequestParam String endDateTime,
                                             @RequestParam PrizeType type) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
         LocalDateTime startDate = LocalDateTime.parse(startDateTime, formatter);
-        LocalDateTime endDate = LocalDateTime.parse(endDateTime, formatter);
 
         Prize prize = new Prize();
         prize.setName(name);
@@ -155,7 +153,6 @@ public class PrizeController {
         prize.setNeededPointsToBuy(neededPointsToBuy);
         prize.setTotalTickets(totalTickets);
         prize.setStartDate(startDate);
-        prize.setEndDate(endDate);
         prize.setRemainedTickets(totalTickets);
         prize.setType(type);
 

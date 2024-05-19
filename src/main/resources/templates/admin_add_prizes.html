@@ -32,12 +32,11 @@
                 <label for="startDateTime">Начален ден и час </label>
                 <input class="form-control" id="startDateTime" name="startDateTime" required type="datetime-local">
 
-                <label for="endDateTime">Краен ден и час </label>
-                <input class="form-control" id="endDateTime" name="endDateTime" required type="datetime-local">
 
                 <label for="type">Тип на наградата:</label>
                 <select class="form-control" id="type" name="type" required>
-                    <option th:each="type : ${prizeTypes}" th:text="${type}" th:value="${type}">Type</option>
+                    <option th:each="type : ${prizeTypes}" th:text="${type}" th:value="${type}">Тип на наградата
+                    </option>
                 </select>
 
                 <br>
