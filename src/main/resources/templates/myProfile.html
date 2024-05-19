@@ -137,37 +137,53 @@
                             </select>
                         </th>
                         <th scope="col">
-                            Начална дата
+                            Дата на закупения билет
                             <select class="filter-select" data-column="5">
-                                <option value="">Всички</option>
-                            </select>
-                        </th>
-                        <th scope="col">
-                            Крайна дата
-                            <select class="filter-select" data-column="6">
                                 <option value="">Всички</option>
                             </select>
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="purchase : ${purchases}">
+                    <tr th:each="purchase : ${purchases}"
+                        th:if="${purchase.prize.getType() == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE}">
                         <td th:text="${purchase.id}"></td>
                         <td th:text="${purchase.purchaseDate}"></td>
                         <td th:text="${purchase.prize.getId()}"></td>
                         <td th:text="${purchase.prize.getName()}"></td>
                         <td th:text="${purchase.prize.getDescription()}"></td>
-                        <td th:text="${purchase.prize.getStartDate()}"></td>
-                        <td th:text="${purchase.prize.getEndDate()}"></td>
+                        <td th:text="${purchase.getPurchaseDate()}"></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
         <div id="wonPrizes" style="display: none;">
-            <h2>Спечелени награди</h2>
+            <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
+                <h2>Спечелени награди</h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID Награда</th>
+                        <th scope="col">Награда</th>
+                        <th scope="col">Описание</th>
+                        <th scope="col">Дата на спечелване</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="prize : ${loggedUser.prizes}">
+                        <td th:text="${prize.getId()}"></td>
+                        <td th:text="${prize.getName()}"></td>
+                        <td th:text="${prize.getDescription()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
         </div>
+
     </div>
+</div>
 </div>
 
 <div th:replace="~{fragments/footer}"></div>

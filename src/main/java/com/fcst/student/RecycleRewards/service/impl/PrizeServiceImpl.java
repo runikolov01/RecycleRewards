@@ -20,7 +20,6 @@ public class PrizeServiceImpl implements PrizeService {
     @Autowired
     private final PrizeRepository prizeRepository;
 
-
     @Autowired
     private UserRepository userRepository;
 
@@ -70,17 +69,20 @@ public class PrizeServiceImpl implements PrizeService {
         int remainedTicketsForThisPrize = prize.getRemainedTickets();
 
         if (user.getTotalPoints() < prize.getNeededPointsToBuy() || remainedTicketsForThisPrize <= 0) {
-            return false; // Not enough points
+            return false; // Not enough points or no more tickets left for the prize
         }
 
         // Deduct points
         user.setTotalPoints(user.getTotalPoints() - prize.getNeededPointsToBuy());
         prize.setRemainedTickets(remainedTicketsForThisPrize - 1);
-        prizeRepository.save(prize);
         userRepository.save(user);
 
-        // Record purchase (assuming you have a Purchase entity and repository)
+        // Record purchase
         Purchase purchase = new Purchase();
+        if (prize.getType() == PrizeType.INSTANT) {
+            user.getPrizes().add(prize);
+
+        }
         purchase.setUser(user);
         purchase.setPrize(prize);
         purchase.setPurchaseDate(LocalDateTime.now());
@@ -88,4 +90,6 @@ public class PrizeServiceImpl implements PrizeService {
 
         return true; // Purchase successful
     }
+
+
 }
