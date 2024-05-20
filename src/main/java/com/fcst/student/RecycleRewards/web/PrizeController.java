@@ -158,11 +158,13 @@ public class PrizeController {
             }
             model.addAttribute("participants", participants);
             model.addAttribute("selectedPrizeId", prizeId);
-
+        } else {
+            model.addAttribute("selectedPrizeId", null);
         }
 
         return "admin_raffle";
     }
+
 
 //    @PostMapping("/draw_winner")
 //    @ResponseBody

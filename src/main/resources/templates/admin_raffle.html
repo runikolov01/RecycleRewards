@@ -16,25 +16,17 @@
         <form method="get" th:action="@{/admin_raffle}">
             <div class="form-group">
                 <label for="prizeSelect">Изберете награда</label>
-                <select class="form-control" id="prizeSelect" name="prizeId" onchange="updateSelectedText()" required>
+                <select class="form-control" id="prizeSelect" name="prizeId" required>
                     <option th:each="prize : ${prizes}"
                             th:text="${prize.name} + ' ' + ${prize.description}"
-                            th:value="${prize.id}">Награда
+                            th:value="${prize.id}"
+                            th:selected="${prize.id == selectedPrizeId}">Награда
                     </option>
                 </select>
             </div>
             <button class="btn btn-primary" type="submit">Покажи участниците</button>
         </form>
     </div>
-
-    <script>
-        function updateSelectedText() {
-            var select = document.getElementById("prizeSelect");
-            var selectedOption = select.options[select.selectedIndex];
-            select.setAttribute("title", selectedOption.text);
-        }
-    </script>
-
 
     <div class="mt-3" th:if="${participants != null}">
         <h2>Участници</h2>
@@ -50,11 +42,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!--                        <tr th:each="participant : ${participants}">-->
-                <!--                            <th scope="row" th:text="${participant.id}">#</th>-->
-                <!--                            <td th:text="${participant.firstName}">Иван</td>-->
-                <!--                            <td th:text="${participant.lastName}">Иванов</td>-->
-                <!--                        </tr>-->
                 <tr th:each="purchase : ${purchases}">
                     <th scope="row" th:text="${purchase.id}">ID Поръчка</th>
                     <td th:text="${purchase.purchaseDate}">Дата</td>
@@ -88,12 +75,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    function updateSelectedText() {
-        var select = document.getElementById("prizeSelect");
-        var selectedOption = select.options[select.selectedIndex];
-        select.setAttribute("title", selectedOption.text);
-    }
-
     document.getElementById("drawWinnerBtn").addEventListener("click", function () {
         let maxNumber = document.getElementById("participantCounter").value;
         let randomNumber = Math.floor(Math.random() * maxNumber) + 1;
