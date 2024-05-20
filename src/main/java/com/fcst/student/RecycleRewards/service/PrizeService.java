@@ -24,4 +24,9 @@ public interface PrizeService {
     void setWinnerForPrize(Long prizeId, Long userId);
 
     public List<Prize> getPrizesWithoutWinners();
+
+    List<Prize> getPrizesByTypeAndRemainedTicketsGreaterThan(PrizeType type, int remainedTickets);
+
+    List<Prize> getAllPrizesWithRemainedTicketsGreaterThan(int remainedTickets);
+
 }

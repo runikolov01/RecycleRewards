@@ -15,4 +15,8 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
 
     @Query(value = "SELECT * FROM Prizes WHERE id NOT IN (SELECT DISTINCT prize_id FROM person_won_prizes)", nativeQuery = true)
     List<Prize> findPrizesWithoutWinners();
+
+    List<Prize> findByTypeAndRemainedTicketsGreaterThan(PrizeType prizeType, int remainedTickets);
+
+    List<Prize> findByRemainedTicketsGreaterThan(int remainedTickets);
 }

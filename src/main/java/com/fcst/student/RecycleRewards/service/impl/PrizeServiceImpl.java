@@ -116,4 +116,14 @@ public class PrizeServiceImpl implements PrizeService {
     public List<Prize> getPrizesWithoutWinners() {
         return prizeRepository.findPrizesWithoutWinners();
     }
+
+    @Override
+    public List<Prize> getPrizesByTypeAndRemainedTicketsGreaterThan(PrizeType type, int remainedTickets) {
+        return prizeRepository.findByTypeAndRemainedTicketsGreaterThan(type, remainedTickets);
+    }
+
+    @Override
+    public List<Prize> getAllPrizesWithRemainedTicketsGreaterThan(int remainedTickets) {
+        return prizeRepository.findByRemainedTicketsGreaterThan(remainedTickets);
+    }
 }

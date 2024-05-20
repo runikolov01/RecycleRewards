@@ -62,10 +62,15 @@ public class PrizeController {
 
         List<Prize> prizes;
         if (type != null) {
-            prizes = prizeService.getPrizesByType(type);
+            if (type.equals(PrizeType.INSTANT) || type.equals(PrizeType.RAFFLE)) {
+                prizes = prizeService.getPrizesByTypeAndRemainedTicketsGreaterThan(type, 0);
+            } else {
+                prizes = prizeService.getPrizesByType(type);
+            }
         } else {
-            prizes = prizeService.getAllPrizes();
+            prizes = prizeService.getAllPrizesWithRemainedTicketsGreaterThan(0);
         }
+
         session.setAttribute("prizes", prizes);
         model.addAttribute("prizes", prizes);
 
