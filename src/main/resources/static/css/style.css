@@ -67,3 +67,9 @@ th:hover {
 .product-list-item-description {
     font-style: italic;
 }
+
+table, th, td {
+    border: 1px solid black !important;
+    border-collapse: collapse !important;
+    text-align: center;
+}

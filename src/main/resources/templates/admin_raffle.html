@@ -33,25 +33,25 @@
         <div class="mt-3" th:if="${participants != null}">
             <h2>Участници</h2>
             <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
-                <table class="participants-table" id="participantsTable">
+                <table class="participants-table table-bordered" id="participantsTable">
                     <thead>
                     <tr>
-                        <th scope="col">ID Участие</th>
-                        <th scope="col">ID Поръчка</th>
-                        <th scope="col">Дата</th>
-                        <th scope="col">ID Потребител</th>
-                        <th scope="col">Име</th>
-                        <th scope="col">Фамилия</th>
+                        <th class="text-center" scope="col">ID Участие</th>
+                        <th class="text-center" scope="col">ID Поръчка</th>
+                        <th class="text-center" scope="col">Дата</th>
+                        <th class="text-center" scope="col">ID Потребител</th>
+                        <th class="text-center" scope="col">Име</th>
+                        <th class="text-center" scope="col">Фамилия</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="purchase, rowState : ${purchases}">
-                        <th scope="row" th:text="${rowState.index + 1}">ID Участие</th>
-                        <th scope="row" th:text="${purchase.id}">ID Поръчка</th>
-                        <td th:text="${purchase.purchaseDate}">Дата</td>
-                        <td th:text="${purchase.getUser().id}">ID Потребител</td>
-                        <td th:text="${purchase.getUser().firstName}">Име</td>
-                        <td th:text="${purchase.getUser().lastName}">Фамилия</td>
+                        <th class="text-center" scope="row" th:text="${rowState.index + 1}">ID Участие</th>
+                        <th class="text-center" th:text="${purchase.id}">ID Поръчка</th>
+                        <td class="text-center" th:text="${purchase.purchaseDate}">Дата</td>
+                        <td class="text-center" th:text="${purchase.getUser().id}">ID Потребител</td>
+                        <td class="text-center" th:text="${purchase.getUser().firstName}">Име</td>
+                        <td class="text-center" th:text="${purchase.getUser().lastName}">Фамилия</td>
                     </tr>
                     </tbody>
                 </table>
@@ -76,7 +76,7 @@
                 </div>
 
                 <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
-                    <table class="table-winner" id="winnerTable">
+                    <table class="table-winner table-bordered" id="winnerTable">
                         <thead>
                         <tr>
                             <th scope="col">ID Участие</th>
@@ -109,7 +109,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("drawWinnerBtn").addEventListener("click", function () {
             let maxNumber = document.getElementById("participantCounter").value;
-            let randomNumber = Math.floor(Math.random() * maxNumber);
+            let randomNumber = Math.floor(Math.random() * maxNumber) + 1;
             document.getElementById("idWinnerRandom").value = randomNumber;
 
             // Log prizeId
@@ -135,6 +135,7 @@
                     }
 
                     let winnerRow = $('<tr>');
+
 
                     $(this).find('th, td').each(function () {
                         winnerRow.append($('<td>').text($(this).text()));
