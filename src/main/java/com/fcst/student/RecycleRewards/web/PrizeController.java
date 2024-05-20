@@ -190,7 +190,7 @@ public class PrizeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid random number");
         }
 
-        User winner = participants.get(randomNumber - 1); // Adjust index to match list index (starting from 0)
+        User winner = participants.get(randomNumber - 1);
 
         // Connect the winner with the prize and save to the database
         prizeService.setWinnerForPrize(prizeId, winner.getId());
@@ -216,6 +216,10 @@ public class PrizeController {
 
         // Connect the prize with the user
         user.getPrizes().add(prize);
+
+        prize.setRemainedTickets(0);
+        prize.setEndDate(LocalDateTime.now());
+
         userService.saveUser(user);
 
         return ResponseEntity.ok("Prize connected with winner successfully");

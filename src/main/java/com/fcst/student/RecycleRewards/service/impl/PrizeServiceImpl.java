@@ -107,6 +107,8 @@ public class PrizeServiceImpl implements PrizeService {
 //            prize.addWinner(winner);
 
             // Save the updated prize
+            prize.setRemainedTickets(0);
+            prize.setEndDate(LocalDateTime.now());
             prizeRepository.save(prize);
         }
     }

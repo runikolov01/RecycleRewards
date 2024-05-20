@@ -143,9 +143,9 @@
                     $('#winnerTable tbody').append(winnerRow);
 
                     // Show winner details
-                    document.getElementById("winnerNumber").innerText = `Избраният номер е: ${randomNumber}`;
+                    // document.getElementById("winnerNumber").innerText = `Избраният номер е: ${randomNumber}`;
                     let winnerDetails = $(this).find('td:eq(4)').text() + ' ' + $(this).find('td:eq(5)').text();
-                    document.getElementById("winnerDetails").innerText = `Победителят е: ${winnerDetails}`;
+                    // document.getElementById("winnerDetails").innerText = `Победителят е: ${winnerDetails}`;
 
                     // Send AJAX request to connect the winner with the prize
                     $.post("/connectPrizeWithWinner", {
