@@ -1,9 +1,12 @@
 package com.fcst.student.RecycleRewards.web;
 
 import com.fcst.student.RecycleRewards.model.Address;
+import com.fcst.student.RecycleRewards.model.Prize;
 import com.fcst.student.RecycleRewards.model.Purchase;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.model.enums.Role;
+import com.fcst.student.RecycleRewards.repository.PrizeRepository;
+import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.AddressService;
 import com.fcst.student.RecycleRewards.service.PurchaseService;
 import com.fcst.student.RecycleRewards.service.UserService;
@@ -37,6 +40,12 @@ public class UserController {
 
     @Autowired
     private PurchaseService purchaseService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PrizeRepository prizeRepository;
 
     @Autowired
     public UserController(UserService userService, LoggedUser loggedUser, ModelMapper modelMapper) {
@@ -131,6 +140,26 @@ public class UserController {
             }
         }
         return "redirect:/home";
+    }
+
+    @GetMapping("/winners")
+    public String showWinners(Model model, HttpSession session) {
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+        session.setAttribute("loggedIn", loggedIn);
+        model.addAttribute("loggedIn", loggedIn);
+
+        Long userId = (Long) session.getAttribute("userId");
+
+
+        List<Prize> wonPrizes = prizeRepository.findAllWonPrizes();
+        System.out.println(wonPrizes.size());
+
+        model.addAttribute("wonPrizes", wonPrizes);
+
+        return "winners";
     }
 
 

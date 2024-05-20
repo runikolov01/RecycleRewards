@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Печеливши</title>
+    <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar}"></div>
+
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h2>Спечелени награди</h2>
+        <div id="wonPrizes" style="display: none;">
+            <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID Награда</th>
+                        <th scope="col">Награда</th>
+                        <th scope="col">Описание</th>
+                        <th scope="col">Печеливш име</th>
+                        <th scope="col">Печеливш фамилия</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="prize : ${wonPrizes}">
+                        <td th:text="${prize.id}"></td>
+<!--                        <td th:text="${prize.getName()}"></td>-->
+<!--                        <td th:text="${prize.getDescription()}"></td>-->
+<!--                        <td th:text="${prize.user.firstName}"></td>-->
+<!--                        <td th:text="${prize.user.lastName}"></td>-->
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div th:replace="~{fragments/footer}"></div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</body>
+</html>
