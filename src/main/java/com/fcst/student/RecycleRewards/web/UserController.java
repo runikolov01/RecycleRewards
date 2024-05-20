@@ -122,7 +122,7 @@ public class UserController {
 
                     List<User> users = userService.getAllUsers();
                     model.addAttribute("users", users);
-                    return "users";
+                    return "admin_users";
                 } else {
                     System.out.println("User role: " + role);
                 }
