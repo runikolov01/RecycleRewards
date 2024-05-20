@@ -11,4 +11,6 @@ public interface PurchaseService {
 
     List<Purchase> getPurchasesByUserId(Long userId);
 
+    List<Purchase> getAllPurchasesByPrizeId(Long prizeId);
+
 }

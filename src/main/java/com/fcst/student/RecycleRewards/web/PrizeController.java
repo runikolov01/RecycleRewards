@@ -1,9 +1,11 @@
 package com.fcst.student.RecycleRewards.web;
 
 import com.fcst.student.RecycleRewards.model.Prize;
+import com.fcst.student.RecycleRewards.model.Purchase;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.model.enums.PrizeType;
 import com.fcst.student.RecycleRewards.service.PrizeService;
+import com.fcst.student.RecycleRewards.service.PurchaseService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,11 +27,13 @@ import java.util.Optional;
 public class PrizeController {
     private final UserService userService;
     private final PrizeService prizeService;
+    private final PurchaseService purchaseService;
 
     @Autowired
-    public PrizeController(UserService userService, PrizeService prizeService) {
+    public PrizeController(UserService userService, PrizeService prizeService, PurchaseService purchaseService) {
         this.userService = userService;
         this.prizeService = prizeService;
+        this.purchaseService = purchaseService;
     }
 
     @GetMapping("/prizes")
@@ -143,8 +148,17 @@ public class PrizeController {
         model.addAttribute("prizes", prizes);
 
         if (prizeId != null) {
-            List<User> participants = userService.getParticipantsByPrizeId(prizeId);
+            List<Purchase> purchases = purchaseService.getAllPurchasesByPrizeId(prizeId);
+            model.addAttribute("purchases", purchases);
+
+            List<User> participants = new ArrayList<>();
+            for (Purchase purchase : purchases) {
+                User user = purchase.getUser();
+                participants.add(user);
+            }
             model.addAttribute("participants", participants);
+            model.addAttribute("selectedPrizeId", prizeId);
+
         }
 
         return "admin_raffle";
