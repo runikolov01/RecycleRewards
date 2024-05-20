@@ -29,55 +29,11 @@
             </div>
             <button class="btn btn-primary" type="submit">Покажи участниците</button>
         </form>
-    </div>
 
-    <div class="mt-3" th:if="${participants != null}">
-        <h2>Участници</h2>
-        <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
-            <table class="participants-table" id="participantsTable">
-                <thead>
-                <tr>
-                    <th scope="col">ID Участие</th>
-                    <th scope="col">ID Поръчка</th>
-                    <th scope="col">Дата</th>
-                    <th scope="col">ID Потребител</th>
-                    <th scope="col">Име</th>
-                    <th scope="col">Фамилия</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="purchase, rowState : ${purchases}">
-                    <th scope="row" th:text="${rowState.index + 1}">ID Участие</th>
-                    <th scope="row" th:text="${purchase.id}">ID Поръчка</th>
-                    <td th:text="${purchase.purchaseDate}">Дата</td>
-                    <td th:text="${purchase.getUser().id}">ID Потребител</td>
-                    <td th:text="${purchase.getUser().firstName}">Име</td>
-                    <td th:text="${purchase.getUser().lastName}">Фамилия</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="mt-3" th:if="${participants != null}">
-        <h2>Изтегли печелившия</h2>
-        <hr>
-        <div class="form-group">
-            <label for="participantCounter">Брой на купените билети:</label>
-            <input class="form-control" id="participantCounter" readonly
-                   th:value="${participants.size()}" type="number">
-        </div>
-        <h3>След натискането на бутона, ще бъде изтеглен печелившият участник:</h3>
-        <button class="btn btn-success" id="drawWinnerBtn">Изтегли печелившия</button>
-        <div class="mt-3">
-            <div class="form-group">
-                <label for="idWinnerRandom">Случайно изтегленият ID номер на участие:</label>
-                <input class="form-control" id="idWinnerRandom" readonly
-                       th:value="${randomNumber}" type="number">
-            </div>
-
+        <div class="mt-3" th:if="${participants != null}">
+            <h2>Участници</h2>
             <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
-                <table class="table-winner" id="winnerTable">
+                <table class="participants-table" id="participantsTable">
                     <thead>
                     <tr>
                         <th scope="col">ID Участие</th>
@@ -89,13 +45,57 @@
                     </tr>
                     </thead>
                     <tbody>
-
+                    <tr th:each="purchase, rowState : ${purchases}">
+                        <th scope="row" th:text="${rowState.index + 1}">ID Участие</th>
+                        <th scope="row" th:text="${purchase.id}">ID Поръчка</th>
+                        <td th:text="${purchase.purchaseDate}">Дата</td>
+                        <td th:text="${purchase.getUser().id}">ID Потребител</td>
+                        <td th:text="${purchase.getUser().firstName}">Име</td>
+                        <td th:text="${purchase.getUser().lastName}">Фамилия</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <p id="winnerNumber"></p>
-            <p id="winnerDetails"></p>
+        <div class="mt-3" th:if="${participants != null}">
+            <h2>Изтегли печелившия</h2>
+            <hr>
+            <div class="form-group">
+                <label for="participantCounter">Брой на купените билети:</label>
+                <input class="form-control" id="participantCounter" readonly
+                       th:value="${participants.size()}" type="number">
+            </div>
+            <h3>След натискането на бутона, ще бъде изтеглен печелившият участник:</h3>
+            <button class="btn btn-success" id="drawWinnerBtn">Изтегли печелившия</button>
+            <div class="mt-3">
+                <div class="form-group">
+                    <label for="idWinnerRandom">Случайно изтегленият ID номер на участие:</label>
+                    <input class="form-control" id="idWinnerRandom" readonly
+                           th:value="${randomNumber}" type="number">
+                </div>
+
+                <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
+                    <table class="table-winner" id="winnerTable">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID Участие</th>
+                            <th scope="col">ID Поръчка</th>
+                            <th scope="col">Дата</th>
+                            <th scope="col">ID Потребител</th>
+                            <th scope="col">Име</th>
+                            <th scope="col">Фамилия</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <p id="winnerNumber"></p>
+                <p id="winnerDetails"></p>
+            </div>
         </div>
     </div>
 </div>
