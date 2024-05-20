@@ -15,7 +15,7 @@
             </li>
             <li class="nav-item"
                 th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
-                <a class="nav-link dark-grey-border" href="/users">Редакция на потребителите</a>
+                <a class="nav-link dark-grey-border" href="/users">Потребители</a>
             </li>
             <li class="nav-item"
                 th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
