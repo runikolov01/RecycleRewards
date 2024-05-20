@@ -136,37 +136,46 @@ public class PrizeController {
         if (userId != null) {
             User user = userService.getUserById(userId);
             if (user != null) {
-                session.setAttribute("loggedUser", user);
-                model.addAttribute("loggedUser", user);
+                // Check if the user role is ADMIN
+                String role = String.valueOf(user.getRole());
+                if (role != null && role.equals("ADMIN")) {
+                    session.setAttribute("loggedUser", user);
+                    model.addAttribute("loggedUser", user);
 
-                Integer totalPoints = user.getTotalPoints();
-                session.setAttribute("totalPoints", totalPoints);
-                model.addAttribute("totalPoints", totalPoints);
+                    Integer totalPoints = user.getTotalPoints();
+                    session.setAttribute("totalPoints", totalPoints);
+                    model.addAttribute("totalPoints", totalPoints);
+
+                    // Get all prizes without winners
+                    List<Prize> prizesWithoutWinners = prizeService.getPrizesWithoutWinners();
+                    model.addAttribute("prizes", prizesWithoutWinners);
+
+                    if (prizeId != null) {
+                        List<Purchase> purchases = purchaseService.getAllPurchasesByPrizeId(prizeId);
+                        model.addAttribute("purchases", purchases);
+
+                        List<User> participants = new ArrayList<>();
+                        for (Purchase purchase : purchases) {
+                            User purchaseUser = purchase.getUser();
+                            participants.add(purchaseUser);
+                        }
+                        model.addAttribute("participants", participants);
+                        model.addAttribute("selectedPrizeId", prizeId);
+                    } else {
+                        model.addAttribute("selectedPrizeId", null);
+                    }
+
+                    return "admin_raffle";
+                } else {
+                    // Redirect to home page if the user is not an ADMIN
+                    return "redirect:/home";
+                }
             }
         }
 
-        // Get all prizes without winners
-        List<Prize> prizesWithoutWinners = prizeService.getPrizesWithoutWinners();
-        model.addAttribute("prizes", prizesWithoutWinners);
-
-        if (prizeId != null) {
-            List<Purchase> purchases = purchaseService.getAllPurchasesByPrizeId(prizeId);
-            model.addAttribute("purchases", purchases);
-
-            List<User> participants = new ArrayList<>();
-            for (Purchase purchase : purchases) {
-                User user = purchase.getUser();
-                participants.add(user);
-            }
-            model.addAttribute("participants", participants);
-            model.addAttribute("selectedPrizeId", prizeId);
-        } else {
-            model.addAttribute("selectedPrizeId", null);
-        }
-
-        return "admin_raffle";
+        // If user is not found, redirect to home page
+        return "redirect:/home";
     }
-
 
     @PostMapping("/draw_winner")
     @ResponseBody
