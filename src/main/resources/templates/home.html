@@ -13,20 +13,20 @@
 <div th:replace="~{fragments/navbar}"></div>
 
 <div class="container mt-5">
-    <div class="jumbotron">
+    <div class="jumbotron text-center">
         <h1 class="display-4">
             <span th:if="${loggedUser != null && loggedUser.getFirstName() != null}"
                   th:text="${loggedUser.getFirstName()}"></span>
             <span th:if="${loggedUser != null && loggedUser.getLastName() != null}"
                   th:text="${loggedUser.getLastName()}"></span>
         </h1>
-        <h1 class="display-4">Добре дошли в RecycleRewards!</h1>
+        <h1 class="display-4">👋 Добре дошли в RecycleRewards!</h1>
         <p class="lead">Тук с всяка рециклирана бутилка печелите!</p>
         <hr class="my-4">
-        <p>Рециклирането е най-важното действие, ако искаме нашата скъпоценна планета да оцелее.</p>
-        <img alt="Logo" height="200" src="/images/logo.jpg" width="200">
+        <p>Защитете Земята, рециклирайки с усмивка.</p>
+        <img alt="Recycle" height="200" src="/images/recycle.png">
         <br><br>
-        <a class="btn btn-primary btn-lg" href="about" role="button">Научете повече за RecycleRewards</a>
+        <a class="btn btn-primary btn-lg" href="about" role="button">Какво е RecycleRewards?</a>
     </div>
 </div>
 
