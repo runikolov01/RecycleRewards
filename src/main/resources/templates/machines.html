@@ -30,19 +30,19 @@
                     lat: 42.6418715,
                     lng: 23.3361706,
                     title: 'Кауфланд - Малинова долина',
-                    description: 'ж.к. Малинова долина, ул. „Проф. д-р Иван Странски“ 20, 1000 София'
+                    description: 'ж.к. Малинова долина, ул. „Проф. д-р Иван Странски“ 20, 1000, София'
                 },
                 {
                     lat: 42.6458327,
                     lng: 23.3791261,
                     title: 'Кауфланд - Младост',
-                    description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712 София'
+                    description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712, София'
                 },
                 {
                     lat: 42.670452,
                     lng: 23.2734864,
                     title: 'Кауфланд - Витоша',
-                    description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712 София'
+                    description: 'ж.к. Бъкстон, ул. „Тодор Каблешков“ 3, 1618, София'
                 },
 
             ];
@@ -73,42 +73,34 @@
 
 <div class="container mt-5">
     <div class="jumbotron">
-        <h1 class="display-4">Локации</h1>
-        <p class="lead">Ето къде можете да рециклирате своите бутилки:</p>
+        <h1 class="display-4">📍Локации</h1>
+        <p class="lead">Вижте къде можете да рециклирате своите бутилки:</p>
 
         <hr class="my-4">
         <br>
         <div id="map" style="height: 400px; width: 100%;"></div>
+        <br>
+
         <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Име</th>
-                    <th scope="col">Фамилия</th>
-                    <th scope="col">Имейл</th>
-                    <th scope="col">Телефон</th>
-                    <th scope="col">Дата на регистрация</th>
-                    <th scope="col">Точки</th>
-                    <th scope="col">Роля</th>
-                    <th scope="col">Действия</th>
+                    <th scope="col">№</th>
+                    <th scope="col">Име локация</th>
+                    <th scope="col">Град</th>
+                    <th scope="col">Пощенски код</th>
+                    <th scope="col">Улица</th>
+                    <th scope="col">Номер</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user, rowStat : ${users}">
-                    <td><span th:text="${user.id}"></span></td>
-                    <td><span class="editable" contenteditable="true" th:text="${user.firstName}"></span></td>
-                    <td><span class="editable" contenteditable="true" th:text="${user.lastName}"></span></td>
-                    <td><span class="editable" contenteditable="true" th:text="${user.email}"></span></td>
-                    <td><span class="editable" contenteditable="true" th:text="${user.phone}"></span></td>
-                    <td th:text="${user.registrationDate}"></td>
-                    <td th:text="${user.totalPoints}"></td>
-                    <td class="editable" contenteditable="true" th:text="${user.role}"></td>
-                    <td>
-                        <button class="btn btn-primary btn-sm edit-btn">Edit</button>
-                        <button class="btn btn-danger btn-sm delete-btn">Delete</button>
-                        <button class="btn btn-success btn-sm save-btn" style="display: none;">Save</button>
-                    </td>
+                <tr th:each="machine : ${machines}">
+                    <td><span th:text="${machine.id}"></span></td>
+                    <td><span th:text="${machine.locationName}"></span></td>
+                    <td><span th:text="${machine.getAddress().city}"></span></td>
+                    <td><span th:text="${machine.getAddress().postcode}"></span></td>
+                    <td><span th:text="${machine.getAddress().street}"></span></td>
+                    <td><span th:text="${machine.getAddress().streetNumber}"></span></td>
                 </tr>
                 </tbody>
             </table>

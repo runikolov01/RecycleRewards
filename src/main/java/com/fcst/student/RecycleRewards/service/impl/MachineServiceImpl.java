@@ -35,6 +35,6 @@ public class MachineServiceImpl implements MachineService {
 
     @Override
     public List<Machine> getAllMachines() {
-        return List.of();
+        return machineRepository.findAll();
     }
 }

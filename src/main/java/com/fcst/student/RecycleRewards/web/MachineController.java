@@ -1,5 +1,6 @@
 package com.fcst.student.RecycleRewards.web;
 
+import com.fcst.student.RecycleRewards.model.Machine;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.service.MachineService;
 import com.fcst.student.RecycleRewards.service.UserService;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 @Controller
 public class MachineController {
@@ -43,9 +46,10 @@ public class MachineController {
                 session.setAttribute("totalPoints", totalPoints);
                 model.addAttribute("totalPoints", totalPoints);
             }
-            System.out.println(user.getRole());
         }
 
+        List<Machine> machines = machineService.getAllMachines();
+        model.addAttribute("machines", machines);
         return "machines";
     }
 }
