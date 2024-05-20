@@ -8,7 +8,9 @@ import com.fcst.student.RecycleRewards.repository.PrizeRepository;
 import com.fcst.student.RecycleRewards.repository.PurchaseRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.PrizeService;
+import com.fcst.student.RecycleRewards.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,6 +27,9 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Autowired
     private PurchaseRepository purchaseRepository;
+
+    @Autowired
+    private UserService userService;
 
 
     public PrizeServiceImpl(PrizeRepository prizeRepository) {

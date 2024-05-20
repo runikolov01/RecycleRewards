@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -166,20 +167,22 @@ public class PrizeController {
     }
 
 
-//    @PostMapping("/draw_winner")
-//    @ResponseBody
-//    public ResponseEntity<User> drawWinner(@RequestParam Long prizeId, @RequestParam int randomNumber) {
-//        List<User> participants = userService.getParticipantsByPrizeId(prizeId);
-//        if (participants.size() < randomNumber) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//        User winner = participants.get(randomNumber - 1); // Assuming the participants are 0-indexed
-//
-//        // Update the winner information in the database
-//        prizeService.setWinnerForPrize(prizeId, winner.getId());
-//
-//        return ResponseEntity.ok(winner);
-//    }
+    @PostMapping("/draw_winner")
+    @ResponseBody
+    public ResponseEntity<User> drawWinner(@RequestParam Long prizeId, @RequestParam int randomNumber) {
+        List<User> participants = userService.getParticipantsByPrizeId(prizeId);
+        if (randomNumber > participants.size() || randomNumber <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        User winner = participants.get(randomNumber);
+
+
+        // Update the winner information in the database
+        prizeService.setWinnerForPrize(prizeId, winner.getId());
+
+        return ResponseEntity.ok(winner);
+    }
 
 
     @PostMapping("/prizes/buy")

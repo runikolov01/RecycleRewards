@@ -20,6 +20,9 @@ public class Purchase {
 
     private LocalDateTime purchaseDate;
 
+//    @Column(name = "is_winner")
+//    private boolean isWinner = false;
+
     public Long getId() {
         return id;
     }
@@ -51,4 +54,12 @@ public class Purchase {
     public void setPurchaseDate(LocalDateTime purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
+
+//    public boolean isWinner() {
+//        return isWinner;
+//    }
+//
+//    public void setWinner(boolean winner) {
+//        isWinner = winner;
+//    }
 }
