@@ -19,6 +19,7 @@
                 <label for="prizeSelect">Изберете награда</label>
                 <select class="form-control" id="prizeSelect" name="prizeId" required>
                     <option th:each="prize : ${prizes}"
+                            th:if="${#lists.isEmpty(prize.participants)}"
                             th:selected="${prize.id == selectedPrizeId}"
                             th:text="${prize.name} + ' ' + ${prize.description}"
                             th:value="${prize.id}">Награда
@@ -69,7 +70,7 @@
         <button class="btn btn-success" id="drawWinnerBtn">Изтегли печелившия</button>
         <div class="mt-3">
             <div class="form-group">
-                <label for="idWinnerRandom">Печелившият ID номер на участие:</label>
+                <label for="idWinnerRandom">Случайно изтегленият ID номер на участие:</label>
                 <input class="form-control" id="idWinnerRandom" readonly
                        th:value="${randomNumber}" type="number">
             </div>

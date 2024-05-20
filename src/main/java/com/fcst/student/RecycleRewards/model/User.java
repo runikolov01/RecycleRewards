@@ -162,4 +162,8 @@ public class User {
     public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
     }
+
+    public void addPrize(Prize prize) {
+        prizes.add(prize);
+    }
 }

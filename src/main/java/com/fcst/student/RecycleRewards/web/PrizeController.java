@@ -145,8 +145,9 @@ public class PrizeController {
             }
         }
 
-        List<Prize> prizes = prizeService.getPrizesByType(PrizeType.RAFFLE);
-        model.addAttribute("prizes", prizes);
+        // Get all prizes without winners
+        List<Prize> prizesWithoutWinners = prizeService.getPrizesWithoutWinners();
+        model.addAttribute("prizes", prizesWithoutWinners);
 
         if (prizeId != null) {
             List<Purchase> purchases = purchaseService.getAllPurchasesByPrizeId(prizeId);
@@ -183,6 +184,30 @@ public class PrizeController {
 
         return ResponseEntity.ok(winner);
     }
+
+
+    @PostMapping("/connectPrizeWithWinner")
+    @ResponseBody
+    public ResponseEntity<String> connectPrizeWithWinner(@RequestParam Long prizeId, @RequestParam Long userId) {
+        Prize prize = prizeService.getPrizeById(prizeId).orElse(null);
+        User user = userService.getUserById(userId);
+        if (prize == null || user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Prize or user not found");
+        }
+
+        // Check if the user has already won this prize
+        List<Prize> userPrizes = user.getPrizes();
+        if (userPrizes.contains(prize)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already won this prize");
+        }
+
+        // Connect the prize with the user
+        user.addPrize(prize);
+        userService.saveUser(user);
+
+        return ResponseEntity.ok("Prize connected with winner successfully");
+    }
+
 
 
     @PostMapping("/prizes/buy")

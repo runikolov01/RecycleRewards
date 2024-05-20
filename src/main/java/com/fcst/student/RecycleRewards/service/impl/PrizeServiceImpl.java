@@ -10,7 +10,6 @@ import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.PrizeService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -66,7 +65,7 @@ public class PrizeServiceImpl implements PrizeService {
         Optional<Prize> prizeOpt = prizeRepository.findById(prizeId);
 
         if (!userOpt.isPresent() || !prizeOpt.isPresent()) {
-            return false; // Either user or prize not found
+            return false;
         }
 
         User user = userOpt.get();
@@ -74,7 +73,7 @@ public class PrizeServiceImpl implements PrizeService {
         int remainedTicketsForThisPrize = prize.getRemainedTickets();
 
         if (user.getTotalPoints() < prize.getNeededPointsToBuy() || remainedTicketsForThisPrize <= 0) {
-            return false; // Not enough points or no more tickets left for the prize
+            return false;
         }
 
         // Deduct points
@@ -93,7 +92,7 @@ public class PrizeServiceImpl implements PrizeService {
         purchase.setPurchaseDate(LocalDateTime.now());
         purchaseRepository.save(purchase);
 
-        return true; // Purchase successful
+        return true;
     }
 
     @Override
@@ -101,10 +100,12 @@ public class PrizeServiceImpl implements PrizeService {
         Optional<Prize> optionalPrize = prizeRepository.findById(prizeId);
         if (optionalPrize.isPresent()) {
             Prize prize = optionalPrize.get();
-        //    prize.setWinnerId(userId);
             prizeRepository.save(prize);
         }
     }
 
-
+    @Override
+    public List<Prize> getPrizesWithoutWinners() {
+        return prizeRepository.findPrizesWithoutWinners();
+    }
 }

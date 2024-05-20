@@ -23,4 +23,5 @@ public interface PrizeService {
 
     void setWinnerForPrize(Long prizeId, Long userId);
 
+    public List<Prize> getPrizesWithoutWinners();
 }
