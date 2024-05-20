@@ -170,19 +170,18 @@ public class PrizeController {
 
     @PostMapping("/draw_winner")
     @ResponseBody
-    public ResponseEntity<User> drawWinner(@RequestParam Long prizeId, @RequestParam int randomNumber) {
+    public ResponseEntity<String> drawWinner(@RequestParam Long prizeId, @RequestParam int randomNumber) {
         List<User> participants = userService.getParticipantsByPrizeId(prizeId);
         if (randomNumber > participants.size() || randomNumber <= 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid random number");
         }
 
-        User winner = participants.get(randomNumber);
+        User winner = participants.get(randomNumber - 1); // Adjust index to match list index (starting from 0)
 
-
-        // Update the winner information in the database
+        // Connect the winner with the prize and save to the database
         prizeService.setWinnerForPrize(prizeId, winner.getId());
 
-        return ResponseEntity.ok(winner);
+        return ResponseEntity.ok("Winner connected with prize successfully");
     }
 
 
@@ -202,12 +201,11 @@ public class PrizeController {
         }
 
         // Connect the prize with the user
-        user.addPrize(prize);
+        user.getPrizes().add(prize);
         userService.saveUser(user);
 
         return ResponseEntity.ok("Prize connected with winner successfully");
     }
-
 
 
     @PostMapping("/prizes/buy")

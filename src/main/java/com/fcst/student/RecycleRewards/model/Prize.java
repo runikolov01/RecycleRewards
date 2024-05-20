@@ -44,7 +44,6 @@ public class Prize {
     @Enumerated(EnumType.STRING)
     private PrizeType type;
 
-
     public Prize() {
 
     }

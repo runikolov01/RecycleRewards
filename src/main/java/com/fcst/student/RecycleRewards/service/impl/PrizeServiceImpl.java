@@ -98,11 +98,19 @@ public class PrizeServiceImpl implements PrizeService {
     @Override
     public void setWinnerForPrize(Long prizeId, Long userId) {
         Optional<Prize> optionalPrize = prizeRepository.findById(prizeId);
-        if (optionalPrize.isPresent()) {
+        Optional<User> optionalWinner = userRepository.findById(userId);
+        if (optionalPrize.isPresent() && optionalWinner.isPresent()) {
             Prize prize = optionalPrize.get();
+            User winner = optionalWinner.get();
+
+            // Add the winner to the prize's list of winners
+//            prize.addWinner(winner);
+
+            // Save the updated prize
             prizeRepository.save(prize);
         }
     }
+
 
     @Override
     public List<Prize> getPrizesWithoutWinners() {
