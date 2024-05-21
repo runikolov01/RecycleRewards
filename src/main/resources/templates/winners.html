@@ -13,27 +13,21 @@
 
 <div class="container mt-5">
     <div class="jumbotron">
-        <h2>Спечелени награди</h2>
+        <h2>Печеливши</h2>
         <div id="wonPrizes" style="display: none;">
             <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">ID Награда</th>
-                        <th scope="col">Награда</th>
-                        <th scope="col">Описание</th>
-                        <th scope="col">Печеливш име</th>
-                        <th scope="col">Печеливш фамилия</th>
+                        <th scope="col">User ID</th>
+                        <th scope="col">Prize ID</th>
+
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="prize : ${wonPrizes}">
+                        <td th:text="${prize.user.id}"></td>
                         <td th:text="${prize.id}"></td>
-<!--                        <td th:text="${prize.getName()}"></td>-->
-<!--                        <td th:text="${prize.getDescription()}"></td>-->
-<!--                        <td th:text="${prize.user.firstName}"></td>-->
-<!--                        <td th:text="${prize.user.lastName}"></td>-->
-                    </tr>
                     </tbody>
                 </table>
 
