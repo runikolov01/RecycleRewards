@@ -14,26 +14,6 @@ public class MachineServiceImpl implements MachineService {
     private MachineRepository machineRepository;
 
     @Override
-    public void saveMachine(Machine machine) {
-        machineRepository.save(machine);
-    }
-
-    @Override
-    public void deleteMachine(Long machineId) {
-        machineRepository.deleteById(machineId);
-    }
-
-    @Override
-    public Machine updateMachine(Machine machine) {
-        return machineRepository.save(machine);
-    }
-
-    @Override
-    public Machine getMachineById(Long machineId) {
-        return machineRepository.getById(machineId);
-    }
-
-    @Override
     public List<Machine> getAllMachines() {
         return machineRepository.findAll();
     }

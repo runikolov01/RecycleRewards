@@ -18,19 +18,4 @@ public class AddressServiceImpl implements AddressService {
     public void saveAddress(Address address) {
         addressRepository.save(address);
     }
-
-    @Override
-    public List<Address> getAddresses() {
-        return List.of();
-    }
-
-    @Override
-    public Address getAddressById(int id) {
-        return null;
-    }
-
-    @Override
-    public void deleteAddressById(int id) {
-
-    }
 }

@@ -27,10 +27,6 @@ public class PrizeServiceImpl implements PrizeService {
     @Autowired
     private PurchaseRepository purchaseRepository;
 
-    @Autowired
-    private UserService userService;
-
-
     public PrizeServiceImpl(PrizeRepository prizeRepository) {
         this.prizeRepository = prizeRepository;
     }
@@ -53,10 +49,6 @@ public class PrizeServiceImpl implements PrizeService {
     @Override
     public List<Prize> getPrizesByType(PrizeType type) {
         return prizeRepository.findByType(type);
-    }
-
-    @Override
-    public void deletePrizeById(int id) {
     }
 
     @Override

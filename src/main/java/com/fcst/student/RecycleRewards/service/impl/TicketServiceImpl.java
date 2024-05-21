@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -38,18 +37,6 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void saveTicket(Ticket ticket) {
         ticketRepository.save(ticket);
-    }
-
-    @Override
-    public void saveBottlesCount(int totalBottlesCount) {
-        Ticket ticket = new Ticket(); // Or retrieve an existing ticket from the database
-        ticket.setPoints(totalBottlesCount);
-        ticketRepository.save(ticket);
-    }
-
-    @Override
-    public Optional<Ticket> getTicket(Integer id) {
-        return this.ticketRepository.findById(Long.valueOf(id));
     }
 
     public String generateUniqueTicketNumber() {

@@ -24,11 +24,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private LoggedUser loggedUser;
 
-    @Autowired
-    private PrizeRepository prizeRepository;
-    @Autowired
-    private PurchaseRepository purchaseRepository;
-
     @Override
     public void saveUser(User person) {
         userRepository.save(person);
@@ -42,16 +37,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
-    }
-
-    @Override
-    public User findUserById(Long userId) {
-        return userRepository.findById(userId).orElse(null);
-    }
-
-    @Override
-    public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
     }
 
     @Override
@@ -80,20 +65,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
-//    @Override
-//    public List<User> getUsersByPrize(Long prizeId) {
-//        return userRepository.findUsersByPrizeId(prizeId);
-//    }
-
-//    @Override
-//    public void awardPrize(User user, Long prizeId) {
-//        Optional<Prize> optionalPrize = prizeRepository.findById(prizeId);
-//        if (optionalPrize.isPresent()) {
-//            Prize prize = optionalPrize.get();
-//            user.getPrizes().add(prize);
-//            userRepository.save(user);
-//        }
-//    }
 
     public List<User> getParticipantsByPrizeId(Long prizeId) {
         return userRepository.findAllByPrizeId(prizeId);
