@@ -71,23 +71,19 @@
 
 <script>
     $(document).ready(function () {
-        // Event handler for sorting by column
         var sortOrders = {}; // Object to track sorting orders for each column
 
         $('th').on('click', function () {
             var columnIndex = $(this).index(); // Get the index of the clicked column
 
-            // Toggle sorting order or set to ascending if not already set
             sortOrders[columnIndex] = (sortOrders[columnIndex] === 'asc') ? 'desc' : 'asc';
 
-            // Get the table body
             var $tbody = $('table tbody');
 
-            // Sort the rows based on the clicked column
             var rows = $tbody.find('tr').toArray();
             rows.sort(function (a, b) {
-                var valueA = $(a).find('td:eq(' + columnIndex + ') span').text(); // Get the value of the cell
-                var valueB = $(b).find('td:eq(' + columnIndex + ') span').text(); // Get the value of the cell
+                var valueA = $(a).find('td:eq(' + columnIndex + ') span').text();
+                var valueB = $(b).find('td:eq(' + columnIndex + ') span').text();
 
                 if (sortOrders[columnIndex] === 'asc') {
                     return (valueA < valueB) ? -1 : (valueA > valueB) ? 1 : 0;
