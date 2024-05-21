@@ -23,16 +23,16 @@ public class Purchase {
     @Column(name = "winner_code")
     private String winnerCode;
 
-    @Column(name = "is_won_prize_taken")
-    private Boolean isWonPrizeTaken;
+    @Column(name = "date_taken_prize")
+    private LocalDateTime dateTakenPrize;
 
-    public Purchase(Long id, User user, Prize prize, LocalDateTime purchaseDate, String winnerCode, Boolean isWonPrizeTaken) {
+    public Purchase(Long id, User user, Prize prize, LocalDateTime purchaseDate, String winnerCode, LocalDateTime dateTakenPrize) {
         this.id = id;
         this.user = user;
         this.prize = prize;
         this.purchaseDate = purchaseDate;
         this.winnerCode = winnerCode;
-        this.isWonPrizeTaken = isWonPrizeTaken;
+        this.dateTakenPrize = dateTakenPrize;
     }
 
     public Purchase() {
@@ -78,11 +78,11 @@ public class Purchase {
         this.winnerCode = winnerCode;
     }
 
-    public Boolean getWonPrizeTaken() {
-        return isWonPrizeTaken;
+    public LocalDateTime getDateTakenPrize() {
+        return dateTakenPrize;
     }
 
-    public void setWonPrizeTaken(Boolean wonPrizeTaken) {
-        isWonPrizeTaken = wonPrizeTaken;
+    public void setDateTakenPrize(LocalDateTime dateTakenPrize) {
+        this.dateTakenPrize = dateTakenPrize;
     }
 }
