@@ -14,26 +14,24 @@
 <div class="container mt-5">
     <div class="jumbotron text-center">
         <div class="card-body">
-            <h1 class="display-3">Поздравления!</h1>
+            <h1 class="display-3">Поздравления!👏</h1>
             <hr>
             <h1 class="display-5">Днес Вие рециклирахте <span th:text="${bottlesCount}">0</span> бутилки!</h1>
             <hr>
             <h2 class="display-5">Вашият билет с код <span th:text="${ticketNumber}">TRYAGAIN</span> ще бъде изпринтен
-                след като
-                натиснете бутона.</h2>
+                след като натиснете бутона.👇</h2>
             <hr>
-            <!-- Display this if IsVoucher is false -->
             <h2 class="display-5" th:if="${!isVoucher}">
-                Вземете билета и го регистрирайте в профила си до <span
+                ❗Вземете билета и го регистрирайте в профила си до <span
                     th:text="${expirationFormatted}">DD/MM/YY TIME</span>,
-                за да спечелите <span th:text="${bottlesCount*5}">0</span> точки!
+                за да спечелите <span th:text="${bottlesCount*5}">0</span> точки❗
             </h2>
 
-            <!-- Display this if IsVoucher is true -->
             <h2 class="display-5" th:if="${isVoucher}">
-                Вземете билета и го използвайте в магазина, за да получите отстъпка от
-                <span th:text="${#numbers.formatDecimal(bottlesCount * 0.05, 1, 'DEFAULT', 2, 'DEFAULT')}">0</span> лева до
-                <span th:text="${expirationFormatted}">DD/MM/YY TIME</span>!</h2>
+                ❗Вземете билета и го използвайте в магазина до
+                <span th:text="${expirationFormatted}">DD/MM/YY TIME</span>, за да получите отстъпка от
+                <span th:text="${#numbers.formatDecimal(bottlesCount * 0.05, 1, 'DEFAULT', 2, 'DEFAULT')}">0</span>
+                лева❗</h2>
             <br>
 
             <form action="/print" id="printForm" method="post">

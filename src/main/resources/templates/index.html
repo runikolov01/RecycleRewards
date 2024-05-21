@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Старт</title>
+    <title>Начална страница</title>
     <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
@@ -47,12 +47,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-    document.getElementById('pointsButton').addEventListener('click', function(event) {
+    document.getElementById('pointsButton').addEventListener('click', function (event) {
         event.preventDefault();
         setVoucherAttribute(false);
     });
 
-    document.getElementById('voucherButton').addEventListener('click', function(event) {
+    document.getElementById('voucherButton').addEventListener('click', function (event) {
         event.preventDefault();
         setVoucherAttribute(true);
     });
@@ -63,7 +63,7 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ isVoucher: isVoucher })
+            body: JSON.stringify({isVoucher: isVoucher})
         })
             .then(response => response.json())
             .then(data => {
