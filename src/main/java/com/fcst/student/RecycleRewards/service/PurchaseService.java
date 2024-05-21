@@ -12,6 +12,9 @@ public interface PurchaseService {
     List<Purchase> getPurchasesByUserId(Long userId);
 
     List<Purchase> getAllPurchasesByPrizeId(Long prizeId);
+
     Purchase getPurchaseById(Long id);
+
+    String generateUniquePurchaseWinnerCode();
 
 }

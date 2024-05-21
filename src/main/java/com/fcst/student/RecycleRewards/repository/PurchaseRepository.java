@@ -11,4 +11,6 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
     List<Purchase> findByUserId(Long userId);
 
     List<Purchase> findAllByPrizeId(Long prizeId);
+
+    boolean existsByWinnerCode(String number);
 }

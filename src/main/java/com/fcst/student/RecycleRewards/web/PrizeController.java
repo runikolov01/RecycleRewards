@@ -203,7 +203,7 @@ public class PrizeController {
 
     @PostMapping("/connectPrizeWithWinner")
     @ResponseBody
-    public ResponseEntity<String> connectPrizeWithWinner(@RequestParam Long prizeId,  @RequestParam Long purchaseId, @RequestParam Long userId) {
+    public ResponseEntity<String> connectPrizeWithWinner(@RequestParam Long prizeId, @RequestParam Long purchaseId, @RequestParam Long userId) {
         Prize prize = prizeService.getPrizeById(prizeId).orElse(null);
         User user = userService.getUserById(userId);
         Purchase purchase = purchaseService.getPurchaseById(purchaseId);
@@ -217,12 +217,14 @@ public class PrizeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already won this prize");
         }
 
-        // Connect the prize with the user
         user.getPrizes().add(prize);
 
         prize.setRemainedTickets(0);
         prize.setEndDate(LocalDateTime.now());
-        purchase.setWinnerCode("TEST");
+
+        String winnerCode = purchaseService.generateUniquePurchaseWinnerCode();
+
+        purchase.setWinnerCode(winnerCode);
 
         userService.saveUser(user);
 
