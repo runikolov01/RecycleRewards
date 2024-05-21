@@ -21,7 +21,9 @@
             <span th:if="${loggedUser != null && loggedUser.getLastName() != null}"
                   th:text="${loggedUser.getLastName()}"></span>
         </h1>
+
         <hr class="my-4">
+
         <div class="form-group">
             <label for="filter">Филтър:</label>
             <select class="form-control" id="filter">
@@ -111,6 +113,7 @@
                 <div id="messageArea"></div>
             </form>
         </div>
+
         <div id="boughtTickets" style="display: none;">
             <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
                 <h2>Закупени билети за томбола</h2>
@@ -169,24 +172,29 @@
                 </table>
             </div>
         </div>
+
         <div id="wonPrizes" style="display: none;">
             <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
                 <h2>Спечелени награди</h2>
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">ID Награда</th>
-                        <th scope="col">Награда</th>
-                        <th scope="col">Описание</th>
-                        <th scope="col">Печеливш код</th>
-
+                        <th scope="col">ID Награда<select class="filter-select" data-column="0">
+                            <option value="">Всички</option>
+                        </select></th>
+                        <th scope="col">Награда<select class="filter-select" data-column="1">
+                            <option value="">Всички</option>
+                        </select></th>
+                        <th scope="col">Описание<select class="filter-select" data-column="2">
+                            <option value="">Всички</option>
+                        </select></th>
+                        <th scope="col">Печеливш код<select class="filter-select" data-column="3">
+                            <option value="">Всички</option>
+                        </select></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="details : ${prizeDetails}">
-<!--                        <td th:text="${prize.getId()}"></td>-->
-<!--                        <td th:text="${prize.getName()}"></td>-->
-<!--                        <td th:text="${prize.getDescription()}"></td>-->
                         <td th:text="${details.prizeId}"></td>
                         <td th:text="${details.prizeName}"></td>
                         <td th:text="${details.prizeDescription}"></td>
@@ -194,12 +202,10 @@
                     </tr>
                     </tbody>
                 </table>
-
             </div>
-        </div>
 
+        </div>
     </div>
-</div>
 </div>
 
 <div th:replace="~{fragments/footer}"></div>
@@ -213,87 +219,74 @@
 <script>
     document.getElementById('filter').addEventListener('change', function () {
         const filter = this.value;
-        document.getElementById('personalData').style.display = filter === 'personal' ? 'block' : 'none';
-        document.getElementById('boughtTickets').style.display = filter === 'tickets' ? 'block' : 'none';
-        document.getElementById('wonPrizes').style.display = filter === 'prizes' ? 'block' : 'none';
+        if (filter === 'personal') {
+            showTable('personalData');
+            hideTable('boughtTickets');
+            hideTable('wonPrizes');
+        } else if (filter === 'tickets') {
+            showTable('boughtTickets');
+            hideTable('personalData');
+            hideTable('wonPrizes');
+        } else if (filter === 'prizes') {
+            showTable('wonPrizes');
+            hideTable('personalData');
+            hideTable('boughtTickets');
+        }
     });
 
-    function showMessage(message, isError) {
-        const messageArea = document.getElementById('messageArea');
-        messageArea.innerText = message;
-        messageArea.className = isError ? 'error-message' : 'success-message';
+    function showTable(tableId) {
+        document.getElementById(tableId).style.display = 'block';
     }
 
-    document.getElementById('profileForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
+    function hideTable(tableId) {
+        document.getElementById(tableId).style.display = 'none';
+    }
 
-        fetch(form.action, {
-            method: form.method,
-            body: formData
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    if (response.status === 400) {
-                        return response.text();
-                    } else {
-                        throw new Error('Network response was not ok');
-                    }
-                }
-            })
-            .then(data => {
-                showMessage(data, !data.startsWith("Данните са актуализирани успешно!"));
-            })
-            .catch(error => {
-                showMessage(error.message, true);
-            });
-    });
-
+    // Add separate filtering logic for each table
     document.addEventListener('DOMContentLoaded', () => {
-        const table = document.querySelector('.table');
-        const rows = table.querySelectorAll('tbody tr');
-        const selects = document.querySelectorAll('.filter-select');
+        const tables = document.querySelectorAll('.table');
+        tables.forEach(table => {
+            const rows = table.querySelectorAll('tbody tr');
+            const selects = table.querySelectorAll('.filter-select');
 
-        const filterTable = () => {
-            const filters = Array.from(selects).map(select => select.value);
-
-            rows.forEach(row => {
-                const cells = Array.from(row.cells);
-                const shouldDisplay = cells.every((cell, index) => {
-                    return filters[index] === '' || cell.innerText === filters[index];
-                });
-
-                row.style.display = shouldDisplay ? '' : 'none';
-            });
-        };
-
-        selects.forEach(select => {
-            select.addEventListener('change', filterTable);
-        });
-
-        const populateFilters = () => {
-            selects.forEach(select => {
-                const columnIndex = select.getAttribute('data-column');
-                const uniqueValues = new Set();
+            const filterTable = () => {
+                const filters = Array.from(selects).map(select => select.value);
 
                 rows.forEach(row => {
-                    const cellValue = row.cells[columnIndex].innerText;
-                    uniqueValues.add(cellValue);
-                });
+                    const cells = Array.from(row.cells);
+                    const shouldDisplay = cells.every((cell, index) => {
+                        return filters[index] === '' || cell.innerText === filters[index];
+                    });
 
-                uniqueValues.forEach(value => {
-                    const option = document.createElement('option');
-                    option.value = value;
-                    option.textContent = value;
-                    select.appendChild(option);
+                    row.style.display = shouldDisplay ? '' : 'none';
                 });
+            };
+
+            selects.forEach(select => {
+                select.addEventListener('change', filterTable);
             });
-        };
 
-        populateFilters();
+            const populateFilters = () => {
+                selects.forEach(select => {
+                    const columnIndex = select.getAttribute('data-column');
+                    const uniqueValues = new Set();
+
+                    rows.forEach(row => {
+                        const cellValue = row.cells[columnIndex].innerText;
+                        uniqueValues.add(cellValue);
+                    });
+
+                    uniqueValues.forEach(value => {
+                        const option = document.createElement('option');
+                        option.value = value;
+                        option.textContent = value;
+                        select.appendChild(option);
+                    });
+                });
+            };
+
+            populateFilters();
+        });
     });
 </script>
 </body>
