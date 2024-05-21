@@ -79,7 +79,7 @@
                     <table class="table-winner table-bordered" id="winnerTable">
                         <thead>
                         <tr>
-                            <th scope="col">ID Участие</th>
+                            <th scope="col">№ Участие</th>
                             <th scope="col">ID Поръчка</th>
                             <th scope="col">Дата</th>
                             <th scope="col">ID Потребител</th>
@@ -115,11 +115,11 @@
             let randomNumber = Math.floor(Math.random() * maxNumber) + 1;
             document.getElementById("idWinnerRandom").value = randomNumber;
 
-            // Log prizeId
             let prizeId = document.getElementById("prizeSelect").value;
+            let purchaseId = null;
             let userId = null;
 
-            $('#winnerTable tbody').empty(); // Clear existing table rows
+            $('#winnerTable tbody').empty();
             let found = false;
 
             $('.participants-table tbody tr').each(function () {
@@ -127,32 +127,22 @@
                 if (idParticipation === randomNumber) {
                     found = true;
 
-                    // Debug: Log the cell content before parsing
-                    let userIdCell = $(this).find('td:eq(1)').text().trim();
+                    // Get the purchaseId and userId from the row
+                    purchaseId = parseInt($(this).find('th:eq(1)').text(), 10);
+                    userId = parseInt($(this).find('td:eq(1)').text(), 10);
 
-                    // Extract and parse the userId
-                    userId = parseInt(userIdCell, 10);
-                    if (isNaN(userId)) {
-                        console.error("Failed to parse userId. Content was:", userIdCell);
-                        return false;
-                    }
+                    console.log(purchaseId);
+                    console.log(userId)
 
                     let winnerRow = $('<tr>');
-
-
                     $(this).find('th, td').each(function () {
                         winnerRow.append($('<td>').text($(this).text()));
                     });
                     $('#winnerTable tbody').append(winnerRow);
 
-                    // Show winner details
-                    // document.getElementById("winnerNumber").innerText = `Избраният номер е: ${randomNumber}`;
-                    let winnerDetails = $(this).find('td:eq(4)').text() + ' ' + $(this).find('td:eq(5)').text();
-                    // document.getElementById("winnerDetails").innerText = `Победителят е: ${winnerDetails}`;
-
-                    // Send AJAX request to connect the winner with the prize
                     $.post("/connectPrizeWithWinner", {
                         prizeId: Number(prizeId),
+                        purchaseId: Number(purchaseId),
                         userId: Number(userId)
                     }).done(function (data) {
                         console.log("Response from server:", data);

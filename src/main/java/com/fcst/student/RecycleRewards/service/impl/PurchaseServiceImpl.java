@@ -27,4 +27,11 @@ public class PurchaseServiceImpl implements PurchaseService {
     public List<Purchase> getAllPurchasesByPrizeId(Long prizeId) {
         return purchaseRepository.findAllByPrizeId(prizeId);
     }
+
+    @Override
+    public Purchase getPurchaseById(Long id) {
+        return purchaseRepository.findById(id).orElse(null);
+    }
+
+
 }

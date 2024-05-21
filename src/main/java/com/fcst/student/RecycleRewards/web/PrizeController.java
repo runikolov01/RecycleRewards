@@ -4,6 +4,7 @@ import com.fcst.student.RecycleRewards.model.Prize;
 import com.fcst.student.RecycleRewards.model.Purchase;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.model.enums.PrizeType;
+import com.fcst.student.RecycleRewards.repository.PurchaseRepository;
 import com.fcst.student.RecycleRewards.service.PrizeService;
 import com.fcst.student.RecycleRewards.service.PurchaseService;
 import com.fcst.student.RecycleRewards.service.UserService;
@@ -29,12 +30,14 @@ public class PrizeController {
     private final UserService userService;
     private final PrizeService prizeService;
     private final PurchaseService purchaseService;
+    private final PurchaseRepository purchaseRepository;
 
     @Autowired
-    public PrizeController(UserService userService, PrizeService prizeService, PurchaseService purchaseService) {
+    public PrizeController(UserService userService, PrizeService prizeService, PurchaseService purchaseService, PurchaseRepository purchaseRepository) {
         this.userService = userService;
         this.prizeService = prizeService;
         this.purchaseService = purchaseService;
+        this.purchaseRepository = purchaseRepository;
     }
 
     @GetMapping("/prizes")
@@ -198,17 +201,17 @@ public class PrizeController {
         return ResponseEntity.ok("Winner connected with prize successfully");
     }
 
-
     @PostMapping("/connectPrizeWithWinner")
     @ResponseBody
-    public ResponseEntity<String> connectPrizeWithWinner(@RequestParam Long prizeId, @RequestParam Long userId) {
+    public ResponseEntity<String> connectPrizeWithWinner(@RequestParam Long prizeId,  @RequestParam Long purchaseId, @RequestParam Long userId) {
         Prize prize = prizeService.getPrizeById(prizeId).orElse(null);
         User user = userService.getUserById(userId);
+        Purchase purchase = purchaseService.getPurchaseById(purchaseId);
+
         if (prize == null || user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Prize or user not found");
         }
 
-        // Check if the user has already won this prize
         List<Prize> userPrizes = user.getPrizes();
         if (userPrizes.contains(prize)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already won this prize");
@@ -219,6 +222,7 @@ public class PrizeController {
 
         prize.setRemainedTickets(0);
         prize.setEndDate(LocalDateTime.now());
+        purchase.setWinnerCode("TEST");
 
         userService.saveUser(user);
 

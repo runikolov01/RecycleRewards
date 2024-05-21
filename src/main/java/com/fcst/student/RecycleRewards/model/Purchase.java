@@ -20,8 +20,19 @@ public class Purchase {
 
     private LocalDateTime purchaseDate;
 
-//    @Column(name = "is_winner")
-//    private boolean isWinner = false;
+    @Column(name = "winner_code")
+    private String winnerCode;
+
+    public Purchase(Long id, User user, Prize prize, LocalDateTime purchaseDate, String winnerCode) {
+        this.id = id;
+        this.user = user;
+        this.prize = prize;
+        this.purchaseDate = purchaseDate;
+        this.winnerCode = winnerCode;
+    }
+
+    public Purchase() {
+    }
 
     public Long getId() {
         return id;
@@ -55,11 +66,11 @@ public class Purchase {
         this.purchaseDate = purchaseDate;
     }
 
-//    public boolean isWinner() {
-//        return isWinner;
-//    }
-//
-//    public void setWinner(boolean winner) {
-//        isWinner = winner;
-//    }
+    public String getWinnerCode() {
+        return winnerCode;
+    }
+
+    public void setWinnerCode(String winnerCode) {
+        this.winnerCode = winnerCode;
+    }
 }
