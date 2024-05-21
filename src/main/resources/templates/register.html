@@ -25,57 +25,67 @@
         <span th:text="${error}"></span>
     </div>
 
-    <!-- Registration form -->
-    <form action="/register" method="post">
-        <div class="form-group">
-            <img alt="person" height="18" src="/images/person.svg" width="22">
-            <label for="firstName">Първо име:</label>
-            <input class="form-control" id="firstName" name="firstName" required th:value="${firstName}"
-                   type="text">
+    <div class="row">
+        <div class="col-md-8">
+            <form action="/register" method="post">
+                <div class="form-group">
+                    <img alt="person" height="18" src="/images/person.svg" width="22">
+                    <label for="firstName">Първо име:</label>
+                    <input class="form-control" id="firstName" name="firstName" required th:value="${firstName}"
+                           type="text">
+                </div>
+                <div class="form-group">
+                    <img alt="person" height="18" src="/images/person.svg" width="22">
+                    <label for="lastName">Фамилия:</label>
+                    <input class="form-control" id="lastName" name="lastName" required th:value="${lastName}"
+                           type="text">
+                </div>
+                <div class="form-group">
+                    <img alt="email" height="15" src="/images/email.svg" width="20">
+                    <label for="email">Електронна поща:</label>
+                    <input class="form-control" id="email" name="email" required th:value="${email}"
+                           type="email">
+                </div>
+                <div class="form-group">
+                    <img alt="email" height="18" src="/images/password.svg" width="22">
+                    <label for="password">Парола:</label>
+                    <input class="form-control" id="password" minlength="8" name="password" required type="password">
+                    <small class="password-strength">Паролата трябва да бъде поне 8 символа дълга.</small>
+                </div>
+                <div class="form-group">
+                    <img alt="email" height="18" src="/images/password.svg" width="22">
+                    <label for="confirmPassword">Повторете паролата:</label>
+                    <input class="form-control" id="confirmPassword" name="confirmPassword" required type="password">
+                </div>
+                <div class="form-group">
+                    <label>Потвърждавате ли, че сте навършили 18 години?</label><br>
+                    <div class="form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" name="ageConfirmation" type="checkbox" value="yes"> Да
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Съгласявате ли се с условията за участие?</label><br>
+                    <div class="form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" name="conditionsConfirmation" required type="checkbox"
+                                   value="yes">
+                            Да
+                        </label>
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="submit">Регистрация
+                </button>
+            </form>
         </div>
-        <div class="form-group">
-            <img alt="person" height="18" src="/images/person.svg" width="22">
-            <label for="lastName">Фамилия:</label>
-            <input class="form-control" id="lastName" name="lastName" required th:value="${lastName}"
-                   type="text">
-        </div>
-        <div class="form-group">
-            <img alt="email" height="15" src="/images/email.svg" width="20">
-            <label for="email">Електронна поща:</label>
-            <input class="form-control" id="email" name="email" required th:value="${email}"
-                   type="email">
-        </div>
-        <div class="form-group">
-            <img alt="email" height="18" src="/images/password.svg" width="22">
-            <label for="password">Парола:</label>
-            <input class="form-control" id="password" minlength="8" name="password" required type="password">
-            <small class="password-strength">Паролата трябва да бъде поне 8 символа дълга.</small>
-        </div>
-        <div class="form-group">
-            <img alt="email" height="18" src="/images/password.svg" width="22">
-            <label for="confirmPassword">Повторете паролата:</label>
-            <input class="form-control" id="confirmPassword" name="confirmPassword" required type="password">
-        </div>
-        <div class="form-group">
-            <label>Потвърждавате ли, че сте навършили 18 години?</label><br>
-            <div class="form-check-inline">
-                <label class="form-check-label">
-                    <input class="form-check-input" name="ageConfirmation" type="checkbox" value="yes"> Да
-                </label>
+
+        <div class="col-md-4">
+            <div class="photo-div">
+                <img alt="Register" class="img-fluid" src="/images/register.svg">
             </div>
         </div>
-        <div class="form-group">
-            <label>Съгласявате ли се с условията за участие?</label><br>
-            <div class="form-check-inline">
-                <label class="form-check-label">
-                    <input class="form-check-input" name="conditionsConfirmation" required type="checkbox" value="yes">
-                    Да
-                </label>
-            </div>
-        </div>
-        <button class="btn btn-primary" type="submit">Регистрация
-        </button>
-    </form>
+    </div>
 </div>
 
 <div th:replace="~{fragments/footer}"></div>
