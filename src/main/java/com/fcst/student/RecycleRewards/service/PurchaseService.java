@@ -1,5 +1,6 @@
 package com.fcst.student.RecycleRewards.service;
 
+import com.fcst.student.RecycleRewards.model.PrizeDetailsDto;
 import com.fcst.student.RecycleRewards.model.Purchase;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +18,6 @@ public interface PurchaseService {
 
     String generateUniquePurchaseWinnerCode();
 
+    List<String> getCodes(Long userId, Long prizeId);
+    public List<PrizeDetailsDto> getPrizeDetailsForUser(Long userId);
 }

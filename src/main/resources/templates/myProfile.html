@@ -147,6 +147,12 @@
                                 <option value="">Всички</option>
                             </select>
                         </th>
+                        <th scope="col">
+                            Печеливш код
+                            <select class="filter-select" data-column="5">
+                                <option value="">Всички</option>
+                            </select>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -157,6 +163,7 @@
                         <td th:text="${purchase.prize.getId()}"></td>
                         <td th:text="${purchase.prize.getName()}"></td>
                         <td th:text="${purchase.prize.getDescription()}"></td>
+                        <td th:text="${purchase.winnerCode}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -171,13 +178,19 @@
                         <th scope="col">ID Награда</th>
                         <th scope="col">Награда</th>
                         <th scope="col">Описание</th>
+                        <th scope="col">Печеливш код</th>
+
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="prize : ${loggedUser.prizes}">
-                        <td th:text="${prize.getId()}"></td>
-                        <td th:text="${prize.getName()}"></td>
-                        <td th:text="${prize.getDescription()}"></td>
+                    <tr th:each="details : ${prizeDetails}">
+<!--                        <td th:text="${prize.getId()}"></td>-->
+<!--                        <td th:text="${prize.getName()}"></td>-->
+<!--                        <td th:text="${prize.getDescription()}"></td>-->
+                        <td th:text="${details.prizeId}"></td>
+                        <td th:text="${details.prizeName}"></td>
+                        <td th:text="${details.prizeDescription}"></td>
+                        <td th:text="${details.winnerCode}"></td>
                     </tr>
                     </tbody>
                 </table>

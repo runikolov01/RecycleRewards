@@ -1,9 +1,6 @@
 package com.fcst.student.RecycleRewards.web;
 
-import com.fcst.student.RecycleRewards.model.Address;
-import com.fcst.student.RecycleRewards.model.Prize;
-import com.fcst.student.RecycleRewards.model.Purchase;
-import com.fcst.student.RecycleRewards.model.User;
+import com.fcst.student.RecycleRewards.model.*;
 import com.fcst.student.RecycleRewards.model.enums.Role;
 import com.fcst.student.RecycleRewards.repository.PrizeRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
@@ -108,6 +105,9 @@ public class UserController {
 
                 List<Purchase> purchases = purchaseService.getPurchasesByUserId(userId);
                 model.addAttribute("purchases", purchases);
+
+                List<PrizeDetailsDto> prizeDetails = purchaseService.getPrizeDetailsForUser(userId);
+                model.addAttribute("prizeDetails", prizeDetails);
 
                 return "myProfile";
             }

@@ -1,5 +1,6 @@
 package com.fcst.student.RecycleRewards.service.impl;
 
+import com.fcst.student.RecycleRewards.model.PrizeDetailsDto;
 import com.fcst.student.RecycleRewards.model.Purchase;
 import com.fcst.student.RecycleRewards.repository.PurchaseRepository;
 import com.fcst.student.RecycleRewards.service.PurchaseService;
@@ -53,6 +54,16 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
             ticketNumberBuilder.setLength(0);
         }
+    }
+
+    @Override
+    public List<String> getCodes(Long userId, Long prizeId) {
+        return purchaseRepository.findCodesByUserIdAndPrizeId(userId, prizeId);
+    }
+
+    @Override
+    public List<PrizeDetailsDto> getPrizeDetailsForUser(Long userId) {
+        return purchaseRepository.findPrizeDetailsByUserId(userId);
     }
 
     private boolean purchaseWinnerCodeExistsInDatabase(String winnerCode) {
