@@ -84,7 +84,7 @@ public class PrizeServiceImpl implements PrizeService {
             purchase.setWinnerCode(prizeWonCode);
             user.getPrizes().add(prize);
         }
-        
+
         purchase.setUser(user);
         purchase.setPrize(prize);
         purchase.setPurchaseDate(LocalDateTime.now());

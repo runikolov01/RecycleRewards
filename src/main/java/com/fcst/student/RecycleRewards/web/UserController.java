@@ -63,6 +63,12 @@ public class UserController {
 
         model.addAttribute("loggedIn", loggedIn);
 
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId != null) {
+            return "redirect:/myProfile";
+        }
+
         return "register";
     }
 
