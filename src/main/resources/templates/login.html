@@ -12,41 +12,42 @@
 
 <div th:replace="~{fragments/navbar}"></div>
 
-<div class="container">
-    <br>
-    <h2>Вход в профила</h2>
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Вход в профила</h1>
+        <hr class="my-4">
 
-    <div class="alert alert-danger" role="alert" th:if="${error}">
-        Невалиден email или парола! Опитайте отново!
-    </div>
-
-    <div class="row">
-        <div class="col-md-8">
-            <form accept-charset="UTF-8" action="/login" method="post">
-                <div class="form-group">
-                    <img alt="email" height="15" src="/images/email.svg" width="20">
-                    <label for="email">Email:</label>
-                    <input class="form-control" id="email" name="email" required type="text">
-                </div>
-                <div class="form-group">
-                    <img alt="email" height="18" src="/images/password.svg" width="22">
-                    <label for="password">Парола:</label>
-                    <input class="form-control" id="password" name="password" required type="password">
-                </div>
-                <button class="btn btn-primary" type="submit">Вход</button>
-            </form>
-            <br>
+        <div class="alert alert-danger" role="alert" th:if="${error}">
+            Невалиден email или парола! Опитайте отново!
         </div>
 
-        <div class="col-md-4">
-            <div class="photo-div">
-                <img alt="Login" class="img-fluid" src="/images/login-new.svg">
+        <div class="row">
+            <div class="col-md-8">
+                <form accept-charset="UTF-8" action="/login" method="post">
+                    <div class="form-group">
+                        <img alt="email" height="15" src="/images/email.svg" width="20">
+                        <label for="email">Email:</label>
+                        <input class="form-control" id="email" name="email" required type="text">
+                    </div>
+                    <div class="form-group">
+                        <img alt="email" height="18" src="/images/password.svg" width="22">
+                        <label for="password">Парола:</label>
+                        <input class="form-control" id="password" name="password" required type="password">
+                    </div>
+                    <button class="btn btn-primary" type="submit">Вход</button>
+                </form>
+                <br>
+            </div>
+
+            <div class="col-md-4">
+                <div class="photo-div">
+                    <img alt="Login" class="img-fluid" src="/images/login-new.svg">
+                </div>
             </div>
         </div>
+        <br>
     </div>
-    <br>
 </div>
-
 <div th:replace="~{fragments/footer}"></div>
 
 
