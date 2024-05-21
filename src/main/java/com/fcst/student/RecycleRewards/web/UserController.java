@@ -171,17 +171,25 @@ public class UserController {
 
         List<Object[]> wonPrizes = prizeRepository.findAllWonPrizes();
 
-        // Convert the list of Object[] into a list of Maps
+        //List of maps to store the User and Prize objects associated with each prize
         List<Map<String, Object>> prizeList = new ArrayList<>();
         for (Object[] objArray : wonPrizes) {
-            Map<String, Object> prizeMap = new HashMap<>();
-            prizeMap.put("userId", objArray[0]); // the user ID is at index 0
-            prizeMap.put("prizeId", objArray[1]); // the prize ID is at index 1
-            prizeList.add(prizeMap);
-        }
-        System.out.println(wonPrizes.size());
+            userId = (Long) objArray[0]; // User ID is at index 0
+            Long prizeId = (Long) objArray[1]; // Prize ID is at index 1
 
-        model.addAttribute("wonPrizes", wonPrizes);
+            User user = userRepository.findById(userId).orElse(null);
+            Prize prize = prizeRepository.findById(prizeId).orElse(null);
+
+            if (user != null && prize != null) {
+                Map<String, Object> prizeMap = new HashMap<>();
+                prizeMap.put("user", user);
+                prizeMap.put("prize", prize);
+                prizeList.add(prizeMap);
+            }
+        }
+
+        model.addAttribute("wonPrizes", prizeList);
+
 
         return "winners";
     }
@@ -234,15 +242,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerSubmit(@RequestParam String firstName,
-                                 @RequestParam String lastName,
-                                 @RequestParam String email,
-                                 @RequestParam String password,
-                                 @RequestParam String confirmPassword,
-                                 @RequestParam String ageConfirmation,
-                                 @RequestParam String conditionsConfirmation,
-                                 RedirectAttributes redirectAttributes,
-                                 HttpSession session) {
+    public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String ageConfirmation, @RequestParam String conditionsConfirmation, RedirectAttributes redirectAttributes, HttpSession session) {
         if (!password.equals(confirmPassword)) {
             // Passwords don't match, redirect back to registration form
             redirectAttributes.addFlashAttribute("error", "Passwords do not match");
@@ -294,34 +294,16 @@ public class UserController {
     }
 
     @PatchMapping("/myProfile")
-    public ResponseEntity<String> updateProfile(@RequestParam(required = false) String firstName,
-                                                @RequestParam(required = false) String lastName,
-                                                @RequestParam(required = false) String email,
-                                                @RequestParam(required = false) Integer telephoneNumber,
-                                                @RequestParam(required = false) String city,
-                                                @RequestParam(required = false) Integer postCode,
-                                                @RequestParam(required = false) String street,
-                                                @RequestParam(required = false) Integer streetNumber,
-                                                @RequestParam(required = false) Integer floor,
-                                                @RequestParam(required = false) Integer apartmentNumber,
-                                                HttpSession session) {
+    public ResponseEntity<String> updateProfile(@RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName, @RequestParam(required = false) String email, @RequestParam(required = false) Integer telephoneNumber, @RequestParam(required = false) String city, @RequestParam(required = false) Integer postCode, @RequestParam(required = false) String street, @RequestParam(required = false) Integer streetNumber, @RequestParam(required = false) Integer floor, @RequestParam(required = false) Integer apartmentNumber, HttpSession session) {
         try {
             Long userId = (Long) session.getAttribute("userId");
             if (userId == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("User not authorized");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authorized");
             }
 
             // Check if any required fields are empty
-            if (firstName == null || firstName.isEmpty() ||
-                    lastName == null || lastName.isEmpty() ||
-                    email == null || email.isEmpty() ||
-                    city == null || city.isEmpty() ||
-                    postCode == null ||
-                    street == null || street.isEmpty() ||
-                    streetNumber == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Моля, попълнете всички полета, маркирани със звездичка.");
+            if (firstName == null || firstName.isEmpty() || lastName == null || lastName.isEmpty() || email == null || email.isEmpty() || city == null || city.isEmpty() || postCode == null || street == null || street.isEmpty() || streetNumber == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Моля, попълнете всички полета, маркирани със звездичка.");
             }
 
             // Retrieve the current user
@@ -356,8 +338,7 @@ public class UserController {
 
             return ResponseEntity.ok("Данните са актуализирани успешно!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error updating profile: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating profile: " + e.getMessage());
         }
     }
 

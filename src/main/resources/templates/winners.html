@@ -14,9 +14,9 @@
 <div class="container mt-5">
     <div class="jumbotron">
         <div class="d-flex justify-content-between align-items-center">
-            <h1 class="display-4">Печеливши 🎁</h1>
+            <h1 class="display-4">Печеливши от томболи🎁</h1>
             <div th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
-                <a class="btn-sm btn-primary" href="/admin_raffle">Теглене на печелившите</a>
+                <a class="btn-sm btn-primary" href="/admin_raffle">Теглене на печелившите от томболите</a>
             </div>
         </div>
         <hr class="my-4">
@@ -26,14 +26,25 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">User ID</th>
-                        <th scope="col">Prize ID</th>
+                        <th scope="col">Награда №</th>
+                        <th scope="col">Дата на теглене</th>
+                        <th scope="col">Награда</th>
+                        <th scope="col">Описание</th>
+                        <th scope="col">Печеливш №</th>
+                        <th scope="col">Име</th>
+                        <th scope="col">Фамилия</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="prize : ${wonPrizes}">
-                        <td th:text="${prize[0]}"></td>
-                        <td th:text="${prize[1]}"></td>
+                    <tr th:each="prize : ${wonPrizes}"
+                        th:if="${prize.prize.getType() == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE}">
+                        <td th:text="${prize.prize.id}"></td>
+                        <td th:text="${prize.prize.endDate}"></td>
+                        <td th:text="${prize.prize.name}"></td>
+                        <td th:text="${prize.prize.description}"></td>
+                        <td th:text="${prize.user.id}"></td>
+                        <td th:text="${prize.user.firstName}"></td>
+                        <td th:text="${prize.prize.name}"></td>
                     </tr>
                     </tbody>
                 </table>
