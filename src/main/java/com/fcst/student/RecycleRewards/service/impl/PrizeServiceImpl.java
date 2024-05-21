@@ -8,7 +8,7 @@ import com.fcst.student.RecycleRewards.repository.PrizeRepository;
 import com.fcst.student.RecycleRewards.repository.PurchaseRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.PrizeService;
-import com.fcst.student.RecycleRewards.service.UserService;
+import com.fcst.student.RecycleRewards.service.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +26,9 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Autowired
     private PurchaseRepository purchaseRepository;
+
+    @Autowired
+    private PurchaseService purchaseService;
 
     public PrizeServiceImpl(PrizeRepository prizeRepository) {
         this.prizeRepository = prizeRepository;
@@ -75,10 +78,13 @@ public class PrizeServiceImpl implements PrizeService {
 
         // Record purchase
         Purchase purchase = new Purchase();
-        if (prize.getType() == PrizeType.INSTANT) {
-            user.getPrizes().add(prize);
 
+        if (prize.getType() == PrizeType.INSTANT) {
+            String prizeWonCode = purchaseService.generateUniquePurchaseWinnerCode();
+            purchase.setWinnerCode(prizeWonCode);
+            user.getPrizes().add(prize);
         }
+        
         purchase.setUser(user);
         purchase.setPrize(prize);
         purchase.setPurchaseDate(LocalDateTime.now());
