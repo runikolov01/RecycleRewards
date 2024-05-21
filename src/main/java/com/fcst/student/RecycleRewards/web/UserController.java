@@ -153,6 +153,18 @@ public class UserController {
 
         Long userId = (Long) session.getAttribute("userId");
 
+        if (userId != null) {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                String role = String.valueOf(user.getRole());
+                Integer totalPoints = user.getTotalPoints();
+                model.addAttribute("totalPoints", totalPoints);
+                model.addAttribute("loggedUser", user);
+                session.setAttribute("loggedUser", user);
+
+                model.addAttribute("loggedIn", true);
+            }
+        }
 
         List<Prize> wonPrizes = prizeRepository.findAllWonPrizes();
         System.out.println(wonPrizes.size());
