@@ -21,11 +21,9 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
     List<Prize> findByRemainedTicketsGreaterThan(int remainedTickets);
 
 
-    @Query("SELECT p FROM Prize p " +
-            "JOIN p.participants u " +
-            "WHERE u.id IN (SELECT pw.id FROM User pw JOIN pw.prizes pr WHERE pr.id = p.id)")
-    List<Prize> findAllWonPrizes();
 
+    @Query("SELECT u.id, p.id FROM User u JOIN u.prizes p")
+    List<Object[]> findAllWonPrizes();
 
 
 

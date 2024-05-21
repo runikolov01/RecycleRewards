@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -166,7 +169,16 @@ public class UserController {
             }
         }
 
-        List<Prize> wonPrizes = prizeRepository.findAllWonPrizes();
+        List<Object[]> wonPrizes = prizeRepository.findAllWonPrizes();
+
+        // Convert the list of Object[] into a list of Maps
+        List<Map<String, Object>> prizeList = new ArrayList<>();
+        for (Object[] objArray : wonPrizes) {
+            Map<String, Object> prizeMap = new HashMap<>();
+            prizeMap.put("userId", objArray[0]); // the user ID is at index 0
+            prizeMap.put("prizeId", objArray[1]); // the prize ID is at index 1
+            prizeList.add(prizeMap);
+        }
         System.out.println(wonPrizes.size());
 
         model.addAttribute("wonPrizes", wonPrizes);

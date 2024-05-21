@@ -28,13 +28,13 @@
                     <tr>
                         <th scope="col">User ID</th>
                         <th scope="col">Prize ID</th>
-
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="prize : ${wonPrizes}">
-                        <td th:text="${prize.user.id}"></td>
-                        <td th:text="${prize.id}"></td>
+                        <td th:text="${prize[0]}"></td>
+                        <td th:text="${prize[1]}"></td>
+                    </tr>
                     </tbody>
                 </table>
 
