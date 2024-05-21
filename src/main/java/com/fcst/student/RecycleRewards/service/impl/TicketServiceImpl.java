@@ -22,7 +22,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket createTicket(Integer bottlesCount, String ticketNumber) {
+    public Ticket createTicket(Integer bottlesCount, String ticketNumber, Boolean isVoucher) {
         if (ticketNumber == null || ticketNumber.isEmpty()) {
             ticketNumber = generateUniqueTicketNumber();
         }
@@ -31,7 +31,7 @@ public class TicketServiceImpl implements TicketService {
 
         Integer points = bottlesCount * 5;
 
-        return new Ticket(ticketNumber, issuedOn, expirationDateTime, bottlesCount, points);
+        return new Ticket(ticketNumber, issuedOn, expirationDateTime, bottlesCount, points, isVoucher);
     }
 
 

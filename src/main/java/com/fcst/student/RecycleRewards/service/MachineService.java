@@ -7,13 +7,5 @@ import java.util.List;
 
 @Service
 public interface MachineService {
-    void saveMachine(Machine machine);
-
-    void deleteMachine(Long machineId);
-
-    Machine updateMachine(Machine machine);
-
-    Machine getMachineById(Long machineId);
-
     List<Machine> getAllMachines();
 }

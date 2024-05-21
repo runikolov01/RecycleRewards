@@ -17,16 +17,13 @@ public interface PrizeService {
 
     List<Prize> getPrizesByType(PrizeType type);
 
-    void deletePrizeById(int id);
-
     boolean purchasePrize(Long userId, Long prizeId);
 
     void setWinnerForPrize(Long prizeId, Long userId);
 
-    public List<Prize> getPrizesWithoutWinners();
+    List<Prize> getPrizesWithoutWinners();
 
     List<Prize> getPrizesByTypeAndRemainedTicketsGreaterThan(PrizeType type, int remainedTickets);
 
     List<Prize> getAllPrizesWithRemainedTicketsGreaterThan(int remainedTickets);
-
 }

@@ -13,9 +13,6 @@ public interface UserService {
 
     void deleteUser(Long userId);
 
-    User findUserById(Long userId);
-
-    boolean existsByEmail(String email);
 
     User getUserById(Long userId);
 
@@ -27,10 +24,6 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-//    List<User> getUsersByPrize(Long prizeId);
-//
-//    void awardPrize(User user, Long prizeId);
-//
     List<User> getParticipantsByPrizeId(Long prizeId);
 
 }
