@@ -14,7 +14,8 @@
 
 <div class="container mt-5">
     <div class="jumbotron">
-        <h1 class="display-4">Профилът на
+        <h1 class="display-4"><img alt="profile" height="80" src="/images/profile.svg" width="80">
+            Профилът на
             <span th:if="${loggedUser != null && loggedUser.getFirstName() != null}"
                   th:text="${loggedUser.getFirstName()}"></span>
             <span th:if="${loggedUser != null && loggedUser.getLastName() != null}"
@@ -35,25 +36,29 @@
             <form action="/myProfile" id="profileForm" method="post">
                 <input name="_method" type="hidden" value="patch">
                 <div class="form-group">
+                    <img alt="person" height="18" src="/images/person.svg" width="22">
                     <label for="firstName">Първо име: (*)</label>
                     <input class="form-control" id="firstName" name="firstName" required
                            th:value="${loggedUser != null && loggedUser.getFirstName() != null ? loggedUser.getFirstName() : ''}"
                            type="text">
                 </div>
                 <div class="form-group">
+                    <img alt="person" height="18" src="/images/person.svg" width="22">
                     <label for="lastName">Фамилия: (*)</label>
                     <input class="form-control" id="lastName" name="lastName" required
                            th:value="${loggedUser != null && loggedUser.getLastName() != null ? loggedUser.getLastName() : ''}"
                            type="text">
                 </div>
                 <div class="form-group">
+                    <img alt="email" height="15" src="/images/email.svg" width="20">
                     <label for="email">Електронна поща: (*)</label>
                     <input class="form-control" id="email" name="email" required
                            th:value="${loggedUser != null && loggedUser.getEmail() != null ? loggedUser.getEmail()  : ''}"
                            type="email">
                 </div>
                 <div class="form-group">
-                    <label for="email">Телефонен номер: (*)</label>
+                    <img alt="telephoneNumber" height="15" src="/images/telephone.svg" width="20">
+                    <label for="telephoneNumber">Телефонен номер: (*)</label>
                     <input class="form-control" id="telephoneNumber" name="telephoneNumber"
                            th:value="${loggedUser != null && loggedUser.getPhone() != null ? loggedUser.getPhone()  : ''}"
                            type="text">
@@ -61,36 +66,42 @@
                 <h1 class="display-4">Личен дрес</h1>
                 <hr class="my-4">
                 <div class="form-group">
+                    <img alt="city" height="15" src="/images/city.svg" width="20">
                     <label for="city">Град: (*)</label>
                     <input class="form-control" id="city" name="city"
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getCity() != null ? loggedUser.getAddress().getCity() : ''}"
                            type="text">
                 </div>
                 <div class="form-group">
+                    <img alt="postCode" height="15" src="/images/number.svg" width="20">
                     <label for="postCode">Пощенски код: (*)</label>
                     <input class="form-control" id="postCode" name="postCode"
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getPostcode() != null ? loggedUser.getAddress().getPostcode() : ''}"
                            type="number">
                 </div>
                 <div class="form-group">
+                    <img alt="street" height="15" src="/images/street.svg" width="20">
                     <label for="street">Улица: (*)</label>
                     <input class="form-control" id="street" name="street"
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getStreet() != null ? loggedUser.getAddress().getStreet() : ''}"
                            type="text">
                 </div>
                 <div class="form-group">
+                    <img alt="streetNumber" height="15" src="/images/number.svg" width="20">
                     <label for="streetNumber">Улица номер: (*)</label>
                     <input class="form-control" id="streetNumber" name="streetNumber"
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getStreetNumber() != null ? loggedUser.getAddress().getStreetNumber() : ''}"
                            type="number">
                 </div>
                 <div class="form-group">
+                    <img alt="floor" height="15" src="/images/number.svg" width="20">
                     <label for="floor">Етаж:</label>
                     <input class="form-control" id="floor" name="floor"
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getFloor() != null ? loggedUser.getAddress().getFloor() : ''}"
                            type="number">
                 </div>
                 <div class="form-group">
+                    <img alt="apartment_number" height="15" src="/images/number.svg" width="20">
                     <label for="apartmentNumber">Апартамент номер:</label>
                     <input class="form-control" id="apartmentNumber" name="apartmentNumber"
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getApartmentNumber() != null ? loggedUser.getAddress().getApartmentNumber() : ''}"
