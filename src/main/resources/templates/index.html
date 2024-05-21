@@ -21,7 +21,8 @@
                 <img alt="1bottleIs5points" src="/images/bottlePoints.png" width="400px">
                 <h1 class="display-5"></h1>
                 <br>
-                <a class="btn btn-primary btn-lg" href="start" role="button">Започни рециклирането</a>
+                <a class="btn btn-primary btn-lg points" href="start" id="pointsButton" role="button">Започни
+                    рециклирането</a>
             </div>
         </div>
         <div class="col-md-6">
@@ -31,7 +32,8 @@
                 <img alt="1bottleIs5points" src="/images/stotinki.png" width="400px">
                 <h1 class="display-5"></h1>
                 <br>
-                <a class="btn btn-primary btn-lg" href="start" role="button">Започни рециклирането</a>
+                <a class="btn btn-primary btn-lg voucher" href="start" id="voucherButton" role="button">Започни
+                    рециклирането</a>
             </div>
         </div>
     </div>
@@ -43,6 +45,38 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    document.getElementById('pointsButton').addEventListener('click', function(event) {
+        event.preventDefault();
+        setVoucherAttribute(false);
+    });
+
+    document.getElementById('voucherButton').addEventListener('click', function(event) {
+        event.preventDefault();
+        setVoucherAttribute(true);
+    });
+
+    function setVoucherAttribute(isVoucher) {
+        fetch('/setVoucherAttribute', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ isVoucher: isVoucher })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'start';
+                } else {
+                    console.error('Failed to set attribute');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+
 
 </body>
 </html>

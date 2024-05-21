@@ -22,9 +22,18 @@
                 след като
                 натиснете бутона.</h2>
             <hr>
-            <h2 class="display-5">Вземете билета и го регистрирайте в профила си до <span
+            <!-- Display this if IsVoucher is false -->
+            <h2 class="display-5" th:if="${!isVoucher}">
+                Вземете билета и го регистрирайте в профила си до <span
                     th:text="${expirationFormatted}">DD/MM/YY TIME</span>,
-                за да спечелите <span th:text="${bottlesCount*5}">0</span> точки!</h2>
+                за да спечелите <span th:text="${bottlesCount*5}">0</span> точки!
+            </h2>
+
+            <!-- Display this if IsVoucher is true -->
+            <h2 class="display-5" th:if="${isVoucher}">
+                Вземете билета и го използвайте в магазина, за да получите отстъпка от
+                <span th:text="${#numbers.formatDecimal(bottlesCount * 0.05, 1, 'DEFAULT', 2, 'DEFAULT')}">0</span> лева до
+                <span th:text="${expirationFormatted}">DD/MM/YY TIME</span>!</h2>
             <br>
 
             <form action="/print" id="printForm" method="post">

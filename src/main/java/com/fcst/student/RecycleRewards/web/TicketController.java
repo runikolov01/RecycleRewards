@@ -11,13 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class TicketController {
@@ -32,18 +32,22 @@ public class TicketController {
         this.userService = userService;
     }
 
-    private void setAttributesAndModel(HttpSession session, Model model, Ticket ticket, Integer bottlesCount) {
+    private void setAttributesAndModel(HttpSession session, Model model, Ticket ticket, Integer bottlesCount, Boolean isVoucher) {
         String issuedOnFormatted = ticket.getIssued().format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
         String expirationFormatted = ticket.getActiveUntil().format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
+
 
         session.setAttribute("ticketNumber", ticket.getNumber());
         session.setAttribute("issuedOnFormatted", issuedOnFormatted);
         session.setAttribute("expirationFormatted", expirationFormatted);
+        session.setAttribute("bottlesCount", bottlesCount);
+        session.setAttribute("isVoucher", isVoucher);
 
         model.addAttribute("bottlesCount", bottlesCount);
         model.addAttribute("ticketNumber", ticket.getNumber());
         model.addAttribute("issuedOnFormatted", issuedOnFormatted);
         model.addAttribute("expirationFormatted", expirationFormatted);
+        model.addAttribute("isVoucher", isVoucher);
     }
 
     @GetMapping("/index")
@@ -51,12 +55,14 @@ public class TicketController {
         return "index";
     }
 
+
     @GetMapping("/start")
     public String openStartPage(HttpSession session, Model model) {
         Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
         bottlesCount = ticketService.getDefaultBottlesCount(bottlesCount);
-
+        Boolean isVoucher = (Boolean) session.getAttribute("isVoucher");
         model.addAttribute("bottlesCount", bottlesCount);
+        model.addAttribute("isVoucher", session.getAttribute("isVoucher"));
         return "start";
     }
 
@@ -71,8 +77,10 @@ public class TicketController {
             session.setAttribute("ticketNumber", ticketNumber); // Store it in the session
         }
 
-        Ticket ticket = ticketService.createTicket(bottlesCount, ticketNumber);
-        setAttributesAndModel(session, model, ticket, bottlesCount);
+        Boolean isVoucher = (Boolean) session.getAttribute("isVoucher");
+        Ticket ticket = ticketService.createTicket(bottlesCount, ticketNumber, isVoucher);
+
+        setAttributesAndModel(session, model, ticket, bottlesCount, isVoucher);
 
         return "print";
     }
@@ -151,6 +159,17 @@ public class TicketController {
         return "registerTicket";
     }
 
+    @PostMapping("/setVoucherAttribute")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> setVoucherAttribute(@RequestBody Map<String, Boolean> requestBody, HttpSession session) {
+        Boolean isVoucher = requestBody.get("isVoucher");
+        session.setAttribute("isVoucher", isVoucher);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/start")
     public String addBottle(HttpSession session) {
         Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
@@ -168,8 +187,10 @@ public class TicketController {
         bottlesCount = ticketService.getDefaultBottlesCount(bottlesCount);
         String ticketNumber = (String) session.getAttribute("ticketNumber");
 
-        Ticket ticket = ticketService.createTicket(bottlesCount, ticketNumber);
-        setAttributesAndModel(session, model, ticket, bottlesCount);
+        Boolean isVoucher = (Boolean) session.getAttribute("isVoucher");
+        Ticket ticket = ticketService.createTicket(bottlesCount, ticketNumber, isVoucher);
+
+        setAttributesAndModel(session, model, ticket, bottlesCount, isVoucher);
 
         ticketService.saveTicket(ticket);
         session.setAttribute("bottlesCount", 0);
@@ -190,14 +211,12 @@ public class TicketController {
             User currentUser = userService.getUserById(userId);
             if (currentUser != null) {
                 Ticket ticket = ticketRepository.findByNumber(ticketNumber);
-                if (ticket != null) {
-                    // Check if the ticket is already registered
+                if (ticket != null && !ticket.getVoucher()) {
                     if (ticket.getRegisteredOn() != null) {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                                 .body("Кодът е вече регистриран. Моля опитайте с друг код.");
                     }
 
-                    // Calculate the time difference
                     LocalDateTime currentTime = LocalDateTime.now();
                     LocalDateTime ticketIssuedTime = ticket.getIssued();
                     long hoursDifference = ChronoUnit.HOURS.between(ticketIssuedTime, currentTime);
