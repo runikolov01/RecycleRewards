@@ -9,8 +9,10 @@
 </head>
 <body>
 
+<div th:replace="~{fragments/navbar_machine}"></div>
+
 <div class="container mt-5">
-    <div class="jumbotron">
+    <div class="jumbotron text-center">
         <h1 class="display-4">Натиснете бутона преди всяко добавяне на нова бутилка:</h1>
         <br>
         <a class="btn btn-primary btn-lg" href="#" onclick="addBottle(event)">Добави бутилка</a>

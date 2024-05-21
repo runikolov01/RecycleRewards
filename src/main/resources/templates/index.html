@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -11,17 +10,32 @@
 </head>
 <body>
 
+<div th:replace="~{fragments/navbar_machine}"></div>
+
 <div class="container mt-5">
-    <div class="jumbotron text-center">
-        <h1 class="display-3">Натиснете бутона за стартиране:</h1>
-        <hr class="my-4">
-        <img alt="1bottleIs5points" src="/images/bottlePoints.png" width="630px">
-        <h1 class="display-5"></h1>
-        <br>
-        <a class="btn btn-primary btn-lg" href="start" role="button">Започни рециклирането</a>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="jumbotron text-center">
+                <h1 class="display-3">Събиране на точки</h1>
+                <hr class="my-4">
+                <img alt="1bottleIs5points" src="/images/bottlePoints.png" width="400px">
+                <h1 class="display-5"></h1>
+                <br>
+                <a class="btn btn-primary btn-lg" href="start" role="button">Започни рециклирането</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="jumbotron text-center">
+                <h1 class="display-3">Получаване на ваучер</h1>
+                <hr class="my-4">
+                <img alt="1bottleIs5points" src="/images/stotinki.png" width="400px">
+                <h1 class="display-5"></h1>
+                <br>
+                <a class="btn btn-primary btn-lg" href="start" role="button">Започни рециклирането</a>
+            </div>
+        </div>
     </div>
 </div>
-
 <div th:replace="~{fragments/footer}"></div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -31,5 +45,4 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </body>
-
 </html>

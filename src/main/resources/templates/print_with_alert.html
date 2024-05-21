@@ -2,18 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <title>Принтиране</title>
-    <link rel="icon" type="image/png" href="images/logo-removebg-preview.png">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
+
+<div th:replace="~{fragments/navbar_machine}"></div>
+
 <div class="container mt-5">
-    <div class="jumbotron">
+    <div class="jumbotron text-center">
         <h1 class="display-1">Билетът се принтира...</h1>
         <hr class="my-4">
-        <img src="images/print.png" alt="Printing">
+        <img alt="Printing" src="images/print.png">
     </div>
 </div>
 
