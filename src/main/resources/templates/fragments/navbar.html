@@ -11,15 +11,7 @@
             <!-- Links for ADMIN role -->
             <li class="nav-item"
                 th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
-                <a class="nav-link dark-grey-border" href="/admin_add_prizes">Добавяне на награди</a>
-            </li>
-            <li class="nav-item"
-                th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
                 <a class="nav-link dark-grey-border" href="/users">Потребители</a>
-            </li>
-            <li class="nav-item"
-                th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
-                <a class="nav-link dark-grey-border" href="/admin_raffle">Теглене на победителите</a>
             </li>
 
             <!-- Common links for all users -->
@@ -31,6 +23,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/machines">Локации</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/winners">Печеливши</a>
             </li>
 
             <!-- Display registration and login links only if user is not logged in -->
