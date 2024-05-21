@@ -124,7 +124,7 @@
                             </select>
                         </th>
                         <th scope="col">
-                            Дата на покупка
+                            Дата на закупения билет
                             <select class="filter-select" data-column="1">
                                 <option value="">Всички</option>
                             </select>
@@ -147,12 +147,6 @@
                                 <option value="">Всички</option>
                             </select>
                         </th>
-                        <th scope="col">
-                            Дата на закупения билет
-                            <select class="filter-select" data-column="5">
-                                <option value="">Всички</option>
-                            </select>
-                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -163,7 +157,6 @@
                         <td th:text="${purchase.prize.getId()}"></td>
                         <td th:text="${purchase.prize.getName()}"></td>
                         <td th:text="${purchase.prize.getDescription()}"></td>
-                        <td th:text="${purchase.getPurchaseDate()}"></td>
                     </tr>
                     </tbody>
                 </table>
