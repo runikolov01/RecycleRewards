@@ -27,12 +27,16 @@ public class Ticket {
     @Column(nullable = false)
     private Integer points;
 
-    @Column(name = "registered_on", nullable = true)
+    @Column(name = "registered_on")
     private LocalDateTime registeredOn;
 
     @ManyToOne
     @JoinColumn(name = "person_id")
     private User registeredBy;
+
+    @Column(name = "is_voucher", nullable = false)
+    private Boolean isVoucher;
+
 
     public Ticket() {
     }
@@ -41,12 +45,13 @@ public class Ticket {
         this.number = number;
     }
 
-    public Ticket(String number, LocalDateTime issued, LocalDateTime activeUntil, Integer bottles, Integer points) {
+    public Ticket(String number, LocalDateTime issued, LocalDateTime activeUntil, Integer bottles, Integer points, Boolean isVoucher) {
         this.number = number;
         this.issued = issued;
         this.activeUntil = activeUntil;
         this.bottles = bottles;
         this.points = points;
+        this.isVoucher = isVoucher;
     }
 
     public Ticket(Long id, String number, LocalDateTime issued, LocalDateTime activeUntil, Integer bottles, Integer points, LocalDateTime registeredOn, User registeredBy) {
@@ -123,5 +128,13 @@ public class Ticket {
 
     public void setBottles(Integer bottles) {
         this.bottles = bottles;
+    }
+
+    public Boolean getVoucher() {
+        return isVoucher;
+    }
+
+    public void setVoucher(Boolean voucher) {
+        isVoucher = voucher;
     }
 }
