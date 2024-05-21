@@ -13,8 +13,13 @@
 
 <div class="container mt-5">
     <div class="jumbotron">
-        <h1 class="display-4">Потребители</h1>
+        <h1 class="display-4">
+            <img alt="profile" height="80" src="/images/users.svg" width="80">
+            Потребители</h1>
         <hr class="my-4">
+        <p>Не забравяйте, че можете да сортирате редовете в таблицата като натиснете върху името на колоната, по
+            която желаете да сортирате таблицата веднъж, за да сортирате текста в колоната А-Я/A-Z, а при повторно
+            натискане: Я-А/Z-A.</p>
         <br>
         <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
             <table class="table table-striped table-bordered">
@@ -40,9 +45,10 @@
                     </td>
                     <td><span class="editable text-center" contenteditable="true" th:text="${user.email}"></span></td>
                     <td><span class="editable text-center" contenteditable="true" th:text="${user.phone}"></span></td>
-                    <td class="text-center" th:text="${user.registrationDate}"></td>
-                    <td class="text-center" th:text="${user.totalPoints}"></td>
-                    <td class="editable text-center" contenteditable="true" th:text="${user.role}"></td>
+                    <td><span class="text-center"
+                              th:text="${#temporals.format(user.registrationDate, 'yyyy-MM-dd')}"></span></td>
+                    <td><span class="text-center" th:text="${user.totalPoints}"></span></td>
+                    <td><span class="editable text-center" contenteditable="true" th:text="${user.role}"></span></td>
                     <td>
                         <button class="btn btn-primary btn-sm edit-btn">Edit</button>
                         <button class="btn btn-danger btn-sm delete-btn">Delete</button>
@@ -82,15 +88,6 @@
             rows.sort(function (a, b) {
                 var valueA = $(a).find('td:eq(' + columnIndex + ') span').text(); // Get the value of the cell
                 var valueB = $(b).find('td:eq(' + columnIndex + ') span').text(); // Get the value of the cell
-
-                // Custom parsing for specific columns
-                if (columnIndex === 5) { // Date column (index 5)
-                    valueA = new Date(valueA);
-                    valueB = new Date(valueB);
-                } else if (columnIndex === 6) { // Points column (index 6)
-                    valueA = parseFloat(valueA.replace(/,/g, '')); // Remove comma and parse as float
-                    valueB = parseFloat(valueB.replace(/,/g, '')); // Remove comma and parse as float
-                }
 
                 if (sortOrders[columnIndex] === 'asc') {
                     return (valueA < valueB) ? -1 : (valueA > valueB) ? 1 : 0;
