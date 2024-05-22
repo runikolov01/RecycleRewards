@@ -13,8 +13,8 @@
 <div th:replace="~{fragments/navbar}"></div>
 
 <div class="container mt-5">
-    <div class="jumbotron">
-        <h1 class="display-4">Форма за Регистрация</h1>
+    <div class="jumbotron p-4">
+        <h1 class="display-4 text-center">Форма за Регистрация</h1>
         <hr class="my-4">
 
         <div class="alert alert-success" role="alert" th:if="${success}">
@@ -26,7 +26,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <form action="/register" method="post">
                     <div class="form-group">
                         <img alt="person" height="18" src="/images/person.svg" width="22">
@@ -67,16 +67,16 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Съгласявате ли се с условията за участие?</label><br>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                                <input class="form-check-input" name="conditionsConfirmation" required type="checkbox"
-                                       value="yes">
-                                Да
-                            </label>
-                        </div>
-                    </div>
+                    <!--                    <div class="form-group">-->
+                    <!--                        <label>Съгласявате ли се с условията за участие?</label><br>-->
+                    <!--                        <div class="form-check-inline">-->
+                    <!--                            <label class="form-check-label">-->
+                    <!--                                <input class="form-check-input" name="conditionsConfirmation" required type="checkbox"-->
+                    <!--                                       value="yes">-->
+                    <!--                                Да-->
+                    <!--                            </label>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                     <button class="btn btn-primary" type="submit">Регистрация
                     </button>
                 </form>

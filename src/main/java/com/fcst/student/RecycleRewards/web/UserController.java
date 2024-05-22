@@ -247,31 +247,20 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String ageConfirmation, @RequestParam String conditionsConfirmation, RedirectAttributes redirectAttributes, HttpSession session) {
+    public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String ageConfirmation, RedirectAttributes redirectAttributes, HttpSession session) {
         if (!password.equals(confirmPassword)) {
-            // Passwords don't match, redirect back to registration form
             redirectAttributes.addFlashAttribute("error", "Passwords do not match");
             return "redirect:/register";
         }
 
         if (!"yes".equals(ageConfirmation)) {
-            // Age confirmation not accepted, redirect back to registration form
             redirectAttributes.addFlashAttribute("error", "Age confirmation not accepted");
             return "redirect:/register";
         }
 
-        if (!"yes".equals(conditionsConfirmation)) {
-            // Conditions confirmation not accepted, redirect back to registration form
-            redirectAttributes.addFlashAttribute("error", "Conditions confirmation not accepted");
-            return "redirect:/register";
-        }
-
-        // Create a new Address object with empty fields
         Address address = new Address();
-        // Save the empty address to get the auto-generated ID
         addressService.saveAddress(address);
 
-        // All validations passed, create a new User object
         User user = new User();
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -281,18 +270,14 @@ public class UserController {
         user.setRegistrationDate(LocalDateTime.now());
         user.setRole(Role.CLIENT);
 
-        // Set the address_id in the User entity
         user.setAddressId(address.getId());
 
         try {
-            // Save the user
             userService.saveUser(user);
-            // Store user ID in session
             session.setAttribute("userId", user.getId());
             redirectAttributes.addFlashAttribute("success", true);
             return "redirect:/register";
         } catch (Exception e) {
-            // Error saving user, redirect back to registration form
             redirectAttributes.addFlashAttribute("error", "Error registering user");
             return "redirect:/register";
         }
