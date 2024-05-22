@@ -1,2 +1,2 @@
 # RecycleRewards
-Final project at Techical University of Sofia
+A web-based application to encourage users to recycle plastic bottles
