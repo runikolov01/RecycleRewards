@@ -228,8 +228,7 @@ public class UserController {
 
             // Set total points as a session attribute
             session.setAttribute("totalPoints", totalPoints);
-
-            return "redirect:/myProfile";
+            return "redirect:/home";
         } else {
             // Authentication failed, redirect back to login page with error message
             model.addAttribute("error", true);

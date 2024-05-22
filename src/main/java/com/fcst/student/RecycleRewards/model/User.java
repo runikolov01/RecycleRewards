@@ -50,6 +50,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "prize_id"))
     private List<Prize> prizes;
 
+    @Column(name = "total_bottles")
+    private Integer totalBottles;
+
     public User() {
     }
 
@@ -165,5 +168,13 @@ public class User {
 
     public void addPrize(Prize prize) {
         prizes.add(prize);
+    }
+
+    public Integer getTotalBottles() {
+        return totalBottles;
+    }
+
+    public void setTotalBottles(Integer totalBottles) {
+        this.totalBottles = totalBottles;
     }
 }

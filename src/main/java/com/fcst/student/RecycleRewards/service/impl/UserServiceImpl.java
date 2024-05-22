@@ -1,8 +1,6 @@
 package com.fcst.student.RecycleRewards.service.impl;
 
 import com.fcst.student.RecycleRewards.model.User;
-import com.fcst.student.RecycleRewards.repository.PrizeRepository;
-import com.fcst.student.RecycleRewards.repository.PurchaseRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
@@ -68,6 +66,11 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getParticipantsByPrizeId(Long prizeId) {
         return userRepository.findAllByPrizeId(prizeId);
+    }
+
+    @Override
+    public Integer getTotalBottlesForAllUsers() {
+        return userRepository.getTotalBottlesSum();
     }
 
 }

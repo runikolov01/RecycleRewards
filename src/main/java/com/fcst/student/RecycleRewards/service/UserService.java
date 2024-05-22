@@ -26,4 +26,6 @@ public interface UserService {
 
     List<User> getParticipantsByPrizeId(Long prizeId);
 
+    Integer getTotalBottlesForAllUsers();
+
 }

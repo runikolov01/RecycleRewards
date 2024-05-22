@@ -3,6 +3,7 @@ package com.fcst.student.RecycleRewards.web;
 import com.fcst.student.RecycleRewards.model.Ticket;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.repository.TicketRepository;
+import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.TicketService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +27,7 @@ public class TicketController {
     private final UserService userService;
     @Autowired
     private TicketService ticketService;
+    private UserRepository userRepository;
 
     public TicketController(TicketRepository ticketRepository, UserService userService) {
         this.ticketRepository = ticketRepository;
@@ -99,15 +101,27 @@ public class TicketController {
         if (loggedIn && userId != null) {
             User user = userService.getUserById(userId);
             if (user != null) {
+                Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
+
+                User currentUser = userService.getUserById(userId);
+                Integer userTotalBottles = currentUser.getTotalBottles();
+                Double userKgBottles = userTotalBottles * 0.015;
+
+                model.addAttribute("userTotalBottles", userTotalBottles);
+                model.addAttribute("userKgBottles", userKgBottles);
+                model.addAttribute("bottlesCount", bottlesCount);
+                session.setAttribute("bottlesCount", bottlesCount);
                 model.addAttribute("loggedUser", user);
                 session.setAttribute("loggedUser", user);
 
-                // Fetch totalPoints for the logged-in user and add it to the model
                 Integer totalPoints = user.getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
-                System.out.println("User Role: " + user.getRole());
             }
         }
+        Integer totalBottles = userService.getTotalBottlesForAllUsers();
+        model.addAttribute("totalBottles", totalBottles);
+        Double totalKg = totalBottles * 0.015;
+        model.addAttribute("totalKg", totalKg);
         return "home";
     }
 
@@ -204,7 +218,7 @@ public class TicketController {
 
     @PostMapping("/registerTicket")
     public ResponseEntity<String> registerTicket(@RequestParam("ticketNumber") String ticketNumber,
-                                                 HttpSession session) {
+                                                 HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId != null) {
             // Fetch user details from the database using the user ID
@@ -228,6 +242,11 @@ public class TicketController {
 
                     ticket.setRegisteredOn(LocalDateTime.now());
                     ticket.setRegisteredBy(currentUser);
+
+                    Integer currentBottlesCount = ticket.getPoints() / 5;
+                    currentUser.setTotalBottles(currentUser.getTotalBottles() + currentBottlesCount);
+                    Integer userTotalBottles = currentUser.getTotalBottles();
+
                     ticketRepository.save(ticket);
 
                     int pointsToAdd = ticket.getPoints();
@@ -236,6 +255,8 @@ public class TicketController {
                     currentUser.setTotalPoints(totalPoints);
                     userService.saveUser(currentUser);
 
+                    model.addAttribute("userTotalBottles", userTotalBottles);
+                    session.setAttribute("totalBottles", userTotalBottles);
                     session.setAttribute("totalPoints", totalPoints);
 
 
