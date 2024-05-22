@@ -24,7 +24,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
             "FROM Purchase p " +
             "JOIN p.user u " +
             "JOIN p.prize pr " +
-            "WHERE u.id = :userId")
+            "WHERE u.id = :userId AND p.winnerCode IS NOT NULL")
     List<PrizeDetailsDto> findPrizeDetailsByUserId(@Param("userId") Long userId);
 
 }
