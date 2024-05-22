@@ -12,23 +12,25 @@
 <div th:replace="~{fragments/navbar_machine}"></div>
 
 <div class="container mt-5">
-    <div class="jumbotron text-center">
+    <div class="jumbotron text-center p-4">
         <div class="card-body">
             <h1 class="display-3">Поздравления!👏</h1>
             <hr>
-            <h1 class="display-5">Днес Вие рециклирахте <span th:text="${bottlesCount}">0</span> бутилки!</h1>
+            <h1 class="display-5 text-success">Днес Вие рециклирахте <span th:text="${bottlesCount}">0</span> бутилки!
+            </h1>
             <hr>
-            <h2 class="display-5">Вашият билет с код <span th:text="${ticketNumber}">TRYAGAIN</span> ще бъде изпринтен
+            <h2 class="display-5 font-italic">Вашият <span th:text="${isVoucher ? 'ваучер' : 'билет'}">билет</span> с
+                код <span th:text="${ticketNumber}">TRYAGAIN</span> ще бъде изпринтен
                 след като натиснете бутона.👇</h2>
             <hr>
-            <h2 class="display-5" th:if="${!isVoucher}">
+            <h2 class="display-5  text-danger" th:if="${!isVoucher}">
                 ❗Вземете билета и го регистрирайте в профила си до <span
                     th:text="${expirationFormatted}">DD/MM/YY TIME</span>,
                 за да спечелите <span th:text="${bottlesCount*5}">0</span> точки❗
             </h2>
 
-            <h2 class="display-5" th:if="${isVoucher}">
-                ❗Вземете билета и го използвайте в магазина до
+            <h2 class="display-5  text-danger" th:if="${isVoucher}">
+                ❗Вземете ваучера и го използвайте в магазина до
                 <span th:text="${expirationFormatted}">DD/MM/YY TIME</span>, за да получите отстъпка от
                 <span th:text="${#numbers.formatDecimal(bottlesCount * 0.05, 1, 'DEFAULT', 2, 'DEFAULT')}">0</span>
                 лева❗</h2>
@@ -39,7 +41,8 @@
                 <input name="ticketNumber" th:value="${ticketNumber}" type="hidden">
                 <input name="issuedOnFormatted" th:value="${issuedOnFormatted}" type="hidden">
                 <input name="expirationFormatted" th:value="${expirationFormatted}" type="hidden">
-                <button class="btn btn-primary btn-lg" type="submit">Принтиране на билет
+                <button class="btn btn-primary btn-lg" type="submit">
+                    <span th:text="${isVoucher ? 'Принтиране на ваучер' : 'Принтиране на билет'}">Принтиране на билет</span>
                 </button>
             </form>
         </div>
