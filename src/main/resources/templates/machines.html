@@ -2,74 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Локации</title>
-    <head>
-        <meta charset="UTF-8">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <title>Старт</title>
-        <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/css/style.css" rel="stylesheet">
-    </head>
-
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBre-86uFZSf1ld88qvLeza7FMb2pJwnIY&callback=initMap"></script>
-    <script>
-        var map;
-
-        function initMap() {
-            var mapOptions = {
-                center: {lat: 42.6977, lng: 23.3219},
-                zoom: 11.6,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-
-            var locations = [
-                {
-                    lat: 42.6418715,
-                    lng: 23.3361706,
-                    title: 'Кауфланд - Малинова долина',
-                    description: 'ж.к. Малинова долина, ул. „Проф. д-р Иван Странски“ 20, 1000, София'
-                },
-                {
-                    lat: 42.6458327,
-                    lng: 23.3791261,
-                    title: 'Кауфланд - Младост',
-                    description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712, София'
-                },
-                {
-                    lat: 42.670452,
-                    lng: 23.2734864,
-                    title: 'Кауфланд - Витоша',
-                    description: 'ж.к. Бъкстон, ул. „Тодор Каблешков“ 3, 1618, София'
-                },
-
-            ];
-
-            locations.forEach(function (location) {
-                var marker = new google.maps.Marker({
-                    position: {lat: location.lat, lng: location.lng},
-                    map: map,
-                    title: location.title,
-                    icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
-                });
-
-                // Optional: Add info window
-                var infoWindow = new google.maps.InfoWindow({
-                    content: location.title + '<br>' + location.description
-                });
-
-                marker.addListener('click', function () {
-                    infoWindow.open(map, marker);
-                });
-            });
-        }
-    </script>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
 <body>
-
 <div th:replace="~{fragments/navbar}"></div>
-
 
 <div class="container mt-5">
     <div class="jumbotron">
@@ -117,6 +57,62 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function initMap() {
+        var mapOptions = {
+            center: {lat: 42.6977, lng: 23.3219},
+            zoom: 11.6,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
+        var locations = [
+            {
+                lat: 42.6418715,
+                lng: 23.3361706,
+                title: 'Кауфланд - Малинова долина',
+                description: 'ж.к. Малинова долина, ул. „Проф. д-р Иван Странски“ 20, 1000, София'
+            },
+            {
+                lat: 42.6458327,
+                lng: 23.3791261,
+                title: 'Кауфланд - Младост',
+                description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712, София'
+            },
+            {
+                lat: 42.670452,
+                lng: 23.2734864,
+                title: 'Кауфланд - Витоша',
+                description: 'ж.к. Бъкстон, ул. „Тодор Каблешков“ 3, 1618, София'
+            },
+        ];
+
+        locations.forEach(function (location) {
+            var marker = new google.maps.Marker({
+                position: {lat: location.lat, lng: location.lng},
+                map: map,
+                title: location.title,
+                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+            });
+
+            var infoWindow = new google.maps.InfoWindow({
+                content: location.title + '<br>' + location.description
+            });
+
+            marker.addListener('click', function () {
+                infoWindow.open(map, marker);
+            });
+        });
+    }
+
+    var apiKey = /*[[${googleMapsApiKey}]]*/ '';
+    var script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+    /*]]>*/
+</script>
 </body>
 </html>
