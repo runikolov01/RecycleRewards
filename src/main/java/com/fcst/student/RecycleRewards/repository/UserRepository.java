@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT SUM(u.totalBottles) FROM User u")
     Integer getTotalBottlesSum();
+
+    User findByActivationToken(String activationToken);
 }

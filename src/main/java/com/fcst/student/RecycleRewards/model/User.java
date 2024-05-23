@@ -13,6 +13,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "activation_token")
+    private String activationToken;
+
+    @Column(name = "token_expiry")
+    private LocalDateTime tokenExpiry;
+
+    @Column(name = "is_activated")
+    private Boolean isActivated;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -68,6 +77,49 @@ public class User {
         this.phone = phone;
         this.role = role;
         this.prizes = prizes;
+    }
+
+    public User(Long id, String activationToken, LocalDateTime tokenExpiry, Boolean isActivated, String firstName, String lastName, Integer totalPoints, Long addressId, Address address, String email, String password, LocalDateTime registrationDate, Integer phone, Role role, List<Prize> prizes, Integer totalBottles) {
+        this.id = id;
+        this.activationToken = activationToken;
+        this.tokenExpiry = tokenExpiry;
+        this.isActivated = isActivated;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.totalPoints = totalPoints;
+        this.addressId = addressId;
+        this.address = address;
+        this.email = email;
+        this.password = password;
+        this.registrationDate = registrationDate;
+        this.phone = phone;
+        this.role = role;
+        this.prizes = prizes;
+        this.totalBottles = totalBottles;
+    }
+
+    public String getActivationToken() {
+        return activationToken;
+    }
+
+    public void setActivationToken(String activationToken) {
+        this.activationToken = activationToken;
+    }
+
+    public LocalDateTime getTokenExpiry() {
+        return tokenExpiry;
+    }
+
+    public void setTokenExpiry(LocalDateTime tokenExpiry) {
+        this.tokenExpiry = tokenExpiry;
+    }
+
+    public Boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(Boolean activated) {
+        isActivated = activated;
     }
 
     public Long getId() {

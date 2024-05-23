@@ -1,10 +1,12 @@
 package com.fcst.student.RecycleRewards.web;
 
+import com.fcst.student.RecycleRewards.EmailConfiguration;
 import com.fcst.student.RecycleRewards.model.*;
 import com.fcst.student.RecycleRewards.model.enums.Role;
 import com.fcst.student.RecycleRewards.repository.PrizeRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.AddressService;
+import com.fcst.student.RecycleRewards.service.EmailService;
 import com.fcst.student.RecycleRewards.service.PurchaseService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
@@ -14,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class UserController {
@@ -46,6 +46,16 @@ public class UserController {
 
     @Autowired
     private PrizeRepository prizeRepository;
+
+
+    @Autowired
+    private EmailConfiguration emailConfiguration;
+
+    @Autowired
+    private JavaMailSender emailSender;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     public UserController(UserService userService, LoggedUser loggedUser, ModelMapper modelMapper) {
@@ -249,15 +259,20 @@ public class UserController {
     @PostMapping("/register")
     public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String ageConfirmation, RedirectAttributes redirectAttributes, HttpSession session) {
         if (!password.equals(confirmPassword)) {
-            redirectAttributes.addFlashAttribute("error", "Passwords do not match");
+            redirectAttributes.addFlashAttribute("error", "Паролите не съвпадат.");
             return "redirect:/register";
         }
 
         if (!"yes".equals(ageConfirmation)) {
-            redirectAttributes.addFlashAttribute("error", "Age confirmation not accepted");
+            redirectAttributes.addFlashAttribute("error", "Трябва да потвърдите, че имате навършени 18 години.");
             return "redirect:/register";
         }
 
+        User emailUser = userService.findByEmail(email);
+        if (emailUser != null) {
+            redirectAttributes.addFlashAttribute("error", "Вече има регистриран потребител с този email адрес.");
+            return "redirect:/register";
+        }
         Address address = new Address();
         addressService.saveAddress(address);
 
@@ -266,15 +281,25 @@ public class UserController {
         user.setLastName(lastName);
         user.setTotalPoints(0);
         user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password)); // Encode the password
+        user.setPassword(passwordEncoder.encode(password));
         user.setRegistrationDate(LocalDateTime.now());
         user.setRole(Role.CLIENT);
-
         user.setAddressId(address.getId());
+
+        // Generate activation token
+        String token = UUID.randomUUID().toString();
+        user.setActivationToken(token);
+        user.setTokenExpiry(LocalDateTime.now().plusHours(24));
+        user.setActivated(false);
 
         try {
             userService.saveUser(user);
             session.setAttribute("userId", user.getId());
+
+            emailService.sendActivationEmail(user.getEmail(), token);
+
+            emailConfiguration.printEmailSettings();
+
             redirectAttributes.addFlashAttribute("success", true);
             return "redirect:/register";
         } catch (Exception e) {
@@ -282,6 +307,7 @@ public class UserController {
             return "redirect:/register";
         }
     }
+
 
     @PatchMapping("/myProfile")
     public ResponseEntity<String> updateProfile(@RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName, @RequestParam(required = false) String email, @RequestParam(required = false) Integer telephoneNumber, @RequestParam(required = false) String city, @RequestParam(required = false) Integer postCode, @RequestParam(required = false) String street, @RequestParam(required = false) Integer streetNumber, @RequestParam(required = false) Integer floor, @RequestParam(required = false) Integer apartmentNumber, HttpSession session) {

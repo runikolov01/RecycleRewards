@@ -28,4 +28,7 @@ public interface UserService {
 
     Integer getTotalBottlesForAllUsers();
 
+    public User findByActivationToken(String token);
+
+    public User findByEmail(String email);
 }
