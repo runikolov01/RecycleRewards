@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Activation</title>
-    <!-- Bootstrap CSS -->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Успешно активиране на профил</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -13,16 +12,16 @@
     </style>
 </head>
 <body>
+
+<div th:replace="~{fragments/navbar}"></div>
+
 <div class="container mt-5">
     <div class="jumbotron">
-        <h1 class="display-4 text-center">Account Activation</h1>
-        <div th:if="${success}" class="alert alert-success text-center">
-            <p th:text="${success}"></p>
-        </div>
-        <div th:if="${error}" class="alert alert-danger text-center">
-            <p th:text="${error}"></p>
-        </div>
+        <h1>Активиране на профила...!</h1>
     </div>
 </div>
+
+<div th:replace="~{fragments/footer}"></div>
+
 </body>
 </html>

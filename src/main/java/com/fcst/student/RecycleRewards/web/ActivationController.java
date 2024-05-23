@@ -21,21 +21,27 @@ public class ActivationController {
         User user = userService.findByActivationToken(token);
 
         if (user == null) {
-            redirectAttributes.addFlashAttribute("error", "Invalid activation token");
-            return "redirect:/login";
+            redirectAttributes.addFlashAttribute("error", "Вече сте активирали своя профил!");
+            return "redirect:/activated_profile";
         }
 
         if (user.getTokenExpiry().isBefore(LocalDateTime.now())) {
-            redirectAttributes.addFlashAttribute("error", "Activation token has expired");
-            return "redirect:/login";
+            userService.deleteUser(user.getId());
+            redirectAttributes.addFlashAttribute("linkExpired", "Линкът е изтекъл! Минали са повече от 24 часа от получаването на този email.");
+            return "redirect:/activated_profile";
         }
 
         user.setActivated(true);
-        user.setActivationToken(null); // Remove the activation token after successful activation
-        user.setTokenExpiry(null); // Remove the token expiry after successful activation
+        user.setActivationToken(null);
+        user.setTokenExpiry(null);
         userService.saveUser(user);
 
-        redirectAttributes.addFlashAttribute("success", "Account activated successfully");
-        return "redirect:/login";
+        redirectAttributes.addFlashAttribute("success", "Профилът е активиран успешно!");
+        return "redirect:/activated_profile";
+    }
+
+    @GetMapping("/activated_profile")
+    public String showFailedActivation() {
+        return "activated_profile";
     }
 }

@@ -82,6 +82,7 @@ public class UserController {
         return "register";
     }
 
+
     @GetMapping("/login")
     public String loginForm(@RequestParam(required = false) String error, Model model, HttpSession session) {
         Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
@@ -295,7 +296,6 @@ public class UserController {
         user.setRole(Role.CLIENT);
         user.setAddressId(address.getId());
 
-        // Generate activation token
         String token = UUID.randomUUID().toString();
         user.setActivationToken(token);
         user.setTokenExpiry(LocalDateTime.now().plusHours(24));
@@ -303,7 +303,6 @@ public class UserController {
 
         try {
             userService.saveUser(user);
-//            session.setAttribute("userId", user.getId());
 
             emailService.sendActivationEmail(user, token);
 

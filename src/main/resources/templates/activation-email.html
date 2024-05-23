@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Активирайте Вашия профил</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #28a745; /* Green color */
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #999999;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>Активиране на Вашия профил в приложението RecycleRewards</h2>
+    </div>
+    <p>Здравейте, ${firstName} ${lastName},</p>
+    <p>Благодарим за Вашата регистрация! Моля да натиснете върху бутона в следващите 24 часа, за да активирате Вашия
+        профил:</p>
+    <br>
+    <div style="text-align: center;">
+        <a class="btn" href="${activationUrl}">Активиране на профила</a>
+    </div>
+    <p style="margin-top: 20px;">Ако не сте създали заявка за регистрация, моля игнорирайте този имейл.</p>
+    <p class="footer">С най-добри пожелания,<br>Екипът на RecycleRewards</p>
+    <a class="navbar-brand"><img alt="Logo" height="40"
+                                 src="https://i.ibb.co/mNc3k5P/logo-removebg-preview.png"> RecycleRewards</a>
+</div>
+</body>
+</html>

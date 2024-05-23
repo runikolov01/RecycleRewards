@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="images/logo-removebg-preview.png" rel="icon" type="image/png">
+    <title>Активиране на профил</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar}"></div>
+
+<div class="container mt-5">
+    <div class="jumbotron text-center p-4" th:if="${error}">
+        <h1 class="display-4 text-center"><img alt="Declined" class="img-fluid" height="120" src="/images/decline.svg"
+                                               width="120"> Профилът е вече активиран!</h1>
+        <div class="alert alert-danger text-center"><p th:text="${error}"></p>
+            <p> Можете да влезете в него <a href="/login"> тук</a>.</p></div>
+    </div>
+
+
+    <div class="jumbotron text-center p-4" th:if="${linkExpired}">
+        <h1 class="display-4 text-center"><img alt="Declined" class="img-fluid" height="120" src="/images/decline.svg"
+                                               width="120">Неуспешно активиране на профил!</h1>
+        <div class="alert alert-danger text-center"><p th:text="${linkExpired}"></p>
+            <p> Регистрирайте се отново <a href="/register"> тук</a>.</p></div>
+    </div>
+
+    <div class="jumbotron text-center p-4" th:if="${success}">
+        <h1 class="display-4 text-center"><img alt="Accepted" class="img-fluid" height="120" src="/images/accept.svg"
+                                               width="120">Успешна активация на профил!</h1>
+        <div class="alert alert-success text-center"><p th:text="${success}"></p>
+            <p> Можете да влезете в него <a href="/login"> тук</a>.</p></div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer}"></div>
+
+</body>
+</html>

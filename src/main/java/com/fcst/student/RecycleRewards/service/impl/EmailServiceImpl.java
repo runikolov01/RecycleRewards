@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Service
@@ -27,22 +28,20 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendActivationEmail(User user, String token) {
-        String subject = "Activate Your Account";
-        String activationUrl = "http://localhost:8080/activate?token=" + token;
+        String subject = "Активирайте Вашия профил";
+        String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8);
+        String activationUrl = "http://localhost:8080/activate?token=" + encodedToken;
 
         try {
-            // Load HTML template
             Resource resource = resourceLoader.getResource("classpath:/templates/activation-email.html");
             InputStream inputStream = resource.getInputStream();
             String htmlContent = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
 
-            // Replace placeholders with actual values
             htmlContent = htmlContent
                     .replace("${firstName}", user.getFirstName())
                     .replace("${lastName}", user.getLastName())
                     .replace("${activationUrl}", activationUrl);
 
-            // Create and send email
             MimeMessage mimeMessage = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setTo(user.getEmail());
@@ -51,6 +50,9 @@ public class EmailServiceImpl implements EmailService {
             emailSender.send(mimeMessage);
 
             System.out.println("Activation email sent to " + user.getEmail());
+
+            System.out.println("EncodedToken: " + encodedToken);
+            System.out.println("Activation Url: " + activationUrl);
         } catch (Exception e) {
             e.printStackTrace();
         }
