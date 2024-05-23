@@ -4,6 +4,7 @@ import com.fcst.student.RecycleRewards.model.Prize;
 import com.fcst.student.RecycleRewards.model.enums.PrizeType;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,15 +16,15 @@ public interface PrizeService {
 
     List<Prize> getAllPrizes();
 
-    List<Prize> getPrizesByType(PrizeType type);
-
     boolean purchasePrize(Long userId, Long prizeId);
 
     void setWinnerForPrize(Long prizeId, Long userId);
 
     List<Prize> getPrizesWithoutWinners();
 
-    List<Prize> getPrizesByTypeAndRemainedTicketsGreaterThan(PrizeType type, int remainedTickets);
+    List<Prize> getPrizesByTypeAndStartDateBefore(PrizeType type, LocalDateTime date);
 
-    List<Prize> getAllPrizesWithRemainedTicketsGreaterThan(int remainedTickets);
+    List<Prize> getAllPrizesWithRemainedTicketsGreaterThanAndStartDateBefore(Integer tickets, LocalDateTime date);
+
+    List<Prize> getPrizesByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(PrizeType type, Integer tickets, LocalDateTime date);
 }

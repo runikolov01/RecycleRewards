@@ -49,10 +49,6 @@ public class PrizeServiceImpl implements PrizeService {
         return prizeRepository.findAll();
     }
 
-    @Override
-    public List<Prize> getPrizesByType(PrizeType type) {
-        return prizeRepository.findByType(type);
-    }
 
     @Override
     public boolean purchasePrize(Long userId, Long prizeId) {
@@ -118,12 +114,17 @@ public class PrizeServiceImpl implements PrizeService {
     }
 
     @Override
-    public List<Prize> getPrizesByTypeAndRemainedTicketsGreaterThan(PrizeType type, int remainedTickets) {
-        return prizeRepository.findByTypeAndRemainedTicketsGreaterThan(type, remainedTickets);
+    public List<Prize> getAllPrizesWithRemainedTicketsGreaterThanAndStartDateBefore(Integer tickets, LocalDateTime date) {
+        return prizeRepository.findByRemainedTicketsGreaterThanAndStartDateBefore(tickets, date);
     }
 
     @Override
-    public List<Prize> getAllPrizesWithRemainedTicketsGreaterThan(int remainedTickets) {
-        return prizeRepository.findByRemainedTicketsGreaterThan(remainedTickets);
+    public List<Prize> getPrizesByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(PrizeType type, Integer tickets, LocalDateTime date) {
+        return prizeRepository.findByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(type, tickets, date);
+    }
+
+    @Override
+    public List<Prize> getPrizesByTypeAndStartDateBefore(PrizeType type, LocalDateTime date) {
+        return prizeRepository.findByTypeAndStartDateBefore(type, date);
     }
 }

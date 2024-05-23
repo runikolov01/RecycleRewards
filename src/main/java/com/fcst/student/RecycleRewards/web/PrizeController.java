@@ -63,16 +63,28 @@ public class PrizeController {
             }
         }
 
+//        List<Prize> prizes;
+//        if (type != null) {
+//            if (type.equals(PrizeType.INSTANT) || type.equals(PrizeType.RAFFLE)) {
+//                prizes = prizeService.getPrizesByTypeAndRemainedTicketsGreaterThan(type, 0);
+//            } else {
+//                prizes = prizeService.getPrizesByType(type);
+//            }
+//        } else {
+//            prizes = prizeService.getAllPrizesWithRemainedTicketsGreaterThan(0);
+//        }
+
         List<Prize> prizes;
         if (type != null) {
             if (type.equals(PrizeType.INSTANT) || type.equals(PrizeType.RAFFLE)) {
-                prizes = prizeService.getPrizesByTypeAndRemainedTicketsGreaterThan(type, 0);
+                prizes = prizeService.getPrizesByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(type, 0, LocalDateTime.now());
             } else {
-                prizes = prizeService.getPrizesByType(type);
+                prizes = prizeService.getPrizesByTypeAndStartDateBefore(type, LocalDateTime.now());
             }
         } else {
-            prizes = prizeService.getAllPrizesWithRemainedTicketsGreaterThan(0);
+            prizes = prizeService.getAllPrizesWithRemainedTicketsGreaterThanAndStartDateBefore(0, LocalDateTime.now());
         }
+
 
         session.setAttribute("prizes", prizes);
         model.addAttribute("prizes", prizes);
