@@ -20,7 +20,7 @@ public class User {
     private LocalDateTime tokenExpiry;
 
     @Column(name = "is_activated")
-    private Boolean isActivated;
+    private boolean isActivated;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -79,7 +79,7 @@ public class User {
         this.prizes = prizes;
     }
 
-    public User(Long id, String activationToken, LocalDateTime tokenExpiry, Boolean isActivated, String firstName, String lastName, Integer totalPoints, Long addressId, Address address, String email, String password, LocalDateTime registrationDate, Integer phone, Role role, List<Prize> prizes, Integer totalBottles) {
+    public User(Long id, String activationToken, LocalDateTime tokenExpiry, boolean isActivated, String firstName, String lastName, Integer totalPoints, Long addressId, Address address, String email, String password, LocalDateTime registrationDate, Integer phone, Role role, List<Prize> prizes, Integer totalBottles) {
         this.id = id;
         this.activationToken = activationToken;
         this.tokenExpiry = tokenExpiry;
@@ -114,11 +114,11 @@ public class User {
         this.tokenExpiry = tokenExpiry;
     }
 
-    public Boolean isActivated() {
+    public boolean isActivated() {
         return isActivated;
     }
 
-    public void setActivated(Boolean activated) {
+    public void setActivated(boolean activated) {
         isActivated = activated;
     }
 

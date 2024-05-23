@@ -20,6 +20,9 @@
         <div class="alert alert-danger" role="alert" th:if="${error}">
             Невалиден email или парола! Опитайте отново!
         </div>
+        <div class="alert alert-danger" role="alert" th:if="${errorNotActivated}">
+            За да влезете в своя профил, трябва да потвърдите email-а си като отворите изпратения линк!
+        </div>
 
         <div class="row">
             <div class="col-md-8">
@@ -30,7 +33,7 @@
                         <input class="form-control" id="email" name="email" required type="text">
                     </div>
                     <div class="form-group">
-                        <img alt="email" height="18" src="/images/password.svg" width="22">
+                        <img alt="password" height="18" src="/images/password.svg" width="22">
                         <label for="password">Парола:</label>
                         <input class="form-control" id="password" name="password" required type="password">
                     </div>
@@ -50,11 +53,9 @@
 </div>
 <div th:replace="~{fragments/footer}"></div>
 
-
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </body>
