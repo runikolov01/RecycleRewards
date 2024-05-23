@@ -27,7 +27,7 @@ public class ActivationController {
 
         if (user.getTokenExpiry().isBefore(LocalDateTime.now())) {
             userService.deleteUser(user.getId());
-            redirectAttributes.addFlashAttribute("linkExpired", "Линкът е изтекъл! Минали са повече от 24 часа от получаването на този email.");
+            redirectAttributes.addFlashAttribute("linkExpired", "Линкът е изтекъл! Изминали са повече от 24 часа от получаването на този email.");
             return "redirect:/activated_profile";
         }
 

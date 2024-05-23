@@ -10,6 +10,7 @@ import com.fcst.student.RecycleRewards.service.EmailService;
 import com.fcst.student.RecycleRewards.service.PurchaseService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.modelmapper.ModelMapper;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -65,7 +67,12 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String registerForm(Model model, HttpSession session) {
+    public String registerForm(Model model, HttpSession session, HttpServletRequest request) {
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+        if (inputFlashMap != null) {
+            model.addAllAttributes(inputFlashMap);
+        }
+
         Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
         if (loggedIn == null) {
             loggedIn = false;
@@ -267,22 +274,37 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String ageConfirmation, RedirectAttributes redirectAttributes, HttpSession session, Model model) {
+    public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email,
+                                 @RequestParam String password, @RequestParam String confirmPassword,
+                                 @RequestParam(required = false) String ageConfirmation, RedirectAttributes redirectAttributes,
+                                 HttpSession session, Model model) {
         if (!password.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("error", "Паролите не съвпадат.");
+            redirectAttributes.addFlashAttribute("firstName", firstName);
+            redirectAttributes.addFlashAttribute("lastName", lastName);
+            redirectAttributes.addFlashAttribute("email", email);
             return "redirect:/register";
         }
 
-        if (!"yes".equals(ageConfirmation)) {
-            redirectAttributes.addFlashAttribute("error", "Трябва да потвърдите, че имате навършени 18 години.");
+        if (ageConfirmation == null || !"yes".equals(ageConfirmation)) {
+            redirectAttributes.addFlashAttribute("error", "Трябва да потвърдите, че имате навършени 18 години. Ако не сте пълнолетен, не можете да се регистрирате.");
+            redirectAttributes.addFlashAttribute("firstName", firstName);
+            redirectAttributes.addFlashAttribute("lastName", lastName);
+            redirectAttributes.addFlashAttribute("email", email);
+            redirectAttributes.addFlashAttribute("password", password);
+            redirectAttributes.addFlashAttribute("confirmPassword", confirmPassword);
             return "redirect:/register";
         }
 
         User emailUser = userService.findByEmail(email);
         if (emailUser != null) {
             redirectAttributes.addFlashAttribute("error", "Вече има регистриран потребител с този email адрес.");
+            redirectAttributes.addFlashAttribute("firstName", firstName);
+            redirectAttributes.addFlashAttribute("lastName", lastName);
+            redirectAttributes.addFlashAttribute("email", email);
             return "redirect:/register";
         }
+
         Address address = new Address();
         addressService.saveAddress(address);
 
