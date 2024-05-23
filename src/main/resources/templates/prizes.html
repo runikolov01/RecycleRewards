@@ -12,7 +12,7 @@
 <div th:replace="~{fragments/navbar}"></div>
 
 <div class="container mt-5">
-    <div class="jumbotron">
+    <div class="jumbotron p-4">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="display-4">Награди 🎁</h1>
             <div th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
