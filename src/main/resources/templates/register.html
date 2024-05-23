@@ -18,7 +18,7 @@
         <hr class="my-4">
 
         <div class="alert alert-success" role="alert" th:if="${success}">
-            Вие се регистрирахте успешно. Можете да влезете в своя профил <a href="/login"> тук</a>.
+            <strong>Вие се регистрирахте успешно!</strong> <span th:text="${success}"></span>
         </div>
 
         <div class="alert alert-danger" role="alert" th:if="${error}">

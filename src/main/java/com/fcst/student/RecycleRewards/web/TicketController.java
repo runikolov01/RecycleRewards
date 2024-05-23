@@ -119,12 +119,14 @@ public class TicketController {
             }
         }
         Integer totalBottles = userService.getTotalBottlesForAllUsers();
+        if (totalBottles == null) {
+            totalBottles = 0;
+        }
         model.addAttribute("totalBottles", totalBottles);
         Double totalKg = totalBottles * 0.015;
         model.addAttribute("totalKg", totalKg);
         return "home";
     }
-
 
     @GetMapping("/about")
     public String about(Model model, HttpSession session) {

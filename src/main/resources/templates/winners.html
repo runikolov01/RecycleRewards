@@ -15,7 +15,7 @@
     <div class="jumbotron">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="display-4">Печеливши от томболи🎁</h1>
-            <div th:if="${loggedIn && loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
+            <div th:if="${loggedIn != null and loggedUser != null and loggedIn and loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
                 <a class="btn-sm btn-primary" href="/admin_raffle">Теглене на печелившите от томболите</a>
             </div>
         </div>

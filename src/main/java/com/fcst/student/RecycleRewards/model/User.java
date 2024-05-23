@@ -20,7 +20,7 @@ public class User {
     private LocalDateTime tokenExpiry;
 
     @Column(name = "is_activated")
-    private boolean isActivated;
+    private boolean isActivated = false;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;

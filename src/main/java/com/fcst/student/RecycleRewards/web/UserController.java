@@ -266,7 +266,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String ageConfirmation, RedirectAttributes redirectAttributes, HttpSession session) {
+    public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String ageConfirmation, RedirectAttributes redirectAttributes, HttpSession session, Model model) {
         if (!password.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("error", "Паролите не съвпадат.");
             return "redirect:/register";
@@ -303,16 +303,16 @@ public class UserController {
 
         try {
             userService.saveUser(user);
-            session.setAttribute("userId", user.getId());
+//            session.setAttribute("userId", user.getId());
 
             emailService.sendActivationEmail(user.getEmail(), token);
 
             emailConfiguration.printEmailSettings();
 
-            redirectAttributes.addFlashAttribute("success", true);
-            return "redirect:/register";
+            model.addAttribute("success", "За да активирате своя профил, в следващите 24 часа трябва да натиснете върху линка, изпратен на Вашия email адрес.");
+            return "register";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error registering user");
+            redirectAttributes.addFlashAttribute("error", "Грешка при регистрацията на потребителя.");
             return "redirect:/register";
         }
     }
