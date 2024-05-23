@@ -29,7 +29,7 @@ public class User {
     private String lastName;
 
     @Column(name = "total_points", nullable = false)
-    private Integer totalPoints;
+    private int totalPoints;
 
     @Column(name = "address_id") // Mapping the address_id field
     private Long addressId; // New field to hold the address_id
@@ -60,7 +60,7 @@ public class User {
     private List<Prize> prizes;
 
     @Column(name = "total_bottles")
-    private Integer totalBottles;
+    private int totalBottles;
 
     public User() {
     }
@@ -79,7 +79,7 @@ public class User {
         this.prizes = prizes;
     }
 
-    public User(Long id, String activationToken, LocalDateTime tokenExpiry, boolean isActivated, String firstName, String lastName, Integer totalPoints, Long addressId, Address address, String email, String password, LocalDateTime registrationDate, Integer phone, Role role, List<Prize> prizes, Integer totalBottles) {
+    public User(Long id, String activationToken, LocalDateTime tokenExpiry, boolean isActivated, String firstName, String lastName, int totalPoints, Long addressId, Address address, String email, String password, LocalDateTime registrationDate, Integer phone, Role role, List<Prize> prizes, int totalBottles) {
         this.id = id;
         this.activationToken = activationToken;
         this.tokenExpiry = tokenExpiry;
@@ -146,11 +146,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Integer getTotalPoints() {
+    public int getTotalPoints() {
         return totalPoints;
     }
 
-    public void setTotalPoints(Integer totalPoints) {
+    public void setTotalPoints(int totalPoints) {
         this.totalPoints = totalPoints;
     }
 
@@ -222,11 +222,11 @@ public class User {
         prizes.add(prize);
     }
 
-    public Integer getTotalBottles() {
+    public int getTotalBottles() {
         return totalBottles;
     }
 
-    public void setTotalBottles(Integer totalBottles) {
+    public void setTotalBottles(int totalBottles) {
         this.totalBottles = totalBottles;
     }
 }

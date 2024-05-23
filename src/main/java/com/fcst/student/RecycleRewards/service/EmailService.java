@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface EmailService {
-     void sendActivationEmail(String email, String token);
+    void sendActivationEmail(User user, String token);
 }

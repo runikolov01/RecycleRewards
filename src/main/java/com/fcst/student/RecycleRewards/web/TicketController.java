@@ -103,9 +103,13 @@ public class TicketController {
             if (user != null) {
                 Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
 
-                User currentUser = userService.getUserById(userId);
-                Integer userTotalBottles = currentUser.getTotalBottles();
-                Double userKgBottles = userTotalBottles * 0.015;
+                Double userKgBottles = 0.00;
+                Integer userTotalBottles = user.getTotalBottles();
+                if (userTotalBottles == null) {
+                    user.setTotalBottles(0);
+                }
+                userKgBottles = userTotalBottles * 0.015;
+
 
                 model.addAttribute("userTotalBottles", userTotalBottles);
                 model.addAttribute("userKgBottles", userKgBottles);

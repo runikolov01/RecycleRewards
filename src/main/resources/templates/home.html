@@ -36,7 +36,9 @@
         <div th:if="${loggedUser!=null}">
             <h1 class="display-4">Поздравления❗</h1>
             <hr class="my-4">
-            <h4 class="text-success font-italic">Вие сте добавили <span th:text="${userTotalBottles}">0</span> бутилки
+
+            <h4 class="text-success font-italic">Вие сте добавили <span
+                    th:text="${userTotalBottles != null ? userTotalBottles : '0'}">0</span> бутилки
                 в нашите машини като по този начин сте рециклирали ~<span
                         th:text="${#numbers.formatDecimal(userKgBottles, 1, 'DEFAULT', 2, 'DEFAULT')}">0</span>кг.
                 пластмаса!

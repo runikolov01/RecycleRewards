@@ -305,7 +305,7 @@ public class UserController {
             userService.saveUser(user);
 //            session.setAttribute("userId", user.getId());
 
-            emailService.sendActivationEmail(user.getEmail(), token);
+            emailService.sendActivationEmail(user, token);
 
             emailConfiguration.printEmailSettings();
 
