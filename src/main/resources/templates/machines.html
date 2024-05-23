@@ -12,7 +12,7 @@
 <div th:replace="~{fragments/navbar}"></div>
 
 <div class="container mt-5">
-    <div class="jumbotron">
+    <div class="jumbotron p-4">
         <h1 class="display-4">📍Локации</h1>
         <p class="lead">Вижте къде можете да рециклирате своите бутилки:</p>
 
@@ -37,10 +37,18 @@
                 <tr th:each="machine : ${machines}">
                     <td><span th:text="${machine.id}"></span></td>
                     <td><span th:text="${machine.locationName}"></span></td>
-                    <td><span th:text="${machine.getAddress().city}"></span></td>
-                    <td><span th:text="${machine.getAddress().postcode}"></span></td>
-                    <td><span th:text="${machine.getAddress().street}"></span></td>
-                    <td><span th:text="${machine.getAddress().streetNumber}"></span></td>
+                    <td><span
+                            th:text="${machine.address != null and machine.address.city != null ? machine.address.city : ''}"></span>
+                    </td>
+                    <td><span
+                            th:text="${machine.address != null and machine.address.postcode != null ? machine.address.postcode : ''}"></span>
+                    </td>
+                    <td><span
+                            th:text="${machine.address != null and machine.address.street != null ? machine.address.street : ''}"></span>
+                    </td>
+                    <td><span
+                            th:text="${machine.address != null and machine.address.streetNumber != null ? machine.address.streetNumber : ''}"></span>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -58,7 +66,6 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:inline="javascript">
-    /*<![CDATA[*/
     function initMap() {
         var mapOptions = {
             center: {lat: 42.6977, lng: 23.3219},
@@ -71,20 +78,38 @@
             {
                 lat: 42.6418715,
                 lng: 23.3361706,
-                title: 'Кауфланд - Малинова долина',
+                title: 'Kaufland - Малинова долина',
                 description: 'ж.к. Малинова долина, ул. „Проф. д-р Иван Странски“ 20, 1000, София'
             },
             {
                 lat: 42.6458327,
                 lng: 23.3791261,
-                title: 'Кауфланд - Младост',
-                description: 'ж.к. Младост 3Младост, ул. „Филип Аврамов“ 3, 1712, София'
+                title: 'Kaufland - Младост',
+                description: 'ж.к. Младост 3, Младост, ул. „Филип Аврамов“ 3, 1712, София'
             },
             {
                 lat: 42.670452,
                 lng: 23.2734864,
-                title: 'Кауфланд - Витоша',
+                title: 'Kaufland - Витоша',
                 description: 'ж.к. Бъкстон, ул. „Тодор Каблешков“ 3, 1618, София'
+            },
+            {
+                lat: 42.73134,
+                lng: 23.2854301,
+                title: 'Lidl - Хан Кубрат',
+                description: 'ж.к. Връбница 1, ул. „Xан Kубрат“ 67, 1229 София'
+            },
+            {
+                lat: 42.7002825,
+                lng: 23.3241214,
+                title: 'Lidl - Екзарх Йосиф',
+                description: 'София център, ул. „Екзарх Йосиф“ 37, 1000 София'
+            },
+            {
+                lat: 42.68954,
+                lng: 23.24667,
+                title: 'Lidl - Президент Линкълн',
+                description: '  бул. „Президент Линкълн“ 76, 1632 София'
             },
         ];
 
@@ -112,7 +137,6 @@
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
-    /*]]>*/
 </script>
 </body>
 </html>

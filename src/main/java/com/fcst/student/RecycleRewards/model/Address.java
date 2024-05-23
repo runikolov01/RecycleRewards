@@ -19,19 +19,19 @@ public class Address {
     private String street;
 
     @Column(name = "street_number")
-    private int streetNumber;
+    private Integer streetNumber;
 
     @Column
-    private int floor;
+    private Integer floor;
 
     @Column(name = "apartment_number")
-    private int apartmentNumber;
+    private Integer apartmentNumber;
 
 
     public Address() {
     }
 
-    public Address(Long id, String city, int postcode, String street, int streetNumber, int floor, int apartmentNumber) {
+    public Address(Long id, String city, int postcode, String street, Integer streetNumber, Integer floor, Integer apartmentNumber) {
         this.id = id;
         this.city = city;
         this.postcode = postcode;
@@ -41,7 +41,7 @@ public class Address {
         this.apartmentNumber = apartmentNumber;
     }
 
-    public Address(Long id, String city, int postcode, String street, int streetNumber) {
+    public Address(Long id, String city, int postcode, String street, Integer streetNumber) {
         this.id = id;
         this.city = city;
         this.postcode = postcode;
@@ -81,7 +81,7 @@ public class Address {
         this.street = street;
     }
 
-    public int getStreetNumber() {
+    public Integer getStreetNumber() {
         return streetNumber;
     }
 
@@ -89,7 +89,7 @@ public class Address {
         this.streetNumber = streetNumber;
     }
 
-    public int getFloor() {
+    public Integer getFloor() {
         return floor;
     }
 
@@ -97,11 +97,11 @@ public class Address {
         this.floor = floor;
     }
 
-    public int getApartmentNumber() {
+    public Integer getApartmentNumber() {
         return apartmentNumber;
     }
 
-    public void setApartmentNumber(int apartmentNumber) {
+    public void setApartmentNumber(Integer apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
     }
 }
