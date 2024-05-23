@@ -309,6 +309,10 @@ public class UserController {
         addressService.saveAddress(address);
 
         User user = new User();
+
+        Long userCode = userService.generateUniqueUserCode();
+        user.setUserCode(userCode);
+
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setTotalPoints(0);

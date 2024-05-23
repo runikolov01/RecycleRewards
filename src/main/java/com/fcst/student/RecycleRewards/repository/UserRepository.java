@@ -24,4 +24,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Integer getTotalBottlesSum();
 
     User findByActivationToken(String activationToken);
+
+    @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.userCode = :userCode")
+    boolean existsByUserCode(@Param("userCode") Long userCode);
 }

@@ -13,6 +13,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false, name = "user_code")
+    private Long userCode;
+
     @Column(name = "activation_token")
     private String activationToken;
 
@@ -65,8 +68,9 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, Integer totalPoints, Long addressId, String email, String password, Integer phone, Role role, List<Prize> prizes) {
+    public User(Long id, Long userCode, String firstName, String lastName, Integer totalPoints, Long addressId, String email, String password, Integer phone, Role role, List<Prize> prizes) {
         this.id = id;
+        this.userCode = userCode;
         this.firstName = firstName;
         this.lastName = lastName;
         this.totalPoints = totalPoints;
@@ -79,8 +83,9 @@ public class User {
         this.prizes = prizes;
     }
 
-    public User(Long id, String activationToken, LocalDateTime tokenExpiry, boolean isActivated, String firstName, String lastName, int totalPoints, Long addressId, Address address, String email, String password, LocalDateTime registrationDate, Integer phone, Role role, List<Prize> prizes, int totalBottles) {
+    public User(Long id, Long userCode, String activationToken, LocalDateTime tokenExpiry, boolean isActivated, String firstName, String lastName, int totalPoints, Long addressId, Address address, String email, String password, LocalDateTime registrationDate, Integer phone, Role role, List<Prize> prizes, int totalBottles) {
         this.id = id;
+        this.userCode = userCode;
         this.activationToken = activationToken;
         this.tokenExpiry = tokenExpiry;
         this.isActivated = isActivated;
@@ -96,6 +101,14 @@ public class User {
         this.role = role;
         this.prizes = prizes;
         this.totalBottles = totalBottles;
+    }
+
+    public Long getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(Long userCode) {
+        this.userCode = userCode;
     }
 
     public String getActivationToken() {

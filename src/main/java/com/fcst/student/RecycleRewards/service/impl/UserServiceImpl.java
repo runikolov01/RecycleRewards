@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -82,5 +83,22 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    @Override
+    public Long generateUniqueUserCode() {
+        Long userCode;
+        do {
+            userCode = generateRandomCode();
+        } while (userRepository.existsByUserCode(userCode));
+        return userCode;
+    }
+
+    @Override
+    public Long generateRandomCode() {
+        Random random = new Random();
+        // Generate a random 8-digit number
+        return 10000000L + random.nextLong() % 90000000L;
+    }
+
 
 }

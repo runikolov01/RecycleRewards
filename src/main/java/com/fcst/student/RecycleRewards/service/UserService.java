@@ -31,4 +31,8 @@ public interface UserService {
     User findByActivationToken(String token);
 
     User findByEmail(String email);
+
+    Long generateUniqueUserCode();
+
+    Long generateRandomCode();
 }
