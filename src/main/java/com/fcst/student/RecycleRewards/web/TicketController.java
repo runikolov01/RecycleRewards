@@ -249,9 +249,9 @@ public class TicketController {
                     ticket.setRegisteredOn(LocalDateTime.now());
                     ticket.setRegisteredBy(currentUser);
 
-                    Integer currentBottlesCount = ticket.getPoints() / 5;
+                    int currentBottlesCount = ticket.getPoints() / 5;
                     currentUser.setTotalBottles(currentUser.getTotalBottles() + currentBottlesCount);
-                    Integer userTotalBottles = currentUser.getTotalBottles();
+                    int userTotalBottles = currentUser.getTotalBottles();
 
                     ticketRepository.save(ticket);
 
