@@ -57,8 +57,8 @@ public class User {
     private Role role;
 
     @ManyToMany
-    @JoinTable(name = "person_won_prizes",
-            joinColumns = @JoinColumn(name = "person_id"),
+    @JoinTable(name = "prize_winners",
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "prize_id"))
     private List<Prize> prizes;
 

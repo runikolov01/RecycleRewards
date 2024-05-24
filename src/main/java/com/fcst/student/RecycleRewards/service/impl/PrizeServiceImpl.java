@@ -100,8 +100,9 @@ public class PrizeServiceImpl implements PrizeService {
             User winner = optionalWinner.get();
 
             // Add the winner to the prize's list of winners
-//            prize.addWinner(winner);
+            // prize.addWinner(winner);
 
+            prize.addParticipant(winner);
             // Save the updated prize
             prize.setRemainedTickets(0);
             prize.setEndDate(LocalDateTime.now());

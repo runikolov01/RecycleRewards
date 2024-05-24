@@ -35,14 +35,12 @@ public class Prize {
     private LocalDateTime endDate;
 
 
-    @ManyToMany
-    @JoinTable(name = "prize_participants",
-            joinColumns = @JoinColumn(name = "prize_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @ManyToMany(mappedBy = "prizes")
     private List<User> participants;
 
     @Enumerated(EnumType.STRING)
     private PrizeType type;
+
 
     public Prize() {
 
@@ -128,9 +126,14 @@ public class Prize {
         return participants;
     }
 
-    public void setParticipants(List<User> participants) {
-        this.participants = participants;
+    public void addParticipant(User user) {
+        participants.add(user);
     }
+
+    public void removeParticipant(User user) {
+        participants.remove(user);
+    }
+
 
     public PrizeType getType() {
         return type;

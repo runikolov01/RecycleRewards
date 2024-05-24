@@ -14,7 +14,7 @@ import java.util.List;
 public interface PrizeRepository extends JpaRepository<Prize, Long> {
     List<Prize> findByType(PrizeType type);
 
-    @Query(value = "SELECT * FROM Prizes WHERE id NOT IN (SELECT DISTINCT prize_id FROM person_won_prizes) AND type = 'RAFFLE'", nativeQuery = true)
+    @Query(value = "SELECT * FROM Prizes WHERE id NOT IN (SELECT DISTINCT prize_id FROM prize_winners) AND type = 'RAFFLE'", nativeQuery = true)
     List<Prize> findRafflePrizesWithoutWinners();
 
     @Query("SELECT u.id, p.id FROM User u JOIN u.prizes p")
