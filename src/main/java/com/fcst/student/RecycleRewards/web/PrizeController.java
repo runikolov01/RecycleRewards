@@ -262,14 +262,14 @@ public class PrizeController {
         Integer neededPoints = prize.getNeededPointsToBuy();
 
         if (totalPoints < neededPoints) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Нямате достатъчно точки, за да купите билет за тази награда.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Нямате достатъчно точки, за да закупите билет за тази награда.");
         }
 
         boolean purchaseSuccessful = prizeService.purchasePrize(userId, prizeId);
 
         if (purchaseSuccessful) {
             session.setAttribute("totalPoints", totalPoints - neededPoints);
-            return ResponseEntity.ok("Билетът за тази награда е купен успешно!");
+            return ResponseEntity.ok("Билетът за тази награда е закупен успешно!");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Възникна грешка, моля опитайте отново!");
         }

@@ -181,6 +181,9 @@
                         <th scope="col">Награда<select class="filter-select" data-column="1">
                             <option value="">Всички</option>
                         </select></th>
+                        <th scope="col">Дата на печелившия билет<select class="filter-select" data-column="1">
+                            <option value="">Всички</option>
+                        </select></th>
                         <th scope="col">Печеливш код<select class="filter-select" data-column="2">
                             <option value="">Всички</option>
                         </select></th>
@@ -191,6 +194,9 @@
                         <td th:if="${details != null}" th:text="${details.prizeId}"></td>
                         <td th:if="${details != null}"
                             th:text="${details.prizeName != null ? details.prizeName : ''} + ' - ' + ${details.prizeDescription != null ? details.prizeDescription : ''}"></td>
+<!--                        <td th:if="${details != null}"-->
+<!--                            th:text="${details.prizeDate != null ? details.prizeDate : 'не е налична'}"></td>-->
+                        <td th:text="${details.prizeDate}"></td>
                         <td th:if="${details != null}" th:text="${details.winnerCode}"></td>
                     </tr>
                     </tbody>

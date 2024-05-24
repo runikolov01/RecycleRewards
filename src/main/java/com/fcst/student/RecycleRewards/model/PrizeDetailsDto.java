@@ -1,11 +1,22 @@
 package com.fcst.student.RecycleRewards.model;
 
+import java.time.LocalDateTime;
+
 public class PrizeDetailsDto {
 
     private Long prizeId;
     private String prizeName;
     private String prizeDescription;
+    private LocalDateTime prizeDate;
     private String winnerCode;
+
+    public PrizeDetailsDto(Long prizeId, String prizeName, String prizeDescription, LocalDateTime prizeDate, String winnerCode) {
+        this.prizeId = prizeId;
+        this.prizeName = prizeName;
+        this.prizeDescription = prizeDescription;
+        this.prizeDate = prizeDate;
+        this.winnerCode = winnerCode;
+    }
 
     public PrizeDetailsDto(Long prizeId, String prizeName, String prizeDescription, String winnerCode) {
         this.prizeId = prizeId;
@@ -39,6 +50,14 @@ public class PrizeDetailsDto {
 
     public void setPrizeDescription(String prizeDescription) {
         this.prizeDescription = prizeDescription;
+    }
+
+    public LocalDateTime getPrizeDate() {
+        return prizeDate;
+    }
+
+    public void setPrizeDate(LocalDateTime prizeDate) {
+        this.prizeDate = prizeDate;
     }
 
     public String getWinnerCode() {

@@ -133,6 +133,7 @@ public class PrizeServiceImpl implements PrizeService {
                         purchase.getPrize().getId(),
                         purchase.getPrize().getName(),
                         purchase.getPrize().getDescription(),
+                        purchase.getPurchaseDate(),
                         purchase.getWinnerCode()))
                 .collect(Collectors.toList());
     }

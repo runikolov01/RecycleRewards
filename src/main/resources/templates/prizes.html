@@ -50,16 +50,17 @@
                                     <br>
                                     <div class="product-list-item-btn dynamic-button">
                                         <button class="btn btn-primary"
-                                                th:onclick="'checkLoginAndProceed(' + ${prize.id} + ', ' + ${prize.neededPointsToBuy} + ')'">
+                                                th:onclick="'checkLoginAndProceed(' + ${prize.id} + ', ' + ${prize.neededPointsToBuy} + ', event)'">
                                             <span th:text="${prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).INSTANT ? 'Обменям точки за наградата' : (prize.type == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE ? 'Купувам 1 билет за участие в томболата' : 'Unknown')}"></span>
                                         </button>
-
+                                    </div>
+                                    <div class="product-list-item-cnt"
+                                         th:text="'Оставащи бройки: ' + ${prize.remainedTickets}">
+                                        Оставащи бройки: yy/zz
                                     </div>
                                 </footer>
                             </div>
-                            <div class="product-list-item-cnt" th:text="'Оставащи бройки: ' + ${prize.remainedTickets}">
-                                Оставащи бройки: yy/zz
-                            </div>
+
                         </article>
                     </div>
                 </div>
@@ -100,7 +101,9 @@
         window.location.href = `/prizes?type=${filter}`;
     }
 
-    function checkLoginAndProceed(prizeId) {
+    function checkLoginAndProceed(prizeId, neededPointsToBuy, event) {
+        event.preventDefault(); // Prevent default button behavior
+
         fetch(`/prizes/buy?prizeId=${prizeId}`, {
             method: 'POST',
             credentials: 'same-origin' // Send cookies along with the request
@@ -115,17 +118,27 @@
             })
             .then(data => {
                 // Handle success response from the server
-                alert(data); // Show a success message to the user
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = data;
+                messageDiv.style.color = 'green';
+
+                const button = event.target; // The button that was clicked
+                const parentDiv = button.closest('.product-list-item-box'); // Find the closest parent div with the class 'product-list-item-box'
+                parentDiv.insertAdjacentElement('afterend', messageDiv); // Insert the message after the parent div
             })
             .catch(error => {
                 // Handle error response from the server
                 console.error('There was a problem with the fetch operation:', error);
-                const errorMessage = document.createElement('div');
-                errorMessage.textContent = error.message;
-                errorMessage.style.color = 'red';
-                document.getElementById('prizeContainer').appendChild(errorMessage);
+                const errorMessageDiv = document.createElement('div');
+                errorMessageDiv.textContent = error.message;
+                errorMessageDiv.style.color = 'red';
+
+                const button = event.target; // The button that was clicked
+                const parentDiv = button.closest('.product-list-item-box'); // Find the closest parent div with the class 'product-list-item-box'
+                parentDiv.insertAdjacentElement('afterend', errorMessageDiv); // Insert the error message after the parent div
             });
     }
+
 </script>
 </body>
 </html>
