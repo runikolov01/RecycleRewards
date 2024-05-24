@@ -229,27 +229,22 @@ public class UserController {
         User user = userService.getUserByEmail(email);
         if (user != null && userService.verifyPassword(user, password)) {
             if (user.isActivated()) {
-                // Authentication successful, store user ID and login status in session
                 session.setAttribute("userId", user.getId());
                 session.setAttribute("loggedIn", true);
                 session.setAttribute("userRole", user.getRole());
 
-                // Fetch total points for the logged-in user
                 Integer totalPoints = user.getTotalPoints();
 
-                // Set total points as a session attribute
                 session.setAttribute("totalPoints", totalPoints);
                 return "redirect:/home";
             } else {
-                // User not activated
                 model.addAttribute("errorNotActivated", true);
-                model.addAttribute("error", false); // Set error to false to avoid null value
+                model.addAttribute("error", false);
                 return "login";
             }
         } else {
-            // Authentication failed
             model.addAttribute("error", true);
-            model.addAttribute("errorNotActivated", false); // Set errorNotActivated to false to avoid null value
+            model.addAttribute("errorNotActivated", false);
             return "login";
         }
     }
