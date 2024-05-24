@@ -1,7 +1,15 @@
 # RecycleRewards
 A web-based application to encourage users to recycle plastic bottles
 _(The project is still in progress..)_
+Frontend: HTML, CSS, JavaScript, Bootstrap
+Backend: Java, Spring, Hibernate, MySQL
 
-![image](https://github.com/runikolov01/RecycleRewards/assets/45116925/9ee47561-ce3f-4e52-832d-4150e2ab8eea)
+# The user guide in Bulgarian is available at the following link:https://drive.google.com/file/d/1W8FeRbjeOIrO926rsgrETRBNOchUCnKN/view?usp=sharing 
 
-![image](https://github.com/runikolov01/RecycleRewards/assets/45116925/3261f821-05d4-4f23-9d27-1adb3a8b3a0a)
+![index](https://github.com/runikolov01/RecycleRewards/assets/45116925/4899f371-bd0f-4d8b-9ac1-d5c132104ac0)
+
+![home_about](https://github.com/runikolov01/RecycleRewards/assets/45116925/28c9ed3b-3761-4ef1-9a36-e895a32ec7f2)
+
+![image](https://github.com/runikolov01/RecycleRewards/assets/45116925/a6591bbf-9be9-46cb-b54b-db3696a2f052)
+![image](https://github.com/runikolov01/RecycleRewards/assets/45116925/f6b1a75e-8c62-4ca3-adcc-13225b9f42d3)
+![image](https://github.com/runikolov01/RecycleRewards/assets/45116925/76246ab1-ff85-427d-ab60-ff21cf3eceb5)
