@@ -5,10 +5,7 @@ import com.fcst.student.RecycleRewards.model.*;
 import com.fcst.student.RecycleRewards.model.enums.Role;
 import com.fcst.student.RecycleRewards.repository.PrizeRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
-import com.fcst.student.RecycleRewards.service.AddressService;
-import com.fcst.student.RecycleRewards.service.EmailService;
-import com.fcst.student.RecycleRewards.service.PurchaseService;
-import com.fcst.student.RecycleRewards.service.UserService;
+import com.fcst.student.RecycleRewards.service.*;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -48,6 +45,9 @@ public class UserController {
 
     @Autowired
     private PrizeRepository prizeRepository;
+
+    @Autowired
+    private PrizeService prizeService;
 
 
     @Autowired
@@ -90,6 +90,31 @@ public class UserController {
     }
 
 
+    @GetMapping("/myProfile")
+    public String showProfile(Model model, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+
+        User loggedUser = userService.getUserById(userId);
+        List<PrizeDetailsDto> prizeDetails = purchaseService.getPrizeDetailsForUser(userId);
+        model.addAttribute("prizeDetails", prizeDetails != null ? prizeDetails : Collections.emptyList());
+
+        Integer totalPoints = loggedUser.getTotalPoints();
+        model.addAttribute("totalPoints", totalPoints);
+        model.addAttribute("loggedUser", loggedUser);
+        session.setAttribute("loggedUser", loggedUser);
+        model.addAttribute("loggedIn", true);
+
+        List<Purchase> purchases = purchaseService.getPurchasesByUserId(userId);
+        model.addAttribute("purchases", purchases);
+
+        model.addAttribute("loggedUser", loggedUser);
+
+        return "myprofile";
+    }
+
     @GetMapping("/login")
     public String loginForm(@RequestParam(required = false) String error, Model model, HttpSession session) {
         Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
@@ -112,34 +137,34 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/myProfile")
-    public String openMyProfile(Model model, HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId != null) {
-            // Fetch user details from the database using the user ID
-            User user = userService.getUserById(userId);
-            if (user != null) {
-                // Get total points for the logged-in user
-                Integer totalPoints = user.getTotalPoints();
-
-                // Pass total points and loggedIn status to the view
-                model.addAttribute("totalPoints", totalPoints);
-                model.addAttribute("loggedUser", user);
-                session.setAttribute("loggedUser", user);
-                model.addAttribute("loggedIn", true); // Set loggedIn to true
-
-                List<Purchase> purchases = purchaseService.getPurchasesByUserId(userId);
-                model.addAttribute("purchases", purchases);
-
-                List<PrizeDetailsDto> prizeDetails = purchaseService.getPrizeDetailsForUser(userId);
-                model.addAttribute("prizeDetails", prizeDetails);
-
-                return "myProfile";
-            }
-        }
-        // Handle case when user ID is not found or user is not found
-        return "redirect:/login"; // or any other appropriate action
-    }
+//    @GetMapping("/myProfile")
+//    public String openMyProfile(Model model, HttpSession session) {
+//        Long userId = (Long) session.getAttribute("userId");
+//        if (userId != null) {
+//            // Fetch user details from the database using the user ID
+//            User user = userService.getUserById(userId);
+//            if (user != null) {
+//                // Get total points for the logged-in user
+//                Integer totalPoints = user.getTotalPoints();
+//
+//                // Pass total points and loggedIn status to the view
+//                model.addAttribute("totalPoints", totalPoints);
+//                model.addAttribute("loggedUser", user);
+//                session.setAttribute("loggedUser", user);
+//                model.addAttribute("loggedIn", true); // Set loggedIn to true
+//
+//                List<Purchase> purchases = purchaseService.getPurchasesByUserId(userId);
+//                model.addAttribute("purchases", purchases);
+//
+//                List<PrizeDetailsDto> prizeDetails = purchaseService.getPrizeDetailsForUser(userId);
+//                model.addAttribute("prizeDetails", prizeDetails);
+//
+//                return "myProfile";
+//            }
+//        }
+//        // Handle case when user ID is not found or user is not found
+//        return "redirect:/login"; // or any other appropriate action
+//    }
 
 
     @GetMapping("/users")

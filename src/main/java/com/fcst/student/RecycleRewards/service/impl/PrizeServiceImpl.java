@@ -1,6 +1,7 @@
 package com.fcst.student.RecycleRewards.service.impl;
 
 import com.fcst.student.RecycleRewards.model.Prize;
+import com.fcst.student.RecycleRewards.model.PrizeDetailsDto;
 import com.fcst.student.RecycleRewards.model.Purchase;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.model.enums.PrizeType;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PrizeServiceImpl implements PrizeService {
@@ -110,7 +112,7 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     public List<Prize> getPrizesWithoutWinners() {
-        return prizeRepository.findPrizesWithoutWinners();
+        return prizeRepository.findRafflePrizesWithoutWinners();
     }
 
     @Override
@@ -121,6 +123,18 @@ public class PrizeServiceImpl implements PrizeService {
     @Override
     public List<Prize> getPrizesByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(PrizeType type, Integer tickets, LocalDateTime date) {
         return prizeRepository.findByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(type, tickets, date);
+    }
+
+    @Override
+    public List<PrizeDetailsDto> getPrizeDetailsByUserId(Long userId) {
+        List<Purchase> purchases = purchaseRepository.findByUserId(userId);
+        return purchases.stream()
+                .map(purchase -> new PrizeDetailsDto(
+                        purchase.getPrize().getId(),
+                        purchase.getPrize().getName(),
+                        purchase.getPrize().getDescription(),
+                        purchase.getWinnerCode()))
+                .collect(Collectors.toList());
     }
 
     @Override

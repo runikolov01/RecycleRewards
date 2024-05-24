@@ -21,7 +21,10 @@
             <span th:if="${loggedUser != null && loggedUser.getLastName() != null}"
                   th:text="${loggedUser.getLastName()}"></span>
         </h1>
-
+        <h1 class="display-4">
+            ID №: <span th:if="${loggedUser != null && loggedUser.getUserCode() != null}"
+                        th:text="${loggedUser.getUserCode()}"></span>
+        </h1>
         <hr class="my-4">
 
         <div class="form-group">
@@ -158,7 +161,7 @@
                         <td th:text="${purchase.id}"></td>
                         <td th:text="${purchase.purchaseDate}"></td>
                         <td th:text="${purchase.prize.getId()}"></td>
-                        <td th:text="${details.prizeName ?: ''} + ' - ' + ${details.prizeDescription ?: ''}"></td>
+                        <td th:text="${purchase.prize.name != null ? purchase.prize.name + ' - ' + (purchase.prize.description != null ? purchase.prize.description : '') : ''}"></td>
                         <td th:text="${purchase.winnerCode}"></td>
                     </tr>
                     </tbody>
@@ -169,7 +172,7 @@
         <div id="wonPrizes" style="display: none;">
             <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
                 <h2>Спечелени награди</h2>
-                <table class="table table-striped">
+                <table class="table table-striped" th:if="${not #lists.isEmpty(prizeDetails)}">
                     <thead>
                     <tr>
                         <th scope="col">ID Награда<select class="filter-select" data-column="0">
@@ -185,9 +188,10 @@
                     </thead>
                     <tbody>
                     <tr th:each="details : ${prizeDetails}">
-                        <td th:text="${details.prizeId}"></td>
-                        <td th:text="${details.prizeName ?: ''} + ' - ' + ${details.prizeDescription ?: ''}"></td>
-                        <td th:text="${details.winnerCode}"></td>
+                        <td th:if="${details != null}" th:text="${details.prizeId}"></td>
+                        <td th:if="${details != null}"
+                            th:text="${details.prizeName != null ? details.prizeName : ''} + ' - ' + ${details.prizeDescription != null ? details.prizeDescription : ''}"></td>
+                        <td th:if="${details != null}" th:text="${details.winnerCode}"></td>
                     </tr>
                     </tbody>
                 </table>

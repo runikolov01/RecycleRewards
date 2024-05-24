@@ -13,13 +13,10 @@ import java.util.List;
 public interface PrizeRepository extends JpaRepository<Prize, Long> {
     List<Prize> findByType(PrizeType type);
 
+    @Query(value = "SELECT * FROM Prizes WHERE id NOT IN (SELECT DISTINCT prize_id FROM person_won_prizes) AND type = 'RAFFLE'", nativeQuery = true)
+    List<Prize> findRafflePrizesWithoutWinners();
 
-    @Query(value = "SELECT * FROM Prizes WHERE id NOT IN (SELECT DISTINCT prize_id FROM person_won_prizes)", nativeQuery = true)
-    List<Prize> findPrizesWithoutWinners();
 
-    List<Prize> findByTypeAndRemainedTicketsGreaterThan(PrizeType prizeType, int remainedTickets);
-
-    List<Prize> findByRemainedTicketsGreaterThan(int remainedTickets);
 
     @Query("SELECT u.id, p.id FROM User u JOIN u.prizes p")
     List<Object[]> findAllWonPrizes();

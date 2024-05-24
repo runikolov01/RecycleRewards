@@ -1,6 +1,7 @@
 package com.fcst.student.RecycleRewards.service;
 
 import com.fcst.student.RecycleRewards.model.Prize;
+import com.fcst.student.RecycleRewards.model.PrizeDetailsDto;
 import com.fcst.student.RecycleRewards.model.enums.PrizeType;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +28,7 @@ public interface PrizeService {
     List<Prize> getAllPrizesWithRemainedTicketsGreaterThanAndStartDateBefore(Integer tickets, LocalDateTime date);
 
     List<Prize> getPrizesByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(PrizeType type, Integer tickets, LocalDateTime date);
+
+    List<PrizeDetailsDto> getPrizeDetailsByUserId(Long userId);
+
 }
