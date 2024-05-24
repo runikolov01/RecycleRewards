@@ -1,4 +1,3 @@
-![image](https://github.com/runikolov01/RecycleRewards/assets/45116925/3e605d33-39eb-495d-8942-7a2530854a2e)# RecycleRewards
 A web-based application to encourage users to recycle plastic bottles
 _(The project is still in progress..)_
 Frontend: HTML, CSS, JavaScript, Bootstrap
