@@ -27,4 +27,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.userCode = :userCode")
     boolean existsByUserCode(@Param("userCode") Long userCode);
+
+    User findByUserCode(Long userCode);
 }

@@ -13,7 +13,7 @@
 
 <div class="container mt-5">
     <div class="jumbotron">
-        <h1 class="display-4">Теглене на победителите 🏆</h1>
+        <h1 class="display-4">Теглене на печелившите 🏆</h1>
         <hr>
         <form method="get" th:action="@{/admin_raffle}">
             <div class="form-group">
@@ -63,6 +63,11 @@
         <div class="mt-3" th:if="${participants != null}">
             <h2>Изтегли печелившия</h2>
             <hr>
+            <div class="form-group">
+                <label for="remainedTicketsCounter">Брой на оставащите билети:</label>
+                <input class="form-control" id="remainedTicketsCounter" readonly
+                       th:value="${remainingTickets}" type="number">
+            </div>
             <div class="form-group">
                 <label for="participantCounter">Брой на купените билети:</label>
                 <input class="form-control" id="participantCounter" readonly
@@ -116,7 +121,7 @@
 
             let prizeId = document.getElementById("prizeSelect").value;
             let purchaseId = null;
-            let userId = null;
+            let userCode = null;
 
             $('#winnerTable tbody').empty();
             let found = false;
@@ -126,12 +131,12 @@
                 if (idParticipation === randomNumber) {
                     found = true;
 
-                    // Get the purchaseId and userId from the row
+                    // Get the purchaseId and userCode from the row
                     purchaseId = parseInt($(this).find('th:eq(1)').text(), 10);
-                    userId = parseInt($(this).find('td:eq(1)').text(), 10);
+                    userCode = parseInt($(this).find('td:eq(1)').text(), 10);
 
                     console.log(purchaseId);
-                    console.log(userId)
+                    console.log(userCode)
 
                     let winnerRow = $('<tr>');
                     $(this).find('th, td').each(function () {
@@ -142,7 +147,7 @@
                     $.post("/connectPrizeWithWinner", {
                         prizeId: Number(prizeId),
                         purchaseId: Number(purchaseId),
-                        userId: Number(userId)
+                        userCode: Number(userCode)
                     }).done(function (data) {
                         console.log("Response from server:", data);
                     }).fail(function () {

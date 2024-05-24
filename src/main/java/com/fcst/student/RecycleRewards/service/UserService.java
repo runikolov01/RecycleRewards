@@ -35,4 +35,6 @@ public interface UserService {
     Long generateUniqueUserCode();
 
     Long generateRandomCode();
+
+    User getUserByUserCode(Long userCode);
 }

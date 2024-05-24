@@ -139,6 +139,17 @@ public class PrizeServiceImpl implements PrizeService {
     }
 
     @Override
+    public int getRemainingTicketsForPrize(Long prizeId) {
+        Prize prize = prizeRepository.findById(prizeId).orElse(null);
+        if (prize == null) {
+            return 0;
+        }
+        int totalTickets = prize.getTotalTickets();
+        int takenTickets = prize.getParticipants().size();
+        return totalTickets - takenTickets;
+    }
+
+    @Override
     public List<Prize> getPrizesByTypeAndStartDateBefore(PrizeType type, LocalDateTime date) {
         return prizeRepository.findByTypeAndStartDateBefore(type, date);
     }

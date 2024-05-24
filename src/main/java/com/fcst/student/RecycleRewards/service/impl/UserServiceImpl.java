@@ -100,5 +100,10 @@ public class UserServiceImpl implements UserService {
         return 10000000L + random.nextLong() % 90000000L;
     }
 
+    @Override
+    public User getUserByUserCode(Long userCode) {
+        return userRepository.findByUserCode(userCode);
+    }
+
 
 }

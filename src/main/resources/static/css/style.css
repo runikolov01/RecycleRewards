@@ -73,3 +73,6 @@ table, th, td {
     border-collapse: collapse !important;
     text-align: center;
 }
+.winner-row {
+    background-color: lightgreen;
+}

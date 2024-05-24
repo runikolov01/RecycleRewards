@@ -112,8 +112,8 @@
                            th:value="${loggedUser != null && loggedUser.getAddress() != null && loggedUser.getAddress().getApartmentNumber() != null ? loggedUser.getAddress().getApartmentNumber() : ''}"
                            type="number">
                 </div>
-                <button class="btn btn-primary" type="submit">Актуализиране на данните</button>
                 <div id="messageArea"></div>
+                <button class="btn btn-primary" onclick="submitForm()" type="button">Актуализиране на данните</button>
             </form>
         </div>
 
@@ -157,13 +157,15 @@
                     </thead>
                     <tbody>
                     <tr th:each="purchase : ${purchases}"
-                        th:if="${purchase.prize.getType() == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE}">
+                        th:if="${purchase.prize.getType() == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE}"
+                        th:class="${purchase.winnerCode != null ? 'winner-row' : ''}">
                         <td th:text="${purchase.id}"></td>
-                        <td th:text="${purchase.purchaseDate}"></td>
+                        <td th:text="${#temporals.format(purchase.purchaseDate, 'yyyy-MM-dd')}"></td>
                         <td th:text="${purchase.prize.getId()}"></td>
                         <td th:text="${purchase.prize.name != null ? purchase.prize.name + ' - ' + (purchase.prize.description != null ? purchase.prize.description : '') : ''}"></td>
                         <td th:text="${purchase.winnerCode}"></td>
                     </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -181,10 +183,10 @@
                         <th scope="col">Награда<select class="filter-select" data-column="1">
                             <option value="">Всички</option>
                         </select></th>
-                        <th scope="col">Дата на печелившия билет<select class="filter-select" data-column="1">
-                            <option value="">Всички</option>
-                        </select></th>
-                        <th scope="col">Печеливш код<select class="filter-select" data-column="2">
+<!--                        <th scope="col">Дата на печелившия билет<select class="filter-select" data-column="2">-->
+<!--                            <option value="">Всички</option>-->
+<!--                        </select></th>-->
+                        <th scope="col">Печеливш код<select class="filter-select" data-column="3">
                             <option value="">Всички</option>
                         </select></th>
                     </tr>
@@ -196,7 +198,7 @@
                             th:text="${details.prizeName != null ? details.prizeName : ''} + ' - ' + ${details.prizeDescription != null ? details.prizeDescription : ''}"></td>
 <!--                        <td th:if="${details != null}"-->
 <!--                            th:text="${details.prizeDate != null ? details.prizeDate : 'не е налична'}"></td>-->
-                        <td th:text="${details.prizeDate}"></td>
+<!--                        <td th:text="${details.prizeDate}"></td>-->
                         <td th:if="${details != null}" th:text="${details.winnerCode}"></td>
                     </tr>
                     </tbody>
@@ -287,6 +289,37 @@
             populateFilters();
         });
     });
+
+    // AJAX form submission
+    function submitForm() {
+        const form = document.getElementById('profileForm');
+        const formData = new FormData(form);
+        const messageArea = document.getElementById('messageArea');
+
+        fetch('/myProfile', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error updating profile: ' + response.status);
+                }
+                return response.text();
+            })
+            .then(data => {
+                messageArea.textContent = "Данните са актуализирани успешно!";
+                messageArea.style.color = 'green'; // Set text color to green for success message
+            })
+            .catch(error => {
+                if (error.message.includes('400')) {
+                    messageArea.textContent = "Моля, попълнете всички полета, маркирани със звездичка.";
+                } else {
+                    messageArea.textContent = error.message;
+                }
+                messageArea.style.color = 'red';
+            });
+    }
 </script>
+
 </body>
 </html>

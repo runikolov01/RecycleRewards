@@ -181,6 +181,11 @@ public class PrizeController {
                         }
                         model.addAttribute("participants", participants);
                         model.addAttribute("selectedPrizeId", prizeId);
+
+                        int remainingTickets = prizeService.getPrizeById(prizeId).get().getRemainedTickets();
+
+                        model.addAttribute("remainingTickets", remainingTickets);
+
                     } else {
                         model.addAttribute("selectedPrizeId", null);
                     }
@@ -215,9 +220,9 @@ public class PrizeController {
 
     @PostMapping("/connectPrizeWithWinner")
     @ResponseBody
-    public ResponseEntity<String> connectPrizeWithWinner(@RequestParam Long prizeId, @RequestParam Long purchaseId, @RequestParam Long userId) {
+    public ResponseEntity<String> connectPrizeWithWinner(@RequestParam Long prizeId, @RequestParam Long purchaseId, @RequestParam Long userCode) {
         Prize prize = prizeService.getPrizeById(prizeId).orElse(null);
-        User user = userService.getUserById(userId);
+        User user = userService.getUserByUserCode(userCode);
         Purchase purchase = purchaseService.getPurchaseById(purchaseId);
 
         if (prize == null || user == null) {
