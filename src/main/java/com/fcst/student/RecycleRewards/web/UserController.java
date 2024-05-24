@@ -5,7 +5,10 @@ import com.fcst.student.RecycleRewards.model.*;
 import com.fcst.student.RecycleRewards.model.enums.Role;
 import com.fcst.student.RecycleRewards.repository.PrizeRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
-import com.fcst.student.RecycleRewards.service.*;
+import com.fcst.student.RecycleRewards.service.AddressService;
+import com.fcst.student.RecycleRewards.service.EmailService;
+import com.fcst.student.RecycleRewards.service.PurchaseService;
+import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +17,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,15 +48,9 @@ public class UserController {
     @Autowired
     private PrizeRepository prizeRepository;
 
-    @Autowired
-    private PrizeService prizeService;
-
 
     @Autowired
     private EmailConfiguration emailConfiguration;
-
-    @Autowired
-    private JavaMailSender emailSender;
 
     @Autowired
     private EmailService emailService;
@@ -137,36 +133,6 @@ public class UserController {
         return "login";
     }
 
-//    @GetMapping("/myProfile")
-//    public String openMyProfile(Model model, HttpSession session) {
-//        Long userId = (Long) session.getAttribute("userId");
-//        if (userId != null) {
-//            // Fetch user details from the database using the user ID
-//            User user = userService.getUserById(userId);
-//            if (user != null) {
-//                // Get total points for the logged-in user
-//                Integer totalPoints = user.getTotalPoints();
-//
-//                // Pass total points and loggedIn status to the view
-//                model.addAttribute("totalPoints", totalPoints);
-//                model.addAttribute("loggedUser", user);
-//                session.setAttribute("loggedUser", user);
-//                model.addAttribute("loggedIn", true); // Set loggedIn to true
-//
-//                List<Purchase> purchases = purchaseService.getPurchasesByUserId(userId);
-//                model.addAttribute("purchases", purchases);
-//
-//                List<PrizeDetailsDto> prizeDetails = purchaseService.getPrizeDetailsForUser(userId);
-//                model.addAttribute("prizeDetails", prizeDetails);
-//
-//                return "myProfile";
-//            }
-//        }
-//        // Handle case when user ID is not found or user is not found
-//        return "redirect:/login"; // or any other appropriate action
-//    }
-
-
     @GetMapping("/users")
     public String showUsers(Model model, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
@@ -224,8 +190,8 @@ public class UserController {
         //List of maps to store the User and Prize objects associated with each prize
         List<Map<String, Object>> prizeList = new ArrayList<>();
         for (Object[] objArray : wonPrizes) {
-            userId = (Long) objArray[0]; // User ID is at index 0
-            Long prizeId = (Long) objArray[1]; // Prize ID is at index 1
+            userId = (Long) objArray[0];
+            Long prizeId = (Long) objArray[1];
 
             User user = userRepository.findById(userId).orElse(null);
             Prize prize = prizeRepository.findById(prizeId).orElse(null);
