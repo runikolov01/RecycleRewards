@@ -38,8 +38,8 @@
                     <tr>
                         <th class="text-center" scope="col">ID Участие</th>
                         <th class="text-center" scope="col">ID Поръчка</th>
-                        <th class="text-center" scope="col">Дата</th>
-                        <th class="text-center" scope="col">ID Потребител</th>
+                        <th class="text-center" scope="col">Дата на поръчка</th>
+                        <th class="text-center" scope="col">ID Потребител №</th>
                         <th class="text-center" scope="col">Име</th>
                         <th class="text-center" scope="col">Фамилия</th>
                     </tr>
@@ -48,8 +48,10 @@
                     <tr th:each="purchase, rowState : ${purchases}">
                         <th class="text-center" scope="row" th:text="${rowState.index + 1}">ID Участие</th>
                         <th class="text-center" th:text="${purchase.id}">ID Поръчка</th>
-                        <td class="text-center" th:text="${purchase.purchaseDate}">Дата</td>
-                        <td class="text-center" th:text="${purchase.getUser().id}">ID Потребител</td>
+                        <td class="text-center" th:text="${#temporals.format(purchase.purchaseDate, 'yyyy-MM-dd')}">Дата
+                            на поръчка
+                        </td>
+                        <td class="text-center" th:text="${purchase.getUser().userCode}">ID Потребител №</td>
                         <td class="text-center" th:text="${purchase.getUser().firstName}">Име</td>
                         <td class="text-center" th:text="${purchase.getUser().lastName}">Фамилия</td>
                     </tr>
@@ -81,7 +83,7 @@
                         <tr>
                             <th scope="col">№ Участие</th>
                             <th scope="col">ID Поръчка</th>
-                            <th scope="col">Дата</th>
+                            <th scope="col">Дата на поръчка</th>
                             <th scope="col">ID Потребител</th>
                             <th scope="col">Име</th>
                             <th scope="col">Фамилия</th>
@@ -92,9 +94,6 @@
                         </tbody>
                     </table>
                 </div>
-
-                <p id="winnerNumber"></p>
-                <p id="winnerDetails"></p>
             </div>
         </div>
     </div>
