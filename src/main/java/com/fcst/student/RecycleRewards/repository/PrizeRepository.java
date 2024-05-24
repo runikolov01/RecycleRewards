@@ -25,4 +25,9 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
     List<Prize> findByRemainedTicketsGreaterThanAndStartDateBefore(Integer tickets, LocalDateTime date);
 
     List<Prize> findByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(PrizeType type, Integer tickets, LocalDateTime date);
+
+    @Query("SELECT COUNT(p) > 0 FROM Prize p WHERE p.prizeCode = :prizeCode")
+    boolean existsByPrizeCode(@Param("prizeCode") Long prizeCode);
+
+    Prize findByPrizeCode(Long prizeCode);
 }

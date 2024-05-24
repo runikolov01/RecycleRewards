@@ -32,4 +32,8 @@ public interface PrizeService {
     List<PrizeDetailsDto> getPrizeDetailsByUserId(Long userId);
 
     int getRemainingTicketsForPrize(Long prizeId);
+
+    Long generateUniquePrizeCode();
+
+    Long generateRandomCode();
 }

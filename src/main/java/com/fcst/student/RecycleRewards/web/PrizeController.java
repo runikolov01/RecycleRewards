@@ -297,6 +297,9 @@ public class PrizeController {
         prize.setRemainedTickets(totalTickets);
         prize.setType(type);
 
+        Long prizeCode = prizeService.generateUniquePrizeCode();
+        prize.setPrizeCode(prizeCode);
+
         prizeService.savePrize(prize);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Вие добавихте наградата успешно!");

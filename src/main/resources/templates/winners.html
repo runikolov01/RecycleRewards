@@ -12,7 +12,7 @@
 <div th:replace="~{fragments/navbar}"></div>
 
 <div class="container mt-5">
-    <div class="jumbotron">
+    <div class="jumbotron p-4">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="display-4">Печеливши от томболи🎁</h1>
             <div th:if="${loggedIn != null and loggedUser != null and loggedIn and loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
@@ -33,7 +33,7 @@
                         <th class="text-center" scope="col">Дата на теглене</th>
                         <th class="text-center" scope="col">Награда</th>
                         <th class="text-center" scope="col">Описание</th>
-                        <th class="text-center" scope="col">ID Потребител №</th>
+                        <th class="text-center" scope="col">Потребител №</th>
                         <th class="text-center" scope="col">Име</th>
                         <th class="text-center" scope="col">Фамилия</th>
                     </tr>
@@ -41,7 +41,7 @@
                     <tbody>
                     <tr th:each="prize : ${wonPrizes}"
                         th:if="${prize.prize.getType() == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE}">
-                        <td><span class="text-center" th:text="${prize.prize.id}"></span></td>
+                        <td><span class="text-center" th:text="${prize.prize.prizeCode}"></span></td>
                         <td><span class="text-center"
                                   th:text="${#temporals.format(prize.prize.endDate, 'yyyy-MM-dd')}"></span></td>
                         <td><span class="text-center" th:text="${prize.prize.name}"></span></td>

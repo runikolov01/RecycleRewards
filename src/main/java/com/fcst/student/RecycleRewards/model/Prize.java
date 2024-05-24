@@ -13,6 +13,9 @@ public class Prize {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false, name = "prize_code")
+    private Long prizeCode;
+
     @Column(nullable = false)
     private String name;
 
@@ -64,6 +67,18 @@ public class Prize {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getPrizeCode() {
+        return prizeCode;
+    }
+
+    public void setPrizeCode(Long prizeCode) {
+        this.prizeCode = prizeCode;
+    }
+
+    public void setParticipants(List<User> participants) {
+        this.participants = participants;
     }
 
     public String getName() {

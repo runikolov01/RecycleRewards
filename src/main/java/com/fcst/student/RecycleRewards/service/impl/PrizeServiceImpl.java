@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -132,6 +133,7 @@ public class PrizeServiceImpl implements PrizeService {
         return purchases.stream()
                 .map(purchase -> new PrizeDetailsDto(
                         purchase.getPrize().getId(),
+                        purchase.getPrize().getPrizeCode(),
                         purchase.getPrize().getName(),
                         purchase.getPrize().getDescription(),
                         purchase.getPurchaseDate(),
@@ -148,6 +150,22 @@ public class PrizeServiceImpl implements PrizeService {
         int totalTickets = prize.getTotalTickets();
         int takenTickets = prize.getParticipants().size();
         return totalTickets - takenTickets;
+    }
+
+    @Override
+    public Long generateUniquePrizeCode() {
+        Long prizeCode;
+        do {
+            prizeCode = generateRandomCode();
+        } while (userRepository.existsByUserCode(prizeCode));
+        return prizeCode;
+    }
+
+    @Override
+    public Long generateRandomCode() {
+        Random random = new Random();
+        // Generate a random 8-digit number
+        return 10000000L + random.nextLong() % 90000000L;
     }
 
     @Override

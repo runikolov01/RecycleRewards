@@ -136,7 +136,7 @@
                             </select>
                         </th>
                         <th scope="col">
-                            ID Награда
+                            Награда №
                             <select class="filter-select" data-column="2">
                                 <option value="">Всички</option>
                             </select>
@@ -156,12 +156,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="purchase : ${purchases}"
-                        th:if="${purchase.prize.getType() == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE}"
-                        th:class="${purchase.winnerCode != null ? 'winner-row' : ''}">
+                    <tr th:class="${purchase.winnerCode != null ? 'winner-row' : ''}"
+                        th:each="purchase : ${purchases}"
+                        th:if="${purchase.prize.getType() == T(com.fcst.student.RecycleRewards.model.enums.PrizeType).RAFFLE}">
                         <td th:text="${purchase.id}"></td>
                         <td th:text="${#temporals.format(purchase.purchaseDate, 'yyyy-MM-dd')}"></td>
-                        <td th:text="${purchase.prize.getId()}"></td>
+                        <td th:text="${purchase.prize.getPrizeCode()}"></td>
                         <td th:text="${purchase.prize.name != null ? purchase.prize.name + ' - ' + (purchase.prize.description != null ? purchase.prize.description : '') : ''}"></td>
                         <td th:text="${purchase.winnerCode}"></td>
                     </tr>
@@ -177,28 +177,18 @@
                 <table class="table table-striped" th:if="${not #lists.isEmpty(prizeDetails)}">
                     <thead>
                     <tr>
-                        <th scope="col">ID Награда<select class="filter-select" data-column="0">
+                        <th scope="col">Награда<select class="filter-select" data-column="0">
                             <option value="">Всички</option>
                         </select></th>
-                        <th scope="col">Награда<select class="filter-select" data-column="1">
-                            <option value="">Всички</option>
-                        </select></th>
-<!--                        <th scope="col">Дата на печелившия билет<select class="filter-select" data-column="2">-->
-<!--                            <option value="">Всички</option>-->
-<!--                        </select></th>-->
-                        <th scope="col">Печеливш код<select class="filter-select" data-column="3">
+                        <th scope="col">Печеливш код<select class="filter-select" data-column="1">
                             <option value="">Всички</option>
                         </select></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="details : ${prizeDetails}">
-                        <td th:if="${details != null}" th:text="${details.prizeId}"></td>
                         <td th:if="${details != null}"
                             th:text="${details.prizeName != null ? details.prizeName : ''} + ' - ' + ${details.prizeDescription != null ? details.prizeDescription : ''}"></td>
-<!--                        <td th:if="${details != null}"-->
-<!--                            th:text="${details.prizeDate != null ? details.prizeDate : 'не е налична'}"></td>-->
-<!--                        <td th:text="${details.prizeDate}"></td>-->
                         <td th:if="${details != null}" th:text="${details.winnerCode}"></td>
                     </tr>
                     </tbody>

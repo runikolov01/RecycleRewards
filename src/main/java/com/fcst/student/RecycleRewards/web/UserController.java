@@ -95,8 +95,8 @@ public class UserController {
 
         User loggedUser = userService.getUserById(userId);
         List<PrizeDetailsDto> prizeDetails = purchaseService.getPrizeDetailsForUser(userId);
-        model.addAttribute("prizeDetails", prizeDetails != null ? prizeDetails : Collections.emptyList());
 
+        model.addAttribute("prizeDetails", prizeDetails != null ? prizeDetails : Collections.emptyList());
         Integer totalPoints = loggedUser.getTotalPoints();
         model.addAttribute("totalPoints", totalPoints);
         model.addAttribute("loggedUser", loggedUser);
