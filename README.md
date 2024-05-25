@@ -12,10 +12,7 @@ Backend: Java, Spring, Hibernate, MySQL
 
 ![login-failed](https://github.com/runikolov01/RecycleRewards/assets/45116925/ccaa181d-ed7b-4478-a239-9840b2b2ba09)
 
-
-
-
+![activation](https://github.com/runikolov01/RecycleRewards/assets/45116925/56c4d322-2161-4af9-8601-1c14300e92fd)
 
 ![image](https://github.com/runikolov01/RecycleRewards/assets/45116925/a6591bbf-9be9-46cb-b54b-db3696a2f052)
 ![image](https://github.com/runikolov01/RecycleRewards/assets/45116925/f6b1a75e-8c62-4ca3-adcc-13225b9f42d3)
-![image](https://github.com/runikolov01/RecycleRewards/assets/45116925/76246ab1-ff85-427d-ab60-ff21cf3eceb5)
