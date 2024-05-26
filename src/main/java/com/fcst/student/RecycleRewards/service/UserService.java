@@ -18,6 +18,8 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
+    User findByResetToken(String resetToken);
+
     boolean verifyPassword(User user, String password);
 
     void logout();
@@ -37,4 +39,6 @@ public interface UserService {
     Long generateRandomCode();
 
     User getUserByUserCode(Long userCode);
+
+    void resetPassword(Long userId, String newPassword);
 }

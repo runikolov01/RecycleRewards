@@ -44,6 +44,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByResetToken(String resetToken) {
+        return userRepository.findByResetToken(resetToken);
+    }
+
+    @Override
     public boolean verifyPassword(User user, String password) {
         return passwordEncoder.matches(password, user.getPassword());
     }
@@ -57,7 +62,6 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
 
     @Override
     public User getUserById(Long userId) {
@@ -105,5 +109,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUserCode(userCode);
     }
 
+    @Override
+    public void resetPassword(Long userId, String newPassword) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            String hashedPassword = passwordEncoder.encode(newPassword);
 
+            user.setPassword(hashedPassword);
+
+            userRepository.save(user);
+        }
+    }
 }

@@ -27,18 +27,31 @@
 
         <div class="row">
             <div class="col-md-8">
-                <form accept-charset="UTF-8" action="/login" method="post">
+                <form accept-charset="UTF-8" action="/login" id="login-form" method="post">
                     <div class="form-group">
                         <img alt="email" height="15" src="/images/email.svg" width="20">
                         <label for="email">Email:</label>
                         <input class="form-control" id="email" name="email" required type="text">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="password-group">
                         <img alt="password" height="18" src="/images/password.svg" width="22">
                         <label for="password">Парола:</label>
                         <input class="form-control" id="password" name="password" required type="password">
                     </div>
-                    <button class="btn btn-primary" type="submit">Вход</button>
+                    <div class="alert alert-success mt-3" id="email-sent-message" style="display: none;">
+                        You can check your email!
+                    </div>
+                    <div>
+                        <a href="#" id="forgot-password-link">Забравена парола?</a>
+                    </div>
+                    <br>
+
+                    <button class="btn btn-primary" id="submit-button" type="submit">Вход</button>
+                </form>
+
+                <form accept-charset="UTF-8" action="/forgot_password" id="forgot-password-form" method="post"
+                      style="display: none;">
+                    <input class="form-control" id="forgot-email" name="email" type="hidden">
                 </form>
                 <br>
             </div>
@@ -52,12 +65,41 @@
         <br>
     </div>
 </div>
+
 <div th:replace="~{fragments/footer}"></div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#forgot-password-link').click(function (e) {
+            e.preventDefault();
+            $('#password-group').hide();
+            $('#forgot-password-link').hide();
+            $('#submit-button').text('Изпрати линк на имейла за промяна на паролата');
+            $('#forgot-password-form').show();
+            $('#submit-button').off('click').on('click', function () {
+                $('#forgot-email').val($('#email').val());
+                $('#email-sent-message').show();
+                // Prevent the form submission
+                return false;
+            });
+
+        });
+
+        $('#submit-button').click(function (e) {
+            e.preventDefault();
+            handleLoginFormSubmission();
+        });
+
+        function handleLoginFormSubmission() {
+            $('#login-form').submit();
+        }
+    });
+</script>
 
 </body>
 </html>

@@ -65,6 +65,10 @@ public class User {
     @Column(name = "total_bottles")
     private int totalBottles;
 
+    @Column(name = "reset_token")
+    private String resetToken;
+
+
     public User() {
     }
 
@@ -241,5 +245,13 @@ public class User {
 
     public void setTotalBottles(int totalBottles) {
         this.totalBottles = totalBottles;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
     }
 }
