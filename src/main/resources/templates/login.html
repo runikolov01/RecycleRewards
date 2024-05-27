@@ -75,29 +75,42 @@
 
 <script>
     $(document).ready(function () {
+        function handleLoginFormSubmission() {
+            $('#login-form').submit();
+        }
+
         $('#forgot-password-link').click(function (e) {
             e.preventDefault();
             $('#password-group').hide();
-            $('#forgot-password-link').hide();
             $('#submit-button').text('Изпрати линк на имейла за промяна на паролата');
             $('#forgot-password-form').show();
-            $('#submit-button').off('click').on('click', function () {
+
+            $('#submit-button').off('click').on('click', function (e) {
+                e.preventDefault();
                 $('#forgot-email').val($('#email').val());
-                $('#email-sent-message').show();
-                // Prevent the form submission
-                return false;
+
+                $.ajax({
+                    type: 'POST',
+                    url: $('#forgot-password-form').attr('action'),
+                    data: $('#forgot-password-form').serialize(),
+                    success: function (response) {
+                        $('#email-sent-message').show().text('Имейлът е изпратен успешно.');
+                    },
+                    error: function (error) {
+                        $('#email-sent-message').show().text('Възникна грешка, моля опитайте отново...');
+                    }
+                });
             });
 
+            $('#login-form').off('submit').on('submit', function (e) {
+                e.preventDefault();
+            });
         });
 
         $('#submit-button').click(function (e) {
             e.preventDefault();
             handleLoginFormSubmission();
         });
-
-        function handleLoginFormSubmission() {
-            $('#login-form').submit();
-        }
     });
 </script>
 
