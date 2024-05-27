@@ -68,15 +68,6 @@ public class User {
     @Column(name = "reset_token")
     private String resetToken;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Purchase> purchases;
-
-    @OneToMany(mappedBy = "registeredBy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets;
-
-
-
-
     public User() {
     }
 
