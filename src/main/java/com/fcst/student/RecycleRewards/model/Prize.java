@@ -38,7 +38,7 @@ public class Prize {
     private LocalDateTime endDate;
 
 
-    @ManyToMany(mappedBy = "prizes")
+    @ManyToMany(mappedBy = "prizes", cascade = CascadeType.ALL)
     private List<User> participants;
 
     @Enumerated(EnumType.STRING)

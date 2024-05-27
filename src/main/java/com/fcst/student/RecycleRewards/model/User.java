@@ -34,11 +34,11 @@ public class User {
     @Column(name = "total_points", nullable = false)
     private int totalPoints;
 
-    @Column(name = "address_id") // Mapping the address_id field
-    private Long addressId; // New field to hold the address_id
+    @Column(name = "address_id")
+    private Long addressId;
 
-    @OneToOne
-    @JoinColumn(name = "address_id", insertable = false, updatable = false) // Mapping the relationship
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", insertable = false, updatable = false)
     private Address address;
 
     @Column(unique = true, nullable = false)
@@ -56,7 +56,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "prize_winners",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "prize_id"))

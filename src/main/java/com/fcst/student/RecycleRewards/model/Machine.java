@@ -12,7 +12,7 @@ public class Machine {
     @Column(name = "location_name", nullable = false)
     private String locationName;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 

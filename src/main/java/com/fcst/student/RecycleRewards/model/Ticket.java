@@ -30,7 +30,7 @@ public class Ticket {
     @Column(name = "registered_on")
     private LocalDateTime registeredOn;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
     private User registeredBy;
 
