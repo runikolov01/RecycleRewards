@@ -34,9 +34,6 @@ public class User {
     @Column(name = "total_points", nullable = false)
     private int totalPoints;
 
-//    @Column(name = "address_id")
-//    private Long addressId;
-
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id", insertable = false, updatable = false)
     private Address address;
@@ -67,6 +64,9 @@ public class User {
 
     @Column(name = "reset_token")
     private String resetToken;
+
+    @Column(name = "deleted_date")
+    private LocalDateTime deletedDate;
 
     public User() {
     }
@@ -251,5 +251,13 @@ public class User {
 
     public void setResetToken(String resetToken) {
         this.resetToken = resetToken;
+    }
+
+    public LocalDateTime getDeletedDate() {
+        return deletedDate;
+    }
+
+    public void setDeletedDate(LocalDateTime deletedDate) {
+        this.deletedDate = deletedDate;
     }
 }

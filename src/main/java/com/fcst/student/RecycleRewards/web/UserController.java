@@ -213,7 +213,6 @@ public class UserController {
 
     @GetMapping("/delete/{userCode}")
     public String deleteUser(@PathVariable("userCode") Long userCode) {
-
         userService.deleteUserByUserCode(userCode);
         return "redirect:/users";
     }
@@ -255,7 +254,7 @@ public class UserController {
     @PostMapping("/login")
     public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
         User user = userService.getUserByEmail(email);
-        if (user != null && userService.verifyPassword(user, password)) {
+        if (user != null && user.getDeletedDate() == null && userService.verifyPassword(user, password)) {
             if (user.isActivated()) {
                 session.setAttribute("userId", user.getId());
                 session.setAttribute("loggedIn", true);

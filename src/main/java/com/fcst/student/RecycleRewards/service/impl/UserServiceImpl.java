@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
@@ -42,7 +43,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteUserByUserCode(Long userCode) {
-        userRepository.deleteByUserCode(userCode);
+        User user = userRepository.findByUserCode(userCode);
+        user.setDeletedDate(LocalDateTime.now());
     }
 
     @Override

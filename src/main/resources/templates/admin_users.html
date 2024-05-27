@@ -22,6 +22,9 @@
             натискане: по обратен ред.</p>
         <br>
         <div style="overflow-x:auto; overflow-y:auto; max-height: 400px;">
+            <div class="alert alert-success mt-3" id="successMessage" style="display: none;">
+                Потребителят е изтрит успешно!
+            </div>
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
@@ -37,7 +40,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user, rowStat : ${users}">
+                <tr th:each="user, rowStat : ${users}" th:if="${user.deletedDate == null}">
                     <td><span class="text-center" th:text="${user.userCode}"></span></td>
                     <td><span class="editable text-center" contenteditable="true" th:text="${user.firstName}"></span>
                     </td>
@@ -103,129 +106,135 @@
 
                     $('#errorMessage').hide();
                 }
-                }).fail(function(xhr, status, error) {
-                    $('#errorMessage').show().text('Не е намерен потребител с този номер.');
-                    console.error('Възникна грешка:', error);
-                });
+            }).fail(function (xhr, status, error) {
+                $('#errorMessage').show().text('Не е намерен потребител с този номер.');
+                console.error('Възникна грешка:', error);
             });
         });
+    });
 
 
-        var sortOrders = {}; // Object to track sorting orders for each column
+    var sortOrders = {}; // Object to track sorting orders for each column
 
-        $('th').on('click', function () {
-            var columnIndex = $(this).index();
+    $('th').on('click', function () {
+        var columnIndex = $(this).index();
 
-            sortOrders[columnIndex] = (sortOrders[columnIndex] === 'asc') ? 'desc' : 'asc';
+        sortOrders[columnIndex] = (sortOrders[columnIndex] === 'asc') ? 'desc' : 'asc';
 
-            var $tbody = $('table tbody');
+        var $tbody = $('table tbody');
 
-            var rows = $tbody.find('tr').toArray();
-            rows.sort(function (a, b) {
-                var valueA = $(a).find('td:eq(' + columnIndex + ') span').text();
-                var valueB = $(b).find('td:eq(' + columnIndex + ') span').text();
+        var rows = $tbody.find('tr').toArray();
+        rows.sort(function (a, b) {
+            var valueA = $(a).find('td:eq(' + columnIndex + ') span').text();
+            var valueB = $(b).find('td:eq(' + columnIndex + ') span').text();
 
-                if (sortOrders[columnIndex] === 'asc') {
-                    return (valueA < valueB) ? -1 : (valueA > valueB) ? 1 : 0;
-                } else {
-                    return (valueA > valueB) ? -1 : (valueA < valueB) ? 1 : 0;
-                }
-            });
-
-            // Reorder the rows in the table
-            $.each(rows, function (index, row) {
-                $tbody.append(row);
-            });
+            if (sortOrders[columnIndex] === 'asc') {
+                return (valueA < valueB) ? -1 : (valueA > valueB) ? 1 : 0;
+            } else {
+                return (valueA > valueB) ? -1 : (valueA < valueB) ? 1 : 0;
+            }
         });
 
-
-        // Event handler for Edit button
-        $(document).on('click', '.edit-btn', function () {
-            // Find the closest row
-            var $row = $(this).closest('tr');
-
-            // Enable editing for all cells
-            $row.find('.editable').prop('contenteditable', true);
-
-            // Change background color of the row to yellow
-            $row.css('background-color', 'yellow');
-
-            // Hide the Delete button and show the Save button
-            $row.find('.delete-btn').hide();
-            $row.find('.save-btn').show();
-            $(this).hide();
+        // Reorder the rows in the table
+        $.each(rows, function (index, row) {
+            $tbody.append(row);
         });
+    });
 
-        // Event handler for Save button
-        $(document).on('click', '.save-btn', function () {
-            // Find the closest row
-            var $row = $(this).closest('tr');
 
-            // Disable editing for all cells
-            $row.find('.editable').prop('contenteditable', false);
+    // Event handler for Edit button
+    $(document).on('click', '.edit-btn', function () {
+        // Find the closest row
+        var $row = $(this).closest('tr');
 
-            // Revert background color of the row to white
-            $row.css('background-color', 'white');
+        // Enable editing for all cells
+        $row.find('.editable').prop('contenteditable', true);
 
-            // Show the Delete button and Edit button, hide the Save button
-            $row.find('.delete-btn').show();
-            $row.find('.edit-btn').show();
-            $(this).hide();
+        // Change background color of the row to yellow
+        $row.css('background-color', 'yellow');
 
-            // Extract updated data from the row
-            var userId = $row.find('td:eq(0) span').text();
-            var firstName = $row.find('td:eq(1) span').text();
-            var lastName = $row.find('td:eq(2) span').text();
-            var email = $row.find('td:eq(3) span').text();
-            var phone = $row.find('td:eq(4) span').text();
+        // Hide the Delete button and show the Save button
+        $row.find('.delete-btn').hide();
+        $row.find('.save-btn').show();
+        $(this).hide();
+    });
+
+    // Event handler for Save button
+    $(document).on('click', '.save-btn', function () {
+        // Find the closest row
+        var $row = $(this).closest('tr');
+
+        // Disable editing for all cells
+        $row.find('.editable').prop('contenteditable', false);
+
+        // Revert background color of the row to white
+        $row.css('background-color', 'white');
+
+        // Show the Delete button and Edit button, hide the Save button
+        $row.find('.delete-btn').show();
+        $row.find('.edit-btn').show();
+        $(this).hide();
+
+        // Extract updated data from the row
+        var userId = $row.find('td:eq(0) span').text();
+        var firstName = $row.find('td:eq(1) span').text();
+        var lastName = $row.find('td:eq(2) span').text();
+        var email = $row.find('td:eq(3) span').text();
+        var phone = $row.find('td:eq(4) span').text();
 
 // Send AJAX request to update user data
-            $.ajax({
-                url: '/update/' + userId,
-                type: 'PATCH',
-                contentType: 'application/json', // Set content type to JSON
-                data: JSON.stringify({
-                    id: userId,
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    phone: phone
-                }),
-                success: function (response) {
-                    // Handle success response
-                    console.log('User updated successfully');
-                },
-                error: function (xhr, status, error) {
-                    // Handle error response
-                    console.error('Error updating user');
-                }
-            });
-
+        $.ajax({
+            url: '/update/' + userId,
+            type: 'PATCH',
+            contentType: 'application/json', // Set content type to JSON
+            data: JSON.stringify({
+                id: userId,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone
+            }),
+            success: function (response) {
+                // Handle success response
+                console.log('User updated successfully');
+            },
+            error: function (xhr, status, error) {
+                // Handle error response
+                console.error('Error updating user');
+            }
         });
 
-        // Event handler for Delete button
-        $(document).on('click', '.delete-btn', function () {
-            // Find the closest row
-            var $row = $(this).closest('tr');
+    });
 
-            // Extract user ID from the Edit button in the same row
-            var userCode = $row.find('td:eq(0) span').text();
+    // Event handler for Delete button
+    $(document).on('click', '.delete-btn', function () {
+        // Find the closest row
+        var $row = $(this).closest('tr');
 
-            // Send AJAX request to delete user
-            $.ajax({
-                url: '/delete/' + userCode,
-                type: 'GET', // Change the request type to GET
-                success: function (response) {
-                    // Handle success response, maybe show a message or refresh the page
-                    console.log('User deleted successfully');
-                    window.location.reload(); // Refresh the page
-                },
-                error: function (xhr, status, error) {
-                    // Handle error response
-                    console.error('Error deleting user');
-                }
-            });
+        // Extract user ID from the Edit button in the same row
+        var userCode = $row.find('td:eq(0) span').text();
+
+        // Send AJAX request to delete user
+        $.ajax({
+            url: '/delete/' + userCode,
+            type: 'GET', // Change the request type to GET
+            success: function (response) {
+                // Handle success response, maybe show a message or refresh the page
+                console.log('User deleted successfully');
+                $('#successMessage').show();
+
+                window.location.reload(); // Refresh the page
+            },
+            error: function (xhr, status, error) {
+                // Handle error response
+                $('#successMessage').show();
+                console.error('Error deleting user');
+            }
         });
+        setTimeout(function () {
+            window.location.reload();
+        }, 4000);
+    });
 </script>
 
 </body>
