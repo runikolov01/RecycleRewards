@@ -31,4 +31,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserCode(Long userCode);
 
     User findByResetToken(String token);
+
+    void deleteByUserCode(Long userCode);
 }

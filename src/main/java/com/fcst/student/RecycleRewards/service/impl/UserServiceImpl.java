@@ -4,6 +4,7 @@ import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.UserService;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,13 +30,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User person) {
-        return userRepository.save(person);
+    public void updateUser(User person) {
+        userRepository.save(person);
     }
 
     @Override
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public void deleteUserByUserCode(Long userCode) {
+        userRepository.deleteByUserCode(userCode);
     }
 
     @Override

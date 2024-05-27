@@ -1,6 +1,7 @@
 package com.fcst.student.RecycleRewards.service;
 
 import com.fcst.student.RecycleRewards.model.User;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +10,12 @@ import java.util.List;
 public interface UserService {
     void saveUser(User person);
 
-    User updateUser(User person);
+    void updateUser(User person);
 
-    void deleteUser(Long userId);
+    void deleteUser(Long id);
+
+    @Transactional
+    void deleteUserByUserCode(Long userCode);
 
 
     User getUserById(Long userId);

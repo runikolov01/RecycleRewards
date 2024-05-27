@@ -209,11 +209,11 @@
             var $row = $(this).closest('tr');
 
             // Extract user ID from the Edit button in the same row
-            var userId = $row.find('td:eq(0) span').text();
+            var userCode = $row.find('td:eq(0) span').text();
 
             // Send AJAX request to delete user
             $.ajax({
-                url: '/delete/' + userId,
+                url: '/delete/' + userCode,
                 type: 'GET', // Change the request type to GET
                 success: function (response) {
                     // Handle success response, maybe show a message or refresh the page
