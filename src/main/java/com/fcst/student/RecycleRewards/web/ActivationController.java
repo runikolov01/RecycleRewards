@@ -2,10 +2,14 @@ package com.fcst.student.RecycleRewards.web;
 
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.service.UserService;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -27,6 +33,9 @@ public class ActivationController {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @GetMapping("/activate")
     public String activateAccount(@RequestParam String token, RedirectAttributes redirectAttributes) {
@@ -76,6 +85,7 @@ public class ActivationController {
         return "redirect:/show_reset_password_form";
     }
 
+
     @PostMapping("/forgot_password")
     public String forgotPassword(@RequestParam String email, RedirectAttributes redirectAttributes) {
         User user = userService.getUserByEmail(email);
@@ -91,17 +101,36 @@ public class ActivationController {
         userService.saveUser(user);
 
         // Send email
-        SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
-        passwordResetEmail.setFrom(environment.getProperty("spring.mail.username"));
-        passwordResetEmail.setTo(user.getEmail());
-        passwordResetEmail.setSubject("Заявка за актуализиране на паролата");
-        passwordResetEmail.setText("За да актуализирате паролата си в профила на RecycleRewards, моля кликнете тук:\n"
-                + "http://localhost:8080/reset_password?token=" + token);
+        try {
+            sendHtmlEmail(user, token);
+            redirectAttributes.addFlashAttribute("message", "Линкът за възстановяване на парола е изпратен на вашия email!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Възникна грешка при изпращането на email.");
+            e.printStackTrace();
+        }
 
-        mailSender.send(passwordResetEmail);
-
-        redirectAttributes.addFlashAttribute("message", "Линкът за възстановяване на парола е изпратен на вашия email!");
         return "redirect:/login";
+    }
+
+    private void sendHtmlEmail(User user, String token) throws Exception {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+        String activationUrl = "http://localhost:8080/reset_password?token=" + token;
+
+        Resource resource = resourceLoader.getResource("classpath:templates/forgot_password_email.html");
+        String htmlContent = new String(Files.readAllBytes(Paths.get(resource.getURI())));
+
+        htmlContent = htmlContent.replace("${firstName}", user.getFirstName());
+        htmlContent = htmlContent.replace("${lastName}", user.getLastName());
+        htmlContent = htmlContent.replace("${activationUrl}", activationUrl);
+
+        helper.setText(htmlContent, true);
+        helper.setTo(user.getEmail());
+        helper.setSubject("Заявка за актуализиране на паролата");
+        helper.setFrom(environment.getProperty("spring.mail.username"));
+
+        mailSender.send(mimeMessage);
     }
 
     @PostMapping("/reset_password")
