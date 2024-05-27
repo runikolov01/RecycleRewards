@@ -12,7 +12,7 @@
             <!-- Links for ADMIN role -->
             <li class="nav-item"
                 th:if="${loggedIn != null and loggedUser != null and loggedIn and loggedUser.role == T(com.fcst.student.RecycleRewards.model.enums.Role).ADMIN}">
-                <a class="nav-link dark-grey-border" href="/users">Потребители</a>
+                <a class="nav-link dark-grey-border" href="/admin_users">Потребители</a>
             </li>
 
             <!-- Common links for all users -->

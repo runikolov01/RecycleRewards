@@ -133,7 +133,7 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/users")
+    @GetMapping("/admin_users")
     public String showUsers(Model model, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId != null) {

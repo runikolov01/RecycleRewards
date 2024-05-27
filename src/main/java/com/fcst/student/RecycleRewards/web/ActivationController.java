@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -69,7 +68,7 @@ public class ActivationController {
 
     @GetMapping("/show_reset_password_form")
     public String showResetPasswordForm() {
-        return "reset_password_form";
+        return "show_reset_password_form";
     }
 
     @GetMapping("/reset_password")
