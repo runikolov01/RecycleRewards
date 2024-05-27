@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
     public Long generateRandomCode() {
         Random random = new Random();
         // Generate a random 8-digit number
-        return 10000000L + random.nextLong() % 90000000L;
+        return 10000000L + Math.abs(random.nextLong() % 90000000L);
     }
 
     @Override
