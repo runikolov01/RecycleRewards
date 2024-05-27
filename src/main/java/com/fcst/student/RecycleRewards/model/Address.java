@@ -104,4 +104,12 @@ public class Address {
     public void setApartmentNumber(Integer apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
     }
+
+    public void setStreetNumber(Integer streetNumber) {
+        this.streetNumber = streetNumber;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
 }

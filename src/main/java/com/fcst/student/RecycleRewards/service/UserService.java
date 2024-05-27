@@ -41,4 +41,6 @@ public interface UserService {
     User getUserByUserCode(Long userCode);
 
     void resetPassword(Long userId, String newPassword);
+
+    User getUserByCode(Long code);
 }

@@ -224,6 +224,33 @@ public class UserController {
         return "edit-user";
     }
 
+    @GetMapping("/admin_users/address/{userCode}")
+    @ResponseBody
+    public ResponseEntity<String> getUserAddress(@PathVariable("userCode") Long userCode) {
+        try {
+            User user = userService.getUserByCode(userCode);
+            if (user != null) {
+                Address address = user.getAddress();
+                if (address != null) {
+                    String jsonResponse = "{\"city\": \"" + address.getCity() + "\", " +
+                            "\"postcode\": \"" + address.getPostcode() + "\", " +
+                            "\"street\": \"" + address.getStreet() + "\", " +
+                            "\"streetNumber\": \"" + address.getStreetNumber() + "\", " +
+                            "\"floor\": \"" + address.getFloor() + "\", " +
+                            "\"apartmentNumber\": \"" + address.getApartmentNumber() + "\"}";
+                    return ResponseEntity.ok(jsonResponse);
+                } else {
+                    return ResponseEntity.notFound().build();
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user address: " + e.getMessage());
+        }
+    }
+
+
     @PostMapping("/login")
     public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
         User user = userService.getUserByEmail(email);

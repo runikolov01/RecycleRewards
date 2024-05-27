@@ -120,4 +120,9 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         }
     }
+
+    @Override
+    public User getUserByCode(Long code) {
+        return userRepository.findByUserCode(code);
+    }
 }

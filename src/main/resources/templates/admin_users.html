@@ -25,7 +25,7 @@
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
-                    <th class="text-center" scope="col">ID</th>
+                    <th class="text-center" scope="col">№</th>
                     <th class="text-center" scope="col">Име</th>
                     <th class="text-center" scope="col">Фамилия</th>
                     <th class="text-center" scope="col">Имейл</th>
@@ -38,7 +38,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="user, rowStat : ${users}">
-                    <td><span class="text-center" th:text="${user.id}"></span></td>
+                    <td><span class="text-center" th:text="${user.userCode}"></span></td>
                     <td><span class="editable text-center" contenteditable="true" th:text="${user.firstName}"></span>
                     </td>
                     <td><span class="editable text-center" contenteditable="true" th:text="${user.lastName}"></span>
@@ -50,31 +50,71 @@
                     <td><span class="text-center" th:text="${user.totalPoints}"></span></td>
                     <td><span class="editable text-center" contenteditable="true" th:text="${user.role}"></span></td>
                     <td>
-                        <button class="btn btn-primary btn-sm edit-btn">Edit</button>
-                        <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+                        <button class="btn btn-primary btn-sm edit-btn mr-1">Edit</button>
+                        <button class="btn btn-danger btn-sm delete-btn mr-1">Delete</button>
                         <button class="btn btn-success btn-sm save-btn" style="display: none;">Save</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
+        <div>
+            <label for="userCode">Потребител №:</label>
+            <input class="form-control" id="userCode" name="userCode" type="number">
+            <br>
+            <button class="btn btn-primary" id="showAddressBtn" type="button">Покажи адреса на потребителя</button>
+        </div>
+        <div class="alert alert-danger mt-3" id="errorMessage" style="display: none;">
+            Потребителят не е намерен! Опитайте с друг номер.
+        </div>
+        <div class="modal-body" id="addressModalBody">
+        </div>
     </div>
 </div>
 
 <div th:replace="~{fragments/footer}"></div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
     $(document).ready(function () {
+        $('#showAddressBtn').on('click', function () {
+            var userCode = $('#userCode').val();
+
+            $.get('/admin_users/address/' + userCode, function (data, status) {
+                if (status === 'success') {
+                    var address = JSON.parse(data);
+
+                    var addressHtml = '<table class="table">';
+                    addressHtml += '<tr><th>Адрес</th><th>Стойност</th></tr>';
+                    addressHtml += '<tr><td>Град</td><td>' + address.city + '</td></tr>';
+                    addressHtml += '<tr><td>Пощенски код</td><td>' + address.postcode + '</td></tr>';
+                    addressHtml += '<tr><td>Улица</td><td>' + address.street + '</td></tr>';
+                    addressHtml += '<tr><td>Улица №</td><td>' + address.streetNumber + '</td></tr>';
+                    addressHtml += '<tr><td>Етаж</td><td>' + address.floor + '</td></tr>';
+                    addressHtml += '<tr><td>Апартамент №</td><td>' + address.apartmentNumber + '</td></tr>';
+                    addressHtml += '</table>';
+
+                    $('#addressModalBody').html(addressHtml);
+                    $('#addressModal').modal('show');
+
+                    $('#errorMessage').hide();
+                }
+                }).fail(function(xhr, status, error) {
+                    $('#errorMessage').show().text('Не е намерен потребител с този номер.');
+                    console.error('Възникна грешка:', error);
+                });
+            });
+        });
+
+
         var sortOrders = {}; // Object to track sorting orders for each column
 
         $('th').on('click', function () {
-            var columnIndex = $(this).index(); // Get the index of the clicked column
+            var columnIndex = $(this).index();
 
             sortOrders[columnIndex] = (sortOrders[columnIndex] === 'asc') ? 'desc' : 'asc';
 
@@ -186,7 +226,6 @@
                 }
             });
         });
-    });
 </script>
 
 </body>
