@@ -34,10 +34,10 @@ public class User {
     @Column(name = "total_points", nullable = false)
     private int totalPoints;
 
-    @Column(name = "address_id")
-    private Long addressId;
+//    @Column(name = "address_id")
+//    private Long addressId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id", insertable = false, updatable = false)
     private Address address;
 
@@ -68,17 +68,25 @@ public class User {
     @Column(name = "reset_token")
     private String resetToken;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Purchase> purchases;
+
+    @OneToMany(mappedBy = "registeredBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets;
+
+
+
 
     public User() {
     }
 
-    public User(Long id, Long userCode, String firstName, String lastName, Integer totalPoints, Long addressId, String email, String password, Integer phone, Role role, List<Prize> prizes) {
+    public User(Long id, Long userCode, String firstName, String lastName, Integer totalPoints, Address address, String email, String password, Integer phone, Role role, List<Prize> prizes) {
         this.id = id;
         this.userCode = userCode;
         this.firstName = firstName;
         this.lastName = lastName;
         this.totalPoints = totalPoints;
-        this.addressId = addressId;
+        this.address = address;
         this.email = email;
         this.password = password;
         this.registrationDate = LocalDateTime.now();
@@ -87,7 +95,7 @@ public class User {
         this.prizes = prizes;
     }
 
-    public User(Long id, Long userCode, String activationToken, LocalDateTime tokenExpiry, boolean isActivated, String firstName, String lastName, int totalPoints, Long addressId, Address address, String email, String password, LocalDateTime registrationDate, Integer phone, Role role, List<Prize> prizes, int totalBottles) {
+    public User(Long id, Long userCode, String activationToken, LocalDateTime tokenExpiry, boolean isActivated, String firstName, String lastName, int totalPoints, Address address, String email, String password, LocalDateTime registrationDate, Integer phone, Role role, List<Prize> prizes, int totalBottles) {
         this.id = id;
         this.userCode = userCode;
         this.activationToken = activationToken;
@@ -96,7 +104,6 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.totalPoints = totalPoints;
-        this.addressId = addressId;
         this.address = address;
         this.email = email;
         this.password = password;
@@ -171,13 +178,13 @@ public class User {
         this.totalPoints = totalPoints;
     }
 
-    public Long getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(Long addressId) {
-        this.addressId = addressId;
-    }
+//    public Long getAddressId() {
+//        return addressId;
+//    }
+//
+//    public void setAddressId(Long addressId) {
+//        this.addressId = addressId;
+//    }
 
     public Address getAddress() {
         return address;

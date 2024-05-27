@@ -334,7 +334,8 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(password));
         user.setRegistrationDate(LocalDateTime.now());
         user.setRole(Role.CLIENT);
-        user.setAddressId(address.getId());
+        //user.setAddressId(address.getId());
+        user.setAddress(address);
 
         String token = UUID.randomUUID().toString();
         user.setActivationToken(token);
