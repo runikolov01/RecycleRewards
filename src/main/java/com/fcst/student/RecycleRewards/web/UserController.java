@@ -405,9 +405,9 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/update/{userId}")
-    public String updateUser(@PathVariable("userId") Long userId, @RequestBody User updatedUser) {
-        User existingUser = userService.getUserById(userId);
+    @PatchMapping("/update/{userCode}")
+    public String updateUser(@PathVariable("userCode") Long userCode, @RequestBody User updatedUser) {
+        User existingUser = userService.getUserByCode(userCode);
 
         if (updatedUser.getFirstName() != null) {
             existingUser.setFirstName(updatedUser.getFirstName());
