@@ -6,7 +6,7 @@ _(The project is still in progress..)_
 
 ## Backend: Java, Spring, Hibernate, MySQL
 
-## The user guide in Bulgarian is available here: https://drive.google.com/file/d/1W8FeRbjeOIrO926rsgrETRBNOchUCnKN/view?usp=sharing 
+## The user guide in Bulgarian is available here: https://drive.google.com/file/d/1i8hpRc3yNZ9G_PP0izfFpGcz7sii6F1k/view?usp=sharing
 
 ![index](https://github.com/runikolov01/RecycleRewards/assets/45116925/4899f371-bd0f-4d8b-9ac1-d5c132104ac0)
 
