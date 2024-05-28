@@ -34,7 +34,7 @@ public class User {
     @Column(name = "total_points", nullable = false)
     private int totalPoints;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", insertable = false, updatable = false)
     private Address address;
 
