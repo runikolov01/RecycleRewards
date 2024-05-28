@@ -3,7 +3,6 @@ package com.fcst.student.RecycleRewards.web;
 import com.fcst.student.RecycleRewards.model.Ticket;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.repository.TicketRepository;
-import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.TicketService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -24,10 +23,11 @@ import java.util.Map;
 public class TicketController {
 
     private final TicketRepository ticketRepository;
+
     private final UserService userService;
+
     @Autowired
     private TicketService ticketService;
-    private UserRepository userRepository;
 
     public TicketController(TicketRepository ticketRepository, UserService userService) {
         this.ticketRepository = ticketRepository;
@@ -75,8 +75,8 @@ public class TicketController {
         bottlesCount = ticketService.getDefaultBottlesCount(bottlesCount);
 
         if (ticketNumber == null) {
-            ticketNumber = ticketService.generateUniqueTicketNumber(); // Generate a new ticket number if not already generated
-            session.setAttribute("ticketNumber", ticketNumber); // Store it in the session
+            ticketNumber = ticketService.generateUniqueTicketNumber();
+            session.setAttribute("ticketNumber", ticketNumber);
         }
 
         Boolean isVoucher = (Boolean) session.getAttribute("isVoucher");
@@ -103,11 +103,8 @@ public class TicketController {
             if (user != null) {
                 Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
 
-                Double userKgBottles = 0.00;
-                Integer userTotalBottles = user.getTotalBottles();
-                if (userTotalBottles == null) {
-                    user.setTotalBottles(0);
-                }
+                double userKgBottles = 0.00;
+                int userTotalBottles = user.getTotalBottles();
                 userKgBottles = userTotalBottles * 0.015;
 
 
@@ -216,7 +213,6 @@ public class TicketController {
         session.setAttribute("bottlesCount", 0);
         session.invalidate();
 
-        // Passing the alert message as a parameter
         model.addAttribute("alertMessage", "Printing...");
 
         return "print_with_alert";

@@ -10,15 +10,13 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-//    boolean existsByEmail(String email);
-
     User findByEmail(String email);
 
     @Query("SELECT p.user FROM Purchase p WHERE p.prize.id = :prizeId")
     List<User> findAllByPrizeId(@Param("prizeId") Long prizeId);
 
-    @Query("SELECT u FROM User u JOIN FETCH u.prizes")
-    List<User> findUsersWithPrizes();
+//    @Query("SELECT u FROM User u JOIN FETCH u.prizes")
+//    List<User> findUsersWithPrizes();
 
     @Query("SELECT SUM(u.totalBottles) FROM User u")
     Integer getTotalBottlesSum();
@@ -31,6 +29,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserCode(Long userCode);
 
     User findByResetToken(String token);
-
-    void deleteByUserCode(Long userCode);
 }
