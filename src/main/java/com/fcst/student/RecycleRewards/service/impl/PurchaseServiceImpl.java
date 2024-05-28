@@ -69,6 +69,4 @@ public class PurchaseServiceImpl implements PurchaseService {
     private boolean purchaseWinnerCodeExistsInDatabase(String winnerCode) {
         return purchaseRepository.existsByWinnerCode(winnerCode);
     }
-
-
 }

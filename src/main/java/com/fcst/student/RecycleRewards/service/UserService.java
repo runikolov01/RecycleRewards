@@ -17,7 +17,6 @@ public interface UserService {
     @Transactional
     void deleteUserByUserCode(Long userCode);
 
-
     User getUserById(Long userId);
 
     User getUserByEmail(String email);
@@ -44,7 +43,7 @@ public interface UserService {
 
     User getUserByUserCode(Long userCode);
 
-    void resetPassword(Long userId, String newPassword);
+//    void resetPassword(Long userId, String newPassword);
 
     User getUserByCode(Long code);
 }

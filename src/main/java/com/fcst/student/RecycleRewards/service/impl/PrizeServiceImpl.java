@@ -70,12 +70,10 @@ public class PrizeServiceImpl implements PrizeService {
             return false;
         }
 
-        // Deduct points
         user.setTotalPoints(user.getTotalPoints() - prize.getNeededPointsToBuy());
         prize.setRemainedTickets(remainedTicketsForThisPrize - 1);
         userRepository.save(user);
 
-        // Record purchase
         Purchase purchase = new Purchase();
 
         if (prize.getType() == PrizeType.INSTANT) {
@@ -104,7 +102,6 @@ public class PrizeServiceImpl implements PrizeService {
             // prize.addWinner(winner);
 
             prize.addParticipant(winner);
-            // Save the updated prize
             prize.setRemainedTickets(0);
             prize.setEndDate(LocalDateTime.now());
             prizeRepository.save(prize);

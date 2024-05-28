@@ -19,7 +19,7 @@ public class PurchaseController {
 
     @GetMapping("/userPurchasedTickets")
     public ResponseEntity<List<Purchase>> getUserPurchasedTickets(HttpServletRequest request) {
-        Long userId = (Long) request.getSession().getAttribute("userId"); // Get user ID from session
+        Long userId = (Long) request.getSession().getAttribute("userId");
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -27,6 +27,4 @@ public class PurchaseController {
 
         return ResponseEntity.ok(purchasedTickets);
     }
-
-
 }

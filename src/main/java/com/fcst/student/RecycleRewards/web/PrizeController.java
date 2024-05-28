@@ -4,7 +4,6 @@ import com.fcst.student.RecycleRewards.model.Prize;
 import com.fcst.student.RecycleRewards.model.Purchase;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.model.enums.PrizeType;
-import com.fcst.student.RecycleRewards.repository.PurchaseRepository;
 import com.fcst.student.RecycleRewards.service.PrizeService;
 import com.fcst.student.RecycleRewards.service.PurchaseService;
 import com.fcst.student.RecycleRewards.service.UserService;
@@ -30,18 +29,46 @@ public class PrizeController {
     private final UserService userService;
     private final PrizeService prizeService;
     private final PurchaseService purchaseService;
-    private final PurchaseRepository purchaseRepository;
 
     @Autowired
-    public PrizeController(UserService userService, PrizeService prizeService, PurchaseService purchaseService, PurchaseRepository purchaseRepository) {
+    public PrizeController(UserService userService, PrizeService prizeService, PurchaseService purchaseService) {
         this.userService = userService;
         this.prizeService = prizeService;
         this.purchaseService = purchaseService;
-        this.purchaseRepository = purchaseRepository;
     }
 
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session, @RequestParam(value = "type", required = false) PrizeType type) {
+        setLoggedInAttribute(model, session, userService);
+
+        List<Prize> prizes;
+        if (type != null) {
+            if (type.equals(PrizeType.INSTANT) || type.equals(PrizeType.RAFFLE)) {
+                prizes = prizeService.getPrizesByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(type, 0, LocalDateTime.now());
+            } else {
+                prizes = prizeService.getPrizesByTypeAndStartDateBefore(type, LocalDateTime.now());
+            }
+        } else {
+            prizes = prizeService.getAllPrizesWithRemainedTicketsGreaterThanAndStartDateBefore(0, LocalDateTime.now());
+        }
+
+
+        session.setAttribute("prizes", prizes);
+        model.addAttribute("prizes", prizes);
+
+        if (type != null) {
+            for (Prize prize : prizes) {
+                List<User> participants = userService.getParticipantsByPrizeId(prize.getId());
+                for (User participant : participants) {
+                    model.addAttribute("participant", participant);
+                }
+            }
+        }
+
+        return "prizes";
+    }
+
+    public static void setLoggedInAttribute(Model model, HttpSession session, UserService userService) {
         Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
         if (loggedIn == null) {
             loggedIn = false;
@@ -62,45 +89,6 @@ public class PrizeController {
                 model.addAttribute("totalPoints", totalPoints);
             }
         }
-
-//        List<Prize> prizes;
-//        if (type != null) {
-//            if (type.equals(PrizeType.INSTANT) || type.equals(PrizeType.RAFFLE)) {
-//                prizes = prizeService.getPrizesByTypeAndRemainedTicketsGreaterThan(type, 0);
-//            } else {
-//                prizes = prizeService.getPrizesByType(type);
-//            }
-//        } else {
-//            prizes = prizeService.getAllPrizesWithRemainedTicketsGreaterThan(0);
-//        }
-
-        List<Prize> prizes;
-        if (type != null) {
-            if (type.equals(PrizeType.INSTANT) || type.equals(PrizeType.RAFFLE)) {
-                prizes = prizeService.getPrizesByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(type, 0, LocalDateTime.now());
-            } else {
-                prizes = prizeService.getPrizesByTypeAndStartDateBefore(type, LocalDateTime.now());
-            }
-        } else {
-            prizes = prizeService.getAllPrizesWithRemainedTicketsGreaterThanAndStartDateBefore(0, LocalDateTime.now());
-        }
-
-
-        session.setAttribute("prizes", prizes);
-        model.addAttribute("prizes", prizes);
-
-        // If type is specified, fetch participants for each prize
-        if (type != null) {
-            for (Prize prize : prizes) {
-                List<User> participants = userService.getParticipantsByPrizeId(prize.getId());
-                // Add participants to the model multiple times based on the number of purchases
-                for (User participant : participants) {
-                    model.addAttribute("participant", participant);
-                }
-            }
-        }
-
-        return "prizes";
     }
 
 
@@ -156,7 +144,6 @@ public class PrizeController {
         if (userId != null) {
             User user = userService.getUserById(userId);
             if (user != null) {
-                // Check if the user role is ADMIN
                 String role = String.valueOf(user.getRole());
                 if (role != null && role.equals("ADMIN")) {
                     session.setAttribute("loggedUser", user);
@@ -166,7 +153,6 @@ public class PrizeController {
                     session.setAttribute("totalPoints", totalPoints);
                     model.addAttribute("totalPoints", totalPoints);
 
-                    // Get all prizes without winners
                     List<Prize> prizesWithoutWinners = prizeService.getPrizesWithoutWinners();
                     model.addAttribute("prizes", prizesWithoutWinners);
 
@@ -192,13 +178,11 @@ public class PrizeController {
 
                     return "admin_raffle";
                 } else {
-                    // Redirect to home page if the user is not an ADMIN
                     return "redirect:/home";
                 }
             }
         }
 
-        // If user is not found, redirect to home page
         return "redirect:/home";
     }
 
@@ -207,15 +191,14 @@ public class PrizeController {
     public ResponseEntity<String> drawWinner(@RequestParam Long prizeId, @RequestParam int randomNumber) {
         List<User> participants = userService.getParticipantsByPrizeId(prizeId);
         if (randomNumber > participants.size() || randomNumber <= 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid random number");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Невалидно случайно число!");
         }
 
         User winner = participants.get(randomNumber - 1);
 
-        // Connect the winner with the prize and save to the database
         prizeService.setWinnerForPrize(prizeId, winner.getId());
 
-        return ResponseEntity.ok("Winner connected with prize successfully");
+        return ResponseEntity.ok("Потребителят е свързан с наградата успешно!");
     }
 
     @PostMapping("/connectPrizeWithWinner")
@@ -226,12 +209,12 @@ public class PrizeController {
         Purchase purchase = purchaseService.getPurchaseById(purchaseId);
 
         if (prize == null || user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Prize or user not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Наградата не е намерена или потребителят не е намерен!");
         }
 
         List<Prize> userPrizes = user.getPrizes();
         if (userPrizes.contains(prize)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already won this prize");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Потребителят вече е спечелил тази награда. Няма право на втора награда със същия уникален номер.");
         }
 
         user.getPrizes().add(prize);
@@ -245,7 +228,7 @@ public class PrizeController {
 
         userService.saveUser(user);
 
-        return ResponseEntity.ok("Prize connected with winner successfully");
+        return ResponseEntity.ok("Наградата е свързана с победителя успешно!");
     }
 
 
@@ -259,7 +242,7 @@ public class PrizeController {
         }
 
         Optional<Prize> optionalPrize = prizeService.getPrizeById(prizeId);
-        if (!optionalPrize.isPresent()) {
+        if (optionalPrize.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Наградата не е намерена.");
         }
 

@@ -18,6 +18,6 @@ public interface PurchaseService {
 
     String generateUniquePurchaseWinnerCode();
 
-    List<String> getCodes(Long userId, Long prizeId);
+//    List<String> getCodes(Long userId, Long prizeId);
     public List<PrizeDetailsDto> getPrizeDetailsForUser(Long userId);
 }

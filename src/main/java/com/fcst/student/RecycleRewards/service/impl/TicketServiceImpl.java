@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
-
 public class TicketServiceImpl implements TicketService {
     @Autowired
     private TicketRepository ticketRepository;

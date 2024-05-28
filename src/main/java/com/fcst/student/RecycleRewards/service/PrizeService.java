@@ -29,9 +29,9 @@ public interface PrizeService {
 
     List<Prize> getPrizesByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(PrizeType type, Integer tickets, LocalDateTime date);
 
-    List<PrizeDetailsDto> getPrizeDetailsByUserId(Long userId);
-
-    int getRemainingTicketsForPrize(Long prizeId);
+//    List<PrizeDetailsDto> getPrizeDetailsByUserId(Long userId);
+//
+//    int getRemainingTicketsForPrize(Long prizeId);
 
     Long generateUniquePrizeCode();
 

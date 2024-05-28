@@ -9,11 +9,9 @@ import com.fcst.student.RecycleRewards.service.AddressService;
 import com.fcst.student.RecycleRewards.service.EmailService;
 import com.fcst.student.RecycleRewards.service.PurchaseService;
 import com.fcst.student.RecycleRewards.service.UserService;
-import com.fcst.student.RecycleRewards.service.session.LoggedUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +28,8 @@ import java.util.*;
 @Controller
 public class UserController {
     private final UserService userService;
-    private final LoggedUser loggedUser;
-    private final ModelMapper modelMapper;
+//    private final LoggedUser loggedUser;
+//    private final ModelMapper modelMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -56,10 +54,8 @@ public class UserController {
     private EmailService emailService;
 
     @Autowired
-    public UserController(UserService userService, LoggedUser loggedUser, ModelMapper modelMapper) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.loggedUser = loggedUser;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/register")
@@ -74,6 +70,7 @@ public class UserController {
             loggedIn = false;
         }
 
+        session.setAttribute("loggedIn", loggedIn);
         model.addAttribute("loggedIn", loggedIn);
 
         Long userId = (Long) session.getAttribute("userId");
@@ -206,7 +203,6 @@ public class UserController {
 
         model.addAttribute("wonPrizes", prizeList);
 
-
         return "winners";
     }
 
@@ -276,7 +272,6 @@ public class UserController {
         }
     }
 
-
     @PostMapping("/logout")
     public String logout(HttpSession session, HttpServletResponse response) {
         session.removeAttribute("userId");
@@ -290,7 +285,7 @@ public class UserController {
     public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email,
                                  @RequestParam String password, @RequestParam String confirmPassword,
                                  @RequestParam(required = false) String ageConfirmation, RedirectAttributes redirectAttributes,
-                                 HttpSession session, Model model) {
+                                 Model model) {
         if (!password.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("error", "Паролите не съвпадат.");
             redirectAttributes.addFlashAttribute("firstName", firstName);
@@ -299,7 +294,7 @@ public class UserController {
             return "redirect:/register";
         }
 
-        if (ageConfirmation == null || !"yes".equals(ageConfirmation)) {
+        if (!"yes".equals(ageConfirmation)) {
             redirectAttributes.addFlashAttribute("error", "Трябва да потвърдите, че имате навършени 18 години. Ако не сте пълнолетен, не можете да се регистрирате.");
             redirectAttributes.addFlashAttribute("firstName", firstName);
             redirectAttributes.addFlashAttribute("lastName", lastName);
@@ -370,7 +365,6 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Моля, попълнете всички полета, маркирани със звездичка, за да актуализирате профила си!");
             }
 
-            // Retrieve the current user
             User currentUser = userService.getUserById(userId);
 
             // Update user data
@@ -402,7 +396,7 @@ public class UserController {
 
             return ResponseEntity.ok("Данните са актуализирани успешно!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating profile: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Грешка при актуализацията на профила: " + e.getMessage());
         }
     }
 

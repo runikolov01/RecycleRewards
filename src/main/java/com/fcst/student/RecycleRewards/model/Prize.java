@@ -37,13 +37,11 @@ public class Prize {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-
     @ManyToMany(mappedBy = "prizes", cascade = CascadeType.ALL)
     private List<User> participants;
 
     @Enumerated(EnumType.STRING)
     private PrizeType type;
-
 
     public Prize() {
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface PrizeRepository extends JpaRepository<Prize, Long> {
-    List<Prize> findByType(PrizeType type);
+//    List<Prize> findByType(PrizeType type);
 
     @Query(value = "SELECT * FROM Prizes WHERE id NOT IN (SELECT DISTINCT prize_id FROM prize_winners) AND type = 'RAFFLE'", nativeQuery = true)
     List<Prize> findRafflePrizesWithoutWinners();
@@ -26,8 +26,8 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
 
     List<Prize> findByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(PrizeType type, Integer tickets, LocalDateTime date);
 
-    @Query("SELECT COUNT(p) > 0 FROM Prize p WHERE p.prizeCode = :prizeCode")
-    boolean existsByPrizeCode(@Param("prizeCode") Long prizeCode);
-
-    Prize findByPrizeCode(Long prizeCode);
+//    @Query("SELECT COUNT(p) > 0 FROM Prize p WHERE p.prizeCode = :prizeCode")
+//    boolean existsByPrizeCode(@Param("prizeCode") Long prizeCode);
+//
+//    Prize findByPrizeCode(Long prizeCode);
 }

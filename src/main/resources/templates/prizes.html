@@ -102,7 +102,7 @@
     }
 
     function checkLoginAndProceed(prizeId, neededPointsToBuy, event) {
-        event.preventDefault(); // Prevent default button behavior
+        event.preventDefault();
 
         fetch(`/prizes/buy?prizeId=${prizeId}`, {
             method: 'POST',
@@ -114,7 +114,7 @@
                         throw new Error(errorMessage);
                     });
                 }
-                return response.text(); // Assuming the response is text
+                return response.text();
             })
             .then(data => {
                 // Handle success response from the server
@@ -123,8 +123,8 @@
                 messageDiv.style.color = 'green';
 
                 const button = event.target; // The button that was clicked
-                const parentDiv = button.closest('.product-list-item-box'); // Find the closest parent div with the class 'product-list-item-box'
-                parentDiv.insertAdjacentElement('afterend', messageDiv); // Insert the message after the parent div
+                const parentDiv = button.closest('.product-list-item-box');
+                parentDiv.insertAdjacentElement('afterend', messageDiv);
             })
             .catch(error => {
                 // Handle error response from the server
@@ -134,8 +134,8 @@
                 errorMessageDiv.style.color = 'red';
 
                 const button = event.target; // The button that was clicked
-                const parentDiv = button.closest('.product-list-item-box'); // Find the closest parent div with the class 'product-list-item-box'
-                parentDiv.insertAdjacentElement('afterend', errorMessageDiv); // Insert the error message after the parent div
+                const parentDiv = button.closest('.product-list-item-box');
+                parentDiv.insertAdjacentElement('afterend', errorMessageDiv);
             });
     }
 

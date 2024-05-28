@@ -27,31 +27,11 @@ public class MachineController {
 
     @GetMapping("/machines")
     public String showMachines(Model model, HttpSession session) {
-        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
-        if (loggedIn == null) {
-            loggedIn = false;
-        }
-        session.setAttribute("loggedIn", loggedIn);
-        model.addAttribute("loggedIn", loggedIn);
-
-        Long userId = (Long) session.getAttribute("userId");
-
-        if (userId != null) {
-            User user = userService.getUserById(userId);
-            if (user != null) {
-                session.setAttribute("loggedUser", user);
-                model.addAttribute("loggedUser", user);
-
-                Integer totalPoints = user.getTotalPoints();
-                session.setAttribute("totalPoints", totalPoints);
-                model.addAttribute("totalPoints", totalPoints);
-            }
-        }
+        PrizeController.setLoggedInAttribute(model, session, userService);
 
         List<Machine> machines = machineService.getAllMachines();
         model.addAttribute("machines", machines);
 
-        // Add the Google Maps API key to the model
         String googleMapsApiKey = dotenv.get("GOOGLE_MAPS_API_KEY");
         model.addAttribute("googleMapsApiKey", googleMapsApiKey);
 

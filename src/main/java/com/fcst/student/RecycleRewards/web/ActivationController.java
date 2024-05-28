@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Controller
@@ -84,7 +85,6 @@ public class ActivationController {
         return "redirect:/show_reset_password_form";
     }
 
-
     @PostMapping("/forgot_password")
     public String forgotPassword(@RequestParam String email, RedirectAttributes redirectAttributes) {
         User user = userService.getUserByEmail(email);
@@ -93,13 +93,11 @@ public class ActivationController {
             return "redirect:/login";
         }
 
-        // Generate token
         String token = UUID.randomUUID().toString();
         user.setResetToken(token);
         user.setTokenExpiry(LocalDateTime.now().plusHours(24));
         userService.saveUser(user);
 
-        // Send email
         try {
             sendHtmlEmail(user, token);
             redirectAttributes.addFlashAttribute("message", "Линкът за възстановяване на парола е изпратен на вашия email!");
@@ -127,7 +125,7 @@ public class ActivationController {
         helper.setText(htmlContent, true);
         helper.setTo(user.getEmail());
         helper.setSubject("Заявка за актуализиране на паролата");
-        helper.setFrom(environment.getProperty("spring.mail.username"));
+        helper.setFrom(Objects.requireNonNull(environment.getProperty("spring.mail.username")));
 
         mailSender.send(mimeMessage);
     }

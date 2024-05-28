@@ -123,9 +123,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
             String hashedPassword = passwordEncoder.encode(newPassword);
-
             user.setPassword(hashedPassword);
-
             userRepository.save(user);
         }
     }
