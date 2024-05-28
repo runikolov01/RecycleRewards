@@ -70,7 +70,22 @@
         <div class="alert alert-danger mt-3" id="errorMessage" style="display: none;">
             Потребителят не е намерен! Опитайте с друг номер.
         </div>
-        <div class="modal-body" id="addressModalBody">
+    </div>
+</div>
+
+<div class="modal" id="addressModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Адрес на потребителя</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="addressModalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
         </div>
     </div>
 </div>
@@ -81,7 +96,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-
 <script>
     $(document).ready(function () {
         $('#showAddressBtn').on('click', function () {
@@ -89,26 +103,31 @@
 
             $.get('/admin_users/address/' + userCode, function (data, status) {
                 if (status === 'success') {
-                    var address = JSON.parse(data);
+                    try {
+                        var address = JSON.parse(data);
 
-                    var addressHtml = '<table class="table">';
-                    addressHtml += '<tr><th>Адрес</th><th>Стойност</th></tr>';
-                    addressHtml += '<tr><td>Град</td><td>' + address.city + '</td></tr>';
-                    addressHtml += '<tr><td>Пощенски код</td><td>' + address.postcode + '</td></tr>';
-                    addressHtml += '<tr><td>Улица</td><td>' + address.street + '</td></tr>';
-                    addressHtml += '<tr><td>Улица №</td><td>' + address.streetNumber + '</td></tr>';
-                    addressHtml += '<tr><td>Етаж</td><td>' + address.floor + '</td></tr>';
-                    addressHtml += '<tr><td>Апартамент №</td><td>' + address.apartmentNumber + '</td></tr>';
-                    addressHtml += '</table>';
+                        var addressHtml = '<table class="table">';
+                        addressHtml += '<tr><th>Адрес</th><th>Стойност</th></tr>';
+                        addressHtml += '<tr><td>Град</td><td>' + address.city + '</td></tr>';
+                        addressHtml += '<tr><td>Пощенски код</td><td>' + address.postcode + '</td></tr>';
+                        addressHtml += '<tr><td>Улица</td><td>' + address.street + '</td></tr>';
+                        addressHtml += '<tr><td>Улица №</td><td>' + address.streetNumber + '</td></tr>';
+                        addressHtml += '<tr><td>Етаж</td><td>' + address.floor + '</td></tr>';
+                        addressHtml += '<tr><td>Апартамент №</td><td>' + address.apartmentNumber + '</td></tr>';
+                        addressHtml += '</table>';
 
-                    $('#addressModalBody').html(addressHtml);
-                    $('#addressModal').modal('show');
+                        $('#addressModalBody').html(addressHtml);
+                        $('#addressModal').modal('show');
 
-                    $('#errorMessage').hide();
+                        $('#errorMessage').hide();
+                    } catch (e) {
+                        $('#errorMessage').show().text('Грешка при обработката на отговора.');
+                        console.error('Error parsing JSON:', e);
+                    }
                 }
             }).fail(function (xhr, status, error) {
                 $('#errorMessage').show().text('Не е намерен потребител с този номер.');
-                console.error('Възникна грешка:', error);
+                console.error('AJAX request failed:', status, error);
             });
         });
     });
@@ -147,46 +166,36 @@
         // Find the closest row
         var $row = $(this).closest('tr');
 
-        // Enable editing for all cells
         $row.find('.editable').prop('contenteditable', true);
 
-        // Change background color of the row to yellow
         $row.css('background-color', 'yellow');
 
-        // Hide the Delete button and show the Save button
         $row.find('.delete-btn').hide();
         $row.find('.save-btn').show();
         $(this).hide();
     });
 
-    // Event handler for Save button
     $(document).on('click', '.save-btn', function () {
-        // Find the closest row
         var $row = $(this).closest('tr');
 
-        // Disable editing for all cells
         $row.find('.editable').prop('contenteditable', false);
 
-        // Revert background color of the row to white
         $row.css('background-color', 'white');
 
-        // Show the Delete button and Edit button, hide the Save button
         $row.find('.delete-btn').show();
         $row.find('.edit-btn').show();
         $(this).hide();
 
-        // Extract updated data from the row
         var userId = $row.find('td:eq(0) span').text();
         var firstName = $row.find('td:eq(1) span').text();
         var lastName = $row.find('td:eq(2) span').text();
         var email = $row.find('td:eq(3) span').text();
         var phone = $row.find('td:eq(4) span').text();
 
-// Send AJAX request to update user data
         $.ajax({
             url: '/update/' + userId,
             type: 'PATCH',
-            contentType: 'application/json', // Set content type to JSON
+            contentType: 'application/json',
             data: JSON.stringify({
                 id: userId,
                 firstName: firstName,
@@ -195,11 +204,9 @@
                 phone: phone
             }),
             success: function (response) {
-                // Handle success response
                 console.log('User updated successfully');
             },
             error: function (xhr, status, error) {
-                // Handle error response
                 console.error('Error updating user');
             }
         });
@@ -208,25 +215,20 @@
 
     // Event handler for Delete button
     $(document).on('click', '.delete-btn', function () {
-        // Find the closest row
         var $row = $(this).closest('tr');
 
-        // Extract user ID from the Edit button in the same row
         var userCode = $row.find('td:eq(0) span').text();
 
-        // Send AJAX request to delete user
         $.ajax({
             url: '/delete/' + userCode,
-            type: 'GET', // Change the request type to GET
+            type: 'GET',
             success: function (response) {
-                // Handle success response, maybe show a message or refresh the page
                 console.log('User deleted successfully');
                 $('#successMessage').show();
 
-                window.location.reload(); // Refresh the page
+                window.location.reload();
             },
             error: function (xhr, status, error) {
-                // Handle error response
                 $('#successMessage').show();
                 console.error('Error deleting user');
             }
