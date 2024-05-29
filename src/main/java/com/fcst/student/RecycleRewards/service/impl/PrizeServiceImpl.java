@@ -1,7 +1,6 @@
 package com.fcst.student.RecycleRewards.service.impl;
 
 import com.fcst.student.RecycleRewards.model.Prize;
-import com.fcst.student.RecycleRewards.model.PrizeDetailsDto;
 import com.fcst.student.RecycleRewards.model.Purchase;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.model.enums.PrizeType;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class PrizeServiceImpl implements PrizeService {
@@ -80,6 +78,9 @@ public class PrizeServiceImpl implements PrizeService {
             String prizeWonCode = purchaseService.generateUniquePurchaseWinnerCode();
             purchase.setWinnerCode(prizeWonCode);
             user.getPrizes().add(prize);
+            if (prize.getRemainedTickets() == 0) {
+                prize.setEndDate(LocalDateTime.now());
+            }
         }
 
         purchase.setUser(user);
