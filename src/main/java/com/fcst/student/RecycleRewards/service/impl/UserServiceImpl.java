@@ -118,15 +118,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUserCode(userCode);
     }
 
-    @Override
-    public void resetPassword(Long userId, String newPassword) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null) {
-            String hashedPassword = passwordEncoder.encode(newPassword);
-            user.setPassword(hashedPassword);
-            userRepository.save(user);
-        }
-    }
+//    @Override
+//    public void resetPassword(Long userId, String newPassword) {
+//        User user = userRepository.findById(userId).orElse(null);
+//        if (user != null) {
+//            String hashedPassword = passwordEncoder.encode(newPassword);
+//            user.setPassword(hashedPassword);
+//            userRepository.save(user);
+//        }
+//    }
 
     @Override
     public User getUserByCode(Long code) {

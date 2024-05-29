@@ -56,10 +56,10 @@ public class PurchaseServiceImpl implements PurchaseService {
         }
     }
 
-    @Override
-    public List<String> getCodes(Long userId, Long prizeId) {
-        return purchaseRepository.findCodesByUserIdAndPrizeId(userId, prizeId);
-    }
+//    @Override
+//    public List<String> getCodes(Long userId, Long prizeId) {
+//        return purchaseRepository.findCodesByUserIdAndPrizeId(userId, prizeId);
+//    }
 
     @Override
     public List<PrizeDetailsDto> getPrizeDetailsForUser(Long userId) {

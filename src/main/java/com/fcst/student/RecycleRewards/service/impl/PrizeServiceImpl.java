@@ -124,30 +124,30 @@ public class PrizeServiceImpl implements PrizeService {
         return prizeRepository.findByTypeAndRemainedTicketsGreaterThanAndStartDateBefore(type, tickets, date);
     }
 
-    @Override
-    public List<PrizeDetailsDto> getPrizeDetailsByUserId(Long userId) {
-        List<Purchase> purchases = purchaseRepository.findByUserId(userId);
-        return purchases.stream()
-                .map(purchase -> new PrizeDetailsDto(
-                        purchase.getPrize().getId(),
-                        purchase.getPrize().getPrizeCode(),
-                        purchase.getPrize().getName(),
-                        purchase.getPrize().getDescription(),
-                        purchase.getPurchaseDate(),
-                        purchase.getWinnerCode()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public int getRemainingTicketsForPrize(Long prizeId) {
-        Prize prize = prizeRepository.findById(prizeId).orElse(null);
-        if (prize == null) {
-            return 0;
-        }
-        int totalTickets = prize.getTotalTickets();
-        int takenTickets = prize.getParticipants().size();
-        return totalTickets - takenTickets;
-    }
+//    @Override
+//    public List<PrizeDetailsDto> getPrizeDetailsByUserId(Long userId) {
+//        List<Purchase> purchases = purchaseRepository.findByUserId(userId);
+//        return purchases.stream()
+//                .map(purchase -> new PrizeDetailsDto(
+//                        purchase.getPrize().getId(),
+//                        purchase.getPrize().getPrizeCode(),
+//                        purchase.getPrize().getName(),
+//                        purchase.getPrize().getDescription(),
+//                        purchase.getPurchaseDate(),
+//                        purchase.getWinnerCode()))
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public int getRemainingTicketsForPrize(Long prizeId) {
+//        Prize prize = prizeRepository.findById(prizeId).orElse(null);
+//        if (prize == null) {
+//            return 0;
+//        }
+//        int totalTickets = prize.getTotalTickets();
+//        int takenTickets = prize.getParticipants().size();
+//        return totalTickets - takenTickets;
+//    }
 
     @Override
     public Long generateUniquePrizeCode() {

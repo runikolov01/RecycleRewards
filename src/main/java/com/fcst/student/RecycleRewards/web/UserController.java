@@ -58,6 +58,48 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/home")
+    public String home(Model model, HttpSession session) {
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+        session.setAttribute("loggedIn", loggedIn);
+        model.addAttribute("loggedIn", loggedIn);
+
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (loggedIn && userId != null) {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
+
+                double userKgBottles = 0.00;
+                int userTotalBottles = user.getTotalBottles();
+                userKgBottles = userTotalBottles * 0.015;
+
+
+                model.addAttribute("userTotalBottles", userTotalBottles);
+                model.addAttribute("userKgBottles", userKgBottles);
+                model.addAttribute("bottlesCount", bottlesCount);
+                session.setAttribute("bottlesCount", bottlesCount);
+                model.addAttribute("loggedUser", user);
+                session.setAttribute("loggedUser", user);
+
+                Integer totalPoints = user.getTotalPoints();
+                model.addAttribute("totalPoints", totalPoints);
+            }
+        }
+        Integer totalBottles = userService.getTotalBottlesForAllUsers();
+        if (totalBottles == null) {
+            totalBottles = 0;
+        }
+        model.addAttribute("totalBottles", totalBottles);
+        Double totalKg = totalBottles * 0.015;
+        model.addAttribute("totalKg", totalKg);
+        return "home";
+    }
+
     @GetMapping("/register")
     public String registerForm(Model model, HttpSession session, HttpServletRequest request) {
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
@@ -82,6 +124,27 @@ public class UserController {
         return "register";
     }
 
+    @GetMapping("/login")
+    public String loginForm(@RequestParam(required = false) String error, Model model, HttpSession session) {
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+
+        model.addAttribute("loggedIn", loggedIn);
+
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId != null) {
+            return "redirect:/myProfile";
+        }
+
+
+        if (error != null) {
+            model.addAttribute("error", true);
+        }
+        return "login";
+    }
 
     @GetMapping("/myProfile")
     public String showProfile(Model model, HttpSession session) {
@@ -108,55 +171,6 @@ public class UserController {
         return "myprofile";
     }
 
-    @GetMapping("/login")
-    public String loginForm(@RequestParam(required = false) String error, Model model, HttpSession session) {
-        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
-        if (loggedIn == null) {
-            loggedIn = false;
-        }
-
-        model.addAttribute("loggedIn", loggedIn);
-
-        Long userId = (Long) session.getAttribute("userId");
-
-        if (userId != null) {
-            return "redirect:/myProfile";
-        }
-
-
-        if (error != null) {
-            model.addAttribute("error", true);
-        }
-        return "login";
-    }
-
-    @GetMapping("/admin_users")
-    public String showUsers(Model model, HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId != null) {
-            User user = userService.getUserById(userId);
-            if (user != null) {
-                String role = String.valueOf(user.getRole());
-                if (role != null && role.equals("ADMIN")) {
-                    Integer totalPoints = user.getTotalPoints();
-                    model.addAttribute("totalPoints", totalPoints);
-                    model.addAttribute("loggedUser", user);
-                    session.setAttribute("loggedUser", user);
-
-                    model.addAttribute("loggedIn", true);
-
-                    List<User> users = userService.getAllUsers();
-                    model.addAttribute("users", users);
-                    return "admin_users";
-                } else {
-                    System.out.println("User role: " + role);
-                }
-            } else {
-                System.out.println("User is null for userId: " + userId);
-            }
-        }
-        return "redirect:/home";
-    }
 
     @GetMapping("/winners")
     public String showWinners(Model model, HttpSession session) {
@@ -206,6 +220,76 @@ public class UserController {
         return "winners";
     }
 
+    @GetMapping("/about")
+    public String about(Model model, HttpSession session) {
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+        session.setAttribute("loggedIn", loggedIn);
+        model.addAttribute("loggedIn", loggedIn);
+
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId != null) {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                model.addAttribute("loggedUser", user);
+                session.setAttribute("loggedUser", user);
+                Integer totalPoints = user.getTotalPoints();
+                model.addAttribute("totalPoints", totalPoints);
+            }
+        }
+        return "about";
+    }
+
+    @GetMapping("/admin_users")
+    public String showUsers(Model model, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId != null) {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                String role = String.valueOf(user.getRole());
+                if (role != null && role.equals("ADMIN")) {
+                    Integer totalPoints = user.getTotalPoints();
+                    model.addAttribute("totalPoints", totalPoints);
+                    model.addAttribute("loggedUser", user);
+                    session.setAttribute("loggedUser", user);
+
+                    model.addAttribute("loggedIn", true);
+
+                    List<User> users = userService.getAllUsers();
+                    model.addAttribute("users", users);
+                    return "admin_users";
+                } else {
+                    System.out.println("User role: " + role);
+                }
+            } else {
+                System.out.println("User is null for userId: " + userId);
+            }
+        }
+        return "redirect:/home";
+    }
+
+    @GetMapping("/admin_users/address/{userCode}")
+    @ResponseBody
+    public ResponseEntity<String> getUserAddress(@PathVariable("userCode") Long userCode) {
+        try {
+            User user = userService.getUserByCode(userCode);
+            if (user != null) {
+                Address address = user.getAddress();
+                if (address != null) {
+                    String jsonResponse = "{\"city\": \"" + address.getCity() + "\", " + "\"postcode\": \"" + address.getPostcode() + "\", " + "\"street\": \"" + address.getStreet() + "\", " + "\"streetNumber\": \"" + address.getStreetNumber() + "\", " + "\"floor\": \"" + address.getFloor() + "\", " + "\"apartmentNumber\": \"" + address.getApartmentNumber() + "\"}";
+                    return ResponseEntity.ok(jsonResponse);
+                } else {
+                    return ResponseEntity.notFound().build();
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user address: " + e.getMessage());
+        }
+    }
 
     @GetMapping("/delete/{userCode}")
     public String deleteUser(@PathVariable("userCode") Long userCode) {
@@ -218,32 +302,6 @@ public class UserController {
         User user = userService.getUserById(userId);
         model.addAttribute("user", user);
         return "edit-user";
-    }
-
-    @GetMapping("/admin_users/address/{userCode}")
-    @ResponseBody
-    public ResponseEntity<String> getUserAddress(@PathVariable("userCode") Long userCode) {
-        try {
-            User user = userService.getUserByCode(userCode);
-            if (user != null) {
-                Address address = user.getAddress();
-                if (address != null) {
-                    String jsonResponse = "{\"city\": \"" + address.getCity() + "\", " +
-                            "\"postcode\": \"" + address.getPostcode() + "\", " +
-                            "\"street\": \"" + address.getStreet() + "\", " +
-                            "\"streetNumber\": \"" + address.getStreetNumber() + "\", " +
-                            "\"floor\": \"" + address.getFloor() + "\", " +
-                            "\"apartmentNumber\": \"" + address.getApartmentNumber() + "\"}";
-                    return ResponseEntity.ok(jsonResponse);
-                } else {
-                    return ResponseEntity.notFound().build();
-                }
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user address: " + e.getMessage());
-        }
     }
 
 
@@ -272,20 +330,8 @@ public class UserController {
         }
     }
 
-    @PostMapping("/logout")
-    public String logout(HttpSession session, HttpServletResponse response) {
-        session.removeAttribute("userId");
-        this.userService.logout();
-        session.invalidate();
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // Prevent caching
-        return "redirect:/home";
-    }
-
     @PostMapping("/register")
-    public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email,
-                                 @RequestParam String password, @RequestParam String confirmPassword,
-                                 @RequestParam(required = false) String ageConfirmation, RedirectAttributes redirectAttributes,
-                                 Model model) {
+    public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam(required = false) String ageConfirmation, RedirectAttributes redirectAttributes, Model model) {
         if (!password.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("error", "Паролите не съвпадат.");
             redirectAttributes.addFlashAttribute("firstName", firstName);
@@ -350,7 +396,6 @@ public class UserController {
             return "redirect:/register";
         }
     }
-
 
     @PatchMapping("/myProfile")
     public ResponseEntity<String> updateProfile(@RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName, @RequestParam(required = false) String email, @RequestParam(required = false) Integer telephoneNumber, @RequestParam(required = false) String city, @RequestParam(required = false) Integer postCode, @RequestParam(required = false) String street, @RequestParam(required = false) Integer streetNumber, @RequestParam(required = false) Integer floor, @RequestParam(required = false) Integer apartmentNumber, HttpSession session) {
@@ -423,5 +468,14 @@ public class UserController {
         userService.updateUser(existingUser);
 
         return "redirect:/users";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpSession session, HttpServletResponse response) {
+        session.removeAttribute("userId");
+        this.userService.logout();
+        session.invalidate();
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // Prevent caching
+        return "redirect:/home";
     }
 }
