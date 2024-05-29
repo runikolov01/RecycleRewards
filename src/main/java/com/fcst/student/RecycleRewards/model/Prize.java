@@ -28,7 +28,7 @@ public class Prize {
     @Column(name = "total_tickets", nullable = false)
     private Integer totalTickets;
 
-    @Column(name = "remained_tickets")
+    @Column(name = "remained_tickets", nullable = false)
     private Integer remainedTickets;
 
     @Column(name = "start_date", nullable = false)
@@ -40,6 +40,7 @@ public class Prize {
     @ManyToMany(mappedBy = "prizes", cascade = CascadeType.ALL)
     private List<User> participants;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private PrizeType type;
 
@@ -47,8 +48,9 @@ public class Prize {
 
     }
 
-    public Prize(Long id, String name, String description, Integer neededPointsToBuy, Integer totalTickets, Integer remainedTickets, LocalDateTime startDate, List<User> participants, PrizeType type) {
+    public Prize(Long id, Long prizeCode, String name, String description, Integer neededPointsToBuy, Integer totalTickets, Integer remainedTickets, LocalDateTime startDate, List<User> participants, PrizeType type) {
         this.id = id;
+        this.prizeCode = prizeCode;
         this.name = name;
         this.description = description;
         this.neededPointsToBuy = neededPointsToBuy;
