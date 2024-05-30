@@ -85,6 +85,5 @@ public interface UserService {
 
     String forgotPasswordProcess(String email, RedirectAttributes redirectAttributes);
 
-    String handlePasswordResetProcess( String token,  String password, RedirectAttributes redirectAttributes);
-
-    }
+    String handlePasswordResetProcess(String token, String password, RedirectAttributes redirectAttributes);
+}
