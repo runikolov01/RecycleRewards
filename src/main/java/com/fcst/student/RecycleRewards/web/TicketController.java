@@ -15,7 +15,6 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-
     @GetMapping("/index")
     public String openHomePage() {
         return "index";
