@@ -26,8 +26,12 @@ public class TicketServiceImpl implements TicketService {
         }
         LocalDateTime issuedOn = LocalDateTime.now();
         LocalDateTime expirationDateTime = issuedOn.plusHours(72);
+        int points = 0;
 
-        Integer points = bottlesCount * 5;
+        if (!isVoucher) {
+            points = bottlesCount * 5;
+        }
+
 
         return new Ticket(ticketNumber, issuedOn, expirationDateTime, bottlesCount, points, isVoucher);
     }
