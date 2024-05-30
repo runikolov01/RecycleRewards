@@ -4,20 +4,22 @@ import com.fcst.student.RecycleRewards.model.PrizeDetailsDto;
 import com.fcst.student.RecycleRewards.model.Purchase;
 import com.fcst.student.RecycleRewards.repository.PurchaseRepository;
 import com.fcst.student.RecycleRewards.service.PurchaseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
-    @Autowired
-    private PurchaseRepository purchaseRepository;
+    private final PurchaseRepository purchaseRepository;
+    private static final int UNIQUE_CODE_LENGTH = 8;
+    private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    @Override
-    public List<Purchase> getUserPurchasedTickets(Long userId) {
-        return purchaseRepository.findByUserId(userId);
+    public PurchaseServiceImpl(PurchaseRepository purchaseRepository) {
+        this.purchaseRepository = purchaseRepository;
     }
 
     @Override
@@ -37,36 +39,35 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public String generateUniquePurchaseWinnerCode() {
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder ticketNumberBuilder = new StringBuilder();
-        Random random = new Random();
-        int length = 8;
+        SecureRandom random = new SecureRandom();
+        StringBuilder ticketNumberBuilder = new StringBuilder(UNIQUE_CODE_LENGTH);
 
         while (true) {
-            for (int i = 0; i < length; i++) {
-                ticketNumberBuilder.append(alphabet.charAt(random.nextInt(alphabet.length())));
+            for (int i = 0; i < UNIQUE_CODE_LENGTH; i++) {
+                ticketNumberBuilder.append(ALPHABET.charAt(random.nextInt(ALPHABET.length())));
             }
 
             String purchaseWinnerCode = ticketNumberBuilder.toString();
 
-            if (!purchaseWinnerCodeExistsInDatabase(purchaseWinnerCode)) {
+            if (!purchaseRepository.existsByWinnerCode(purchaseWinnerCode)) {
                 return purchaseWinnerCode;
             }
             ticketNumberBuilder.setLength(0);
         }
     }
 
-//    @Override
-//    public List<String> getCodes(Long userId, Long prizeId) {
-//        return purchaseRepository.findCodesByUserIdAndPrizeId(userId, prizeId);
-//    }
-
     @Override
     public List<PrizeDetailsDto> getPrizeDetailsForUser(Long userId) {
         return purchaseRepository.findPrizeDetailsByUserId(userId);
     }
 
-    private boolean purchaseWinnerCodeExistsInDatabase(String winnerCode) {
-        return purchaseRepository.existsByWinnerCode(winnerCode);
+    @Override
+    public ResponseEntity<List<Purchase>> showUserPurchasedTickets(HttpServletRequest request) {
+        Long userId = (Long) request.getSession().getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        List<Purchase> purchasedTickets = getPurchasesByUserId(userId);
+        return ResponseEntity.ok(purchasedTickets);
     }
 }

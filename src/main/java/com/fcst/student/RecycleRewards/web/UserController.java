@@ -28,8 +28,6 @@ import java.util.*;
 @Controller
 public class UserController {
     private final UserService userService;
-//    private final LoggedUser loggedUser;
-//    private final ModelMapper modelMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -45,7 +43,6 @@ public class UserController {
 
     @Autowired
     private PrizeRepository prizeRepository;
-
 
     @Autowired
     private EmailConfiguration emailConfiguration;
@@ -287,7 +284,7 @@ public class UserController {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user address: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Възникна грешка: " + e.getMessage());
         }
     }
 
@@ -402,7 +399,7 @@ public class UserController {
         try {
             Long userId = (Long) session.getAttribute("userId");
             if (userId == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authorized");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Потребителят не е оторизиран!");
             }
 
             // Check if any required fields are empty

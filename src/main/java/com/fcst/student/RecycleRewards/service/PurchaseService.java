@@ -2,14 +2,14 @@ package com.fcst.student.RecycleRewards.service;
 
 import com.fcst.student.RecycleRewards.model.PrizeDetailsDto;
 import com.fcst.student.RecycleRewards.model.Purchase;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface PurchaseService {
-    List<Purchase> getUserPurchasedTickets(Long userId);
-
     List<Purchase> getPurchasesByUserId(Long userId);
 
     List<Purchase> getAllPurchasesByPrizeId(Long prizeId);
@@ -18,6 +18,7 @@ public interface PurchaseService {
 
     String generateUniquePurchaseWinnerCode();
 
-//    List<String> getCodes(Long userId, Long prizeId);
-    public List<PrizeDetailsDto> getPrizeDetailsForUser(Long userId);
+    List<PrizeDetailsDto> getPrizeDetailsForUser(Long userId);
+
+    ResponseEntity<List<Purchase>> showUserPurchasedTickets(HttpServletRequest request);
 }
