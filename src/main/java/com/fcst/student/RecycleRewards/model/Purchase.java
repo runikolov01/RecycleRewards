@@ -12,11 +12,11 @@ public class Purchase {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "prize_id")
+    @JoinColumn(name = "prize_id", nullable = false)
     private Prize prize;
 
     @Column(name = "purchase_date", nullable = false)
