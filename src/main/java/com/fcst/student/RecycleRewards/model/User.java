@@ -22,7 +22,7 @@ public class User {
     @Column(name = "token_expiry")
     private LocalDateTime tokenExpiry;
 
-    @Column(name = "is_activated")
+    @Column(name = "is_activated", nullable = false)
     private boolean isActivated = false;
 
     @Column(name = "first_name", nullable = false)
@@ -35,7 +35,7 @@ public class User {
     private int totalPoints;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
     @Column(unique = true, nullable = false)
@@ -50,6 +50,7 @@ public class User {
     @Column(unique = true)
     private Integer phone;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -60,7 +61,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "prize_id"))
     private List<Prize> prizes;
 
-    @Column(name = "total_bottles")
+    @Column(name = "total_bottles", nullable = false)
     private int totalBottles;
 
     @Column(name = "reset_token")
