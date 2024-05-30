@@ -4,9 +4,11 @@ import com.fcst.student.RecycleRewards.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    Ticket findByNumber(String number);
+    Optional<Ticket> findByNumber(String number);
 
     boolean existsByNumber(String number);
 }

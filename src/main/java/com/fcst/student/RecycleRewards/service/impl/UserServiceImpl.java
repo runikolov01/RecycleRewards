@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -73,10 +74,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long userId) {
-        return userRepository.findById(userId).orElse(null);
+    public Optional<User> getUserById(Long userId) {
+        return userRepository.findById(userId);
     }
-
 
     public List<User> getParticipantsByPrizeId(Long prizeId) {
         return userRepository.findAllByPrizeId(prizeId);

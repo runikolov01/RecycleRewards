@@ -70,12 +70,12 @@ public class UserController {
         Long userId = (Long) session.getAttribute("userId");
 
         if (loggedIn && userId != null) {
-            User user = userService.getUserById(userId);
-            if (user != null) {
+            Optional<User> user = userService.getUserById(userId);
+            if (user.isPresent()) {
                 Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
 
                 double userKgBottles = 0.00;
-                int userTotalBottles = user.getTotalBottles();
+                int userTotalBottles = user.get().getTotalBottles();
                 userKgBottles = userTotalBottles * 0.015;
 
 
@@ -86,7 +86,7 @@ public class UserController {
                 model.addAttribute("loggedUser", user);
                 session.setAttribute("loggedUser", user);
 
-                Integer totalPoints = user.getTotalPoints();
+                Integer totalPoints = user.get().getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
             }
         }
@@ -153,11 +153,11 @@ public class UserController {
             return "redirect:/login";
         }
 
-        User loggedUser = userService.getUserById(userId);
+        Optional<User> loggedUser = userService.getUserById(userId);
         List<PrizeDetailsDto> prizeDetails = purchaseService.getPrizeDetailsForUser(userId);
 
         model.addAttribute("prizeDetails", prizeDetails != null ? prizeDetails : Collections.emptyList());
-        Integer totalPoints = loggedUser.getTotalPoints();
+        Integer totalPoints = loggedUser.get().getTotalPoints();
         model.addAttribute("totalPoints", totalPoints);
         model.addAttribute("loggedUser", loggedUser);
         session.setAttribute("loggedUser", loggedUser);
@@ -184,10 +184,10 @@ public class UserController {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId != null) {
-            User user = userService.getUserById(userId);
-            if (user != null) {
-                String role = String.valueOf(user.getRole());
-                Integer totalPoints = user.getTotalPoints();
+            Optional<User> user = userService.getUserById(userId);
+            if (user.isPresent()) {
+                String role = String.valueOf(user.get().getRole());
+                Integer totalPoints = user.get().getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
                 model.addAttribute("loggedUser", user);
                 session.setAttribute("loggedUser", user);
@@ -231,11 +231,11 @@ public class UserController {
 
         Long userId = (Long) session.getAttribute("userId");
         if (userId != null) {
-            User user = userService.getUserById(userId);
-            if (user != null) {
+            Optional<User> user = userService.getUserById(userId);
+            if (user.isPresent()) {
                 model.addAttribute("loggedUser", user);
                 session.setAttribute("loggedUser", user);
-                Integer totalPoints = user.getTotalPoints();
+                Integer totalPoints = user.get().getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
             }
         }
@@ -246,11 +246,11 @@ public class UserController {
     public String showUsers(Model model, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId != null) {
-            User user = userService.getUserById(userId);
-            if (user != null) {
-                String role = String.valueOf(user.getRole());
+            Optional<User> user = userService.getUserById(userId);
+            if (user.isPresent()) {
+                String role = String.valueOf(user.get().getRole());
                 if (role != null && role.equals("ADMIN")) {
-                    Integer totalPoints = user.getTotalPoints();
+                    Integer totalPoints = user.get().getTotalPoints();
                     model.addAttribute("totalPoints", totalPoints);
                     model.addAttribute("loggedUser", user);
                     session.setAttribute("loggedUser", user);
@@ -299,7 +299,7 @@ public class UserController {
 
     @GetMapping("/edit/{userId}")
     public String showEditUserForm(@PathVariable("userId") Long userId, Model model) {
-        User user = userService.getUserById(userId);
+        Optional<User> user = userService.getUserById(userId);
         model.addAttribute("user", user);
         return "edit-user";
     }
@@ -410,16 +410,16 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Моля, попълнете всички полета, маркирани със звездичка, за да актуализирате профила си!");
             }
 
-            User currentUser = userService.getUserById(userId);
+            Optional<User> currentUser = userService.getUserById(userId);
 
             // Update user data
-            currentUser.setFirstName(firstName);
-            currentUser.setLastName(lastName);
-            currentUser.setEmail(email);
-            currentUser.setPhone(telephoneNumber);
+            currentUser.get().setFirstName(firstName);
+            currentUser.get().setLastName(lastName);
+            currentUser.get().setEmail(email);
+            currentUser.get().setPhone(telephoneNumber);
 
             // Check if the user has an associated address
-            Address address = currentUser.getAddress();
+            Address address = currentUser.get().getAddress();
             if (address == null) {
                 // If the user doesn't have an address, create a new one
                 address = new Address();
@@ -434,10 +434,10 @@ public class UserController {
             address.setApartmentNumber(apartmentNumber != null ? apartmentNumber : 0);
 
             // Link the address to the user
-            currentUser.setAddress(address);
+            currentUser.get().setAddress(address);
 
             // Update the user in the database
-            userService.updateUser(currentUser);
+            userService.updateUser(currentUser.orElse(null));
 
             return ResponseEntity.ok("Данните са актуализирани успешно!");
         } catch (Exception e) {

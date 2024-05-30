@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface UserService {
@@ -17,7 +18,7 @@ public interface UserService {
     @Transactional
     void deleteUserByUserCode(Long userCode);
 
-    User getUserById(Long userId);
+    Optional<User> getUserById(Long userId);
 
     User getUserByEmail(String email);
 

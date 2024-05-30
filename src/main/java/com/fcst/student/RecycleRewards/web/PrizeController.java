@@ -79,12 +79,12 @@ public class PrizeController {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId != null) {
-            User user = userService.getUserById(userId);
-            if (user != null) {
+            Optional<User> user = userService.getUserById(userId);
+            if (user.isPresent()) {
                 session.setAttribute("loggedUser", user);
                 model.addAttribute("loggedUser", user);
 
-                Integer totalPoints = user.getTotalPoints();
+                Integer totalPoints = user.get().getTotalPoints();
                 session.setAttribute("totalPoints", totalPoints);
                 model.addAttribute("totalPoints", totalPoints);
             }
@@ -104,11 +104,11 @@ public class PrizeController {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId != null) {
-            User user = userService.getUserById(userId);
-            if (user != null) {
-                String role = String.valueOf(user.getRole());
+            Optional<User> user = userService.getUserById(userId);
+            if (user.isPresent()) {
+                String role = String.valueOf(user.get().getRole());
                 if (role != null && role.equals("ADMIN")) {
-                    Integer totalPoints = user.getTotalPoints();
+                    Integer totalPoints = user.get().getTotalPoints();
                     session.setAttribute("loggedUser", user);
                     session.setAttribute("totalPoints", totalPoints);
 
@@ -142,14 +142,14 @@ public class PrizeController {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId != null) {
-            User user = userService.getUserById(userId);
-            if (user != null) {
-                String role = String.valueOf(user.getRole());
+            Optional<User> user = userService.getUserById(userId);
+            if (user.isPresent()) {
+                String role = String.valueOf(user.get().getRole());
                 if (role != null && role.equals("ADMIN")) {
                     session.setAttribute("loggedUser", user);
                     model.addAttribute("loggedUser", user);
 
-                    Integer totalPoints = user.getTotalPoints();
+                    Integer totalPoints = user.get().getTotalPoints();
                     session.setAttribute("totalPoints", totalPoints);
                     model.addAttribute("totalPoints", totalPoints);
 
