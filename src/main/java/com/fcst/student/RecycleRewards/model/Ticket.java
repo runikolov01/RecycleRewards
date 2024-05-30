@@ -21,11 +21,11 @@ public class Ticket {
     @Column(name = "active_until", nullable = false)
     private LocalDateTime activeUntil;
 
-    @Column
-    private Integer bottles;
+    @Column(nullable = false)
+    private int bottles;
 
     @Column(nullable = false)
-    private Integer points;
+    private int points;
 
     @Column(name = "registered_on")
     private LocalDateTime registeredOn;
@@ -45,7 +45,7 @@ public class Ticket {
         this.number = number;
     }
 
-    public Ticket(String number, LocalDateTime issued, LocalDateTime activeUntil, Integer bottles, Integer points, Boolean isVoucher) {
+    public Ticket(String number, LocalDateTime issued, LocalDateTime activeUntil, int bottles, int points, Boolean isVoucher) {
         this.number = number;
         this.issued = issued;
         this.activeUntil = activeUntil;
@@ -54,7 +54,7 @@ public class Ticket {
         this.isVoucher = isVoucher;
     }
 
-    public Ticket(Long id, String number, LocalDateTime issued, LocalDateTime activeUntil, Integer bottles, Integer points, LocalDateTime registeredOn, User registeredBy) {
+    public Ticket(Long id, String number, LocalDateTime issued, LocalDateTime activeUntil, int bottles, int points, LocalDateTime registeredOn, User registeredBy) {
         this.id = id;
         this.number = number;
         this.issued = issued;
@@ -97,11 +97,11 @@ public class Ticket {
         this.activeUntil = activeUntil;
     }
 
-    public Integer getPoints() {
+    public int getPoints() {
         return points;
     }
 
-    public void setPoints(Integer points) {
+    public void setPoints(int points) {
         this.points = points;
     }
 
@@ -122,11 +122,11 @@ public class Ticket {
         this.registeredBy = registeredBy;
     }
 
-    public Integer getBottles() {
+    public int getBottles() {
         return bottles;
     }
 
-    public void setBottles(Integer bottles) {
+    public void setBottles(int bottles) {
         this.bottles = bottles;
     }
 
