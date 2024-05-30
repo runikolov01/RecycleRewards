@@ -13,7 +13,7 @@ public class Machine {
     private String locationName;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
     @Column(nullable = false)
