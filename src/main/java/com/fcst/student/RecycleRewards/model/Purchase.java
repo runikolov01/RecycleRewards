@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "purchases")
 public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +19,7 @@ public class Purchase {
     @JoinColumn(name = "prize_id")
     private Prize prize;
 
+    @Column(name = "purchase_date", nullable = false)
     private LocalDateTime purchaseDate;
 
     @Column(name = "winner_code")
