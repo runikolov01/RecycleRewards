@@ -1,36 +1,20 @@
 package com.fcst.student.RecycleRewards.web;
 
-import com.fcst.student.RecycleRewards.model.Ticket;
-import com.fcst.student.RecycleRewards.model.User;
-import com.fcst.student.RecycleRewards.repository.TicketRepository;
 import com.fcst.student.RecycleRewards.service.TicketService;
-import com.fcst.student.RecycleRewards.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 @Controller
 public class TicketController {
-
-    private final TicketRepository ticketRepository;
-
-    private final UserService userService;
-
     @Autowired
     private TicketService ticketService;
 
-    public TicketController(TicketRepository ticketRepository, UserService userService) {
-        this.ticketRepository = ticketRepository;
-        this.userService = userService;
-    }
 
     @GetMapping("/index")
     public String openHomePage() {

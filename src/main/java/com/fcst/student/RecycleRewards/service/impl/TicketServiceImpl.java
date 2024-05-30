@@ -26,6 +26,10 @@ public class TicketServiceImpl implements TicketService {
 
     private static final Logger logger = LoggerFactory.getLogger(TicketServiceImpl.class);
 
+    private static final int TICKET_EXPIRATION_HOURS = 72;
+    private static final int TICKET_NUMBER_LENGTH = 8;
+    private static final String TICKET_NUMBER_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
     private final TicketRepository ticketRepository;
     private final UserService userService;
 
@@ -181,7 +185,7 @@ public class TicketServiceImpl implements TicketService {
     private boolean isTicketExpired(Ticket ticket) {
         LocalDateTime currentTime = LocalDateTime.now();
         long hoursDifference = ChronoUnit.HOURS.between(ticket.getIssued(), currentTime);
-        return hoursDifference > 72;
+        return hoursDifference > TICKET_EXPIRATION_HOURS;
     }
 
     private void registerTicketToUser(Ticket ticket, User user, HttpSession session, Model model) {
@@ -210,7 +214,7 @@ public class TicketServiceImpl implements TicketService {
             ticketNumber = generateUniqueTicketNumber();
         }
         LocalDateTime issuedOn = LocalDateTime.now();
-        LocalDateTime expirationDateTime = issuedOn.plusHours(72);
+        LocalDateTime expirationDateTime = issuedOn.plusHours(TICKET_EXPIRATION_HOURS);
         int points = isVoucher ? 0 : bottlesCount * 5;
 
         return new Ticket(ticketNumber, issuedOn, expirationDateTime, bottlesCount, points, isVoucher);
@@ -223,22 +227,17 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public String generateUniqueTicketNumber() {
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder ticketNumberBuilder = new StringBuilder();
         Random random = new Random();
-        int length = 8;
 
         while (true) {
-            for (int i = 0; i < length; i++) {
-                ticketNumberBuilder.append(alphabet.charAt(random.nextInt(alphabet.length())));
-            }
-
-            String ticketNumber = ticketNumberBuilder.toString();
+            String ticketNumber = random.ints(TICKET_NUMBER_LENGTH, 0, TICKET_NUMBER_ALPHABET.length())
+                    .mapToObj(TICKET_NUMBER_ALPHABET::charAt)
+                    .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                    .toString();
 
             if (!ticketNumberExistsInDatabase(ticketNumber)) {
                 return ticketNumber;
             }
-            ticketNumberBuilder.setLength(0);
         }
     }
 
