@@ -44,12 +44,10 @@ public class PrizeController {
         return prizeService.setPrizeForWinner(prizeId, purchaseId, userCode);
     }
 
-
     @PostMapping("/prizes/buy")
     public ResponseEntity<String> buyPrize(@RequestParam Long prizeId, HttpSession session) {
         return prizeService.takePrize(prizeId, session);
     }
-
 
     @PostMapping("/admin_add_prizes")
     public ResponseEntity<String> savePrize(@RequestParam String name, @RequestParam String description, @RequestParam Integer neededPointsToBuy, @RequestParam Integer totalTickets, @RequestParam String startDateTime, @RequestParam PrizeType type) {
