@@ -12,8 +12,12 @@ import java.util.Map;
 
 @Controller
 public class TicketController {
+    private final TicketService ticketService;
+
     @Autowired
-    private TicketService ticketService;
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
 
     @GetMapping("/index")
     public String openHomePage() {

@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MachineController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final MachineService machineService;
 
     @Autowired
-    private MachineService machineService;
+    public MachineController(UserService userService, MachineService machineService) {
+        this.userService = userService;
+        this.machineService = machineService;
+    }
 
     @GetMapping("/machines")
     public String showMachines(Model model, HttpSession session) {

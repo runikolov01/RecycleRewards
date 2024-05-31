@@ -17,9 +17,6 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 
     boolean existsByWinnerCode(String number);
 
-    @Query("SELECT p.winnerCode FROM Purchase p JOIN p.user u JOIN p.prize pr WHERE u.id = :userId AND pr.id = :prizeId")
-    List<String> findCodesByUserIdAndPrizeId(@Param("userId") Long userId, @Param("prizeId") Long prizeId);
-
     @Query("SELECT new com.fcst.student.RecycleRewards.model.PrizeDetailsDto(p.prize.id, p.prize.name, p.prize.description, p.winnerCode) " +
             "FROM Purchase p " +
             "JOIN p.user u " +

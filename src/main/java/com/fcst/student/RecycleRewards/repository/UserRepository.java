@@ -15,9 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT p.user FROM Purchase p WHERE p.prize.id = :prizeId")
     List<User> findAllByPrizeId(@Param("prizeId") Long prizeId);
 
-//    @Query("SELECT u FROM User u JOIN FETCH u.prizes")
-//    List<User> findUsersWithPrizes();
-
     @Query("SELECT SUM(u.totalBottles) FROM User u")
     Integer getTotalBottlesSum();
 

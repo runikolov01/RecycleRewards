@@ -12,17 +12,20 @@ import java.util.List;
 
 @Service
 public class MachineServiceImpl implements MachineService {
-    @Autowired
-    private MachineRepository machineRepository;
+    private final MachineRepository machineRepository;
+    private final Dotenv dotenv;
 
     @Autowired
-    private Dotenv dotenv;
+    public MachineServiceImpl(MachineRepository machineRepository, Dotenv dotenv) {
+        this.machineRepository = machineRepository;
+        this.dotenv = dotenv;
+    }
 
     @Override
     public List<Machine> getAllMachines() {
         return machineRepository.findAll();
     }
-    
+
     @Override
     public void populateModelWithMachinesAndApiKey(Model model) {
         List<Machine> machines = getAllMachines();

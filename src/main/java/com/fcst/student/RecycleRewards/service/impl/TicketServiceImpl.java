@@ -6,8 +6,6 @@ import com.fcst.student.RecycleRewards.repository.TicketRepository;
 import com.fcst.student.RecycleRewards.service.TicketService;
 import com.fcst.student.RecycleRewards.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,9 +21,6 @@ import java.util.Random;
 
 @Service
 public class TicketServiceImpl implements TicketService {
-
-    private static final Logger logger = LoggerFactory.getLogger(TicketServiceImpl.class);
-
     private static final int TICKET_EXPIRATION_HOURS = 72;
     private static final int TICKET_NUMBER_LENGTH = 8;
     private static final String TICKET_NUMBER_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

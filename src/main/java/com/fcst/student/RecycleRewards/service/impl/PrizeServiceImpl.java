@@ -254,14 +254,15 @@ public class PrizeServiceImpl implements PrizeService {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId != null) {
-            Optional<User> user = userService.getUserById(userId);
-            if (user.isPresent()) {
-                String role = String.valueOf(user.get().getRole());
+            Optional<User> userOptional = userService.getUserById(userId);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                String role = String.valueOf(user.getRole());
                 if (role != null && role.equals("ADMIN")) {
                     session.setAttribute("loggedUser", user);
                     model.addAttribute("loggedUser", user);
 
-                    Integer totalPoints = user.get().getTotalPoints();
+                    Integer totalPoints = user.getTotalPoints();
                     session.setAttribute("totalPoints", totalPoints);
                     model.addAttribute("totalPoints", totalPoints);
 
@@ -269,26 +270,27 @@ public class PrizeServiceImpl implements PrizeService {
                     model.addAttribute("prizes", prizesWithoutWinners);
 
                     if (prizeId != null) {
-                        List<Purchase> purchases = purchaseService.getAllPurchasesByPrizeId(prizeId);
-                        model.addAttribute("purchases", purchases);
+                        Optional<Prize> prizeOptional = getPrizeById(prizeId);
+                        if (prizeOptional.isPresent()) {
+                            Prize prize = prizeOptional.get();
+                            List<Purchase> purchases = purchaseService.getAllPurchasesByPrizeId(prizeId);
+                            model.addAttribute("purchases", purchases);
 
-                        List<User> participants = new ArrayList<>();
-                        for (Purchase purchase : purchases) {
-                            User purchaseUser = purchase.getUser();
-                            participants.add(purchaseUser);
+                            List<User> participants = new ArrayList<>();
+                            for (Purchase purchase : purchases) {
+                                User purchaseUser = purchase.getUser();
+                                participants.add(purchaseUser);
+                            }
+                            model.addAttribute("participants", participants);
+                            model.addAttribute("selectedPrizeId", prizeId);
+
+                            int remainingTickets = prize.getRemainedTickets();
+                            model.addAttribute("remainingTickets", remainingTickets);
+                        } else {
+                            model.addAttribute("selectedPrizeId", null);
                         }
-                        model.addAttribute("participants", participants);
-                        model.addAttribute("selectedPrizeId", prizeId);
-
-                        int remainingTickets = getPrizeById(prizeId).get().getRemainedTickets();
-
-                        model.addAttribute("remainingTickets", remainingTickets);
-
-                    } else {
-                        model.addAttribute("selectedPrizeId", null);
+                        return "admin_raffle";
                     }
-
-                    return "admin_raffle";
                 } else {
                     return "redirect:/home";
                 }

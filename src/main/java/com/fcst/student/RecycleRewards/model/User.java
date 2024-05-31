@@ -170,14 +170,6 @@ public class User {
         this.totalPoints = totalPoints;
     }
 
-//    public Long getAddressId() {
-//        return addressId;
-//    }
-//
-//    public void setAddressId(Long addressId) {
-//        this.addressId = addressId;
-//    }
-
     public Address getAddress() {
         return address;
     }

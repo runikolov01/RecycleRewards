@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class PrizeController {
+    private final PrizeService prizeService;
+
     @Autowired
-    PrizeService prizeService;
+    public PrizeController(PrizeService prizeService) {
+        this.prizeService = prizeService;
+    }
 
     @GetMapping("/prizes")
     public String showPrizes(Model model, HttpSession session, @RequestParam(value = "type", required = false) PrizeType type) {
