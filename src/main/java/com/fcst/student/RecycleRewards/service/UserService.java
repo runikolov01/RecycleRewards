@@ -22,7 +22,6 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    @Transactional
     void deleteUserByUserCode(Long userCode);
 
     Optional<User> getUserById(Long userId);
@@ -51,8 +50,6 @@ public interface UserService {
 
     User getUserByUserCode(Long userCode);
 
-    User getUserByCode(Long code);
-
     String openHomePage(Model model, HttpSession session);
 
     String openRegisterForm(Model model, HttpSession session, HttpServletRequest request);
@@ -69,21 +66,25 @@ public interface UserService {
 
     ResponseEntity<String> openUserAddress(Long userCode);
 
-    String loginProcess(String email, String password, Model model, HttpSession session);
+    String deleteUserByCodeProcess(Long userCode);
+
+    String openEditUserForm(Long userId, Model model);
+
+    String activateAccountProcess(String token, RedirectAttributes redirectAttributes);
+
+    String resetPasswordProcess(String token, RedirectAttributes redirectAttributes);
 
     String registerProcess(String firstName, String lastName, String email, String password, String confirmPassword, String ageConfirmation, RedirectAttributes redirectAttributes, Model model);
+
+    String loginProcess(String email, String password, Model model, HttpSession session);
+
+    String forgotPasswordProcess(String email, RedirectAttributes redirectAttributes);
+
+    String handlePasswordResetProcess(String token, String password, RedirectAttributes redirectAttributes);
 
     ResponseEntity<String> updateProfileProcess(String firstName, String lastName, String email, Integer telephoneNumber, String city, Integer postCode, String street, Integer streetNumber, Integer floor, Integer apartmentNumber, HttpSession session);
 
     String updateUserProcess(Long userCode, User updatedUser);
 
     String logoutProcess(HttpSession session, HttpServletResponse response);
-
-    String activateAccountProcess(String token, RedirectAttributes redirectAttributes);
-
-    String resetPasswordProcess(String token, RedirectAttributes redirectAttributes);
-
-    String forgotPasswordProcess(String email, RedirectAttributes redirectAttributes);
-
-    String handlePasswordResetProcess(String token, String password, RedirectAttributes redirectAttributes);
 }

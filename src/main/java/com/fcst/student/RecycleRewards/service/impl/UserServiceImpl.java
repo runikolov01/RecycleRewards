@@ -37,44 +37,31 @@ import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+    private final Environment environment;
+    private final ResourceLoader resourceLoader;
+    private final PasswordEncoder passwordEncoder;
+    private final AddressService addressService;
+    private final UserRepository userRepository;
+    private final PurchaseService purchaseService;
+    private final EmailConfiguration emailConfiguration;
+    private final EmailService emailService;
+    private final PrizeRepository prizeRepository;
+    private final LoggedUser loggedUser;
 
     @Autowired
-    private Environment environment;
-
-    @Autowired
-    private ResourceLoader resourceLoader;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AddressService addressService;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PurchaseService purchaseService;
-
-    @Autowired
-    private EmailConfiguration emailConfiguration;
-
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private PrizeRepository prizeRepository;
-
-    @Autowired
-    private LoggedUser loggedUser;
-
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, LoggedUser loggedUser, PurchaseService purchaseService) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(JavaMailSender mailSender, Environment environment, ResourceLoader resourceLoader, PasswordEncoder passwordEncoder, AddressService addressService, UserRepository userRepository, PurchaseService purchaseService, EmailConfiguration emailConfiguration, EmailService emailService, PrizeRepository prizeRepository, LoggedUser loggedUser) {
+        this.mailSender = mailSender;
+        this.environment = environment;
+        this.resourceLoader = resourceLoader;
         this.passwordEncoder = passwordEncoder;
-        this.loggedUser = loggedUser;
+        this.addressService = addressService;
+        this.userRepository = userRepository;
         this.purchaseService = purchaseService;
+        this.emailConfiguration = emailConfiguration;
+        this.emailService = emailService;
+        this.prizeRepository = prizeRepository;
+        this.loggedUser = loggedUser;
     }
 
     @Override
@@ -100,6 +87,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> getUserById(Long userId) {
+        return userRepository.findById(userId);
+    }
+
+
+    @Override
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -122,11 +115,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    @Override
-    public Optional<User> getUserById(Long userId) {
-        return userRepository.findById(userId);
     }
 
     public List<User> getParticipantsByPrizeId(Long prizeId) {
@@ -169,10 +157,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUserCode(userCode);
     }
 
-    @Override
-    public User getUserByCode(Long code) {
-        return userRepository.findByUserCode(code);
-    }
 
     @Override
     public String openHomePage(Model model, HttpSession session) {
@@ -190,9 +174,8 @@ public class UserServiceImpl implements UserService {
             if (user.isPresent()) {
                 Integer bottlesCount = (Integer) session.getAttribute("bottlesCount");
 
-                double userKgBottles = 0.00;
                 int userTotalBottles = user.get().getTotalBottles();
-                userKgBottles = userTotalBottles * 0.015;
+                double userKgBottles = userTotalBottles * 0.015;
 
                 model.addAttribute("userTotalBottles", userTotalBottles);
                 model.addAttribute("userKgBottles", userKgBottles);
@@ -268,11 +251,16 @@ public class UserServiceImpl implements UserService {
             return "redirect:/login";
         }
 
-        Optional<User> loggedUser = getUserById(userId);
+        Optional<User> loggedUserOptional = getUserById(userId);
+        if (loggedUserOptional.isEmpty()) {
+            return "redirect:/login";
+        }
+
+        User loggedUser = loggedUserOptional.get();
         List<PrizeDetailsDto> prizeDetails = purchaseService.getPrizeDetailsForUser(userId);
 
         model.addAttribute("prizeDetails", prizeDetails != null ? prizeDetails : Collections.emptyList());
-        Integer totalPoints = loggedUser.get().getTotalPoints();
+        Integer totalPoints = loggedUser.getTotalPoints();
         model.addAttribute("totalPoints", totalPoints);
         model.addAttribute("loggedUser", loggedUser);
         session.setAttribute("loggedUser", loggedUser);
@@ -281,10 +269,9 @@ public class UserServiceImpl implements UserService {
         List<Purchase> purchases = purchaseService.getPurchasesByUserId(userId);
         model.addAttribute("purchases", purchases);
 
-        model.addAttribute("loggedUser", loggedUser);
-
         return "myprofile";
     }
+
 
     @Override
     public String openWinnersPage(Model model, HttpSession session) {
@@ -300,7 +287,6 @@ public class UserServiceImpl implements UserService {
         if (userId != null) {
             Optional<User> user = getUserById(userId);
             if (user.isPresent()) {
-                String role = String.valueOf(user.get().getRole());
                 Integer totalPoints = user.get().getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
                 model.addAttribute("loggedUser", user);
@@ -387,7 +373,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> openUserAddress(Long userCode) {
         try {
-            User user = getUserByCode(userCode);
+            User user = getUserByUserCode(userCode);
             if (user != null) {
                 Address address = user.getAddress();
                 if (address != null) {
@@ -404,29 +390,55 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional
     @Override
-    public String loginProcess(String email, String password, Model model, HttpSession session) {
-        User user = getUserByEmail(email);
-        if (user != null && user.getDeletedDate() == null && verifyPassword(user, password)) {
-            if (user.isActivated()) {
-                session.setAttribute("userId", user.getId());
-                session.setAttribute("loggedIn", true);
-                session.setAttribute("userRole", user.getRole());
+    public String deleteUserByCodeProcess(Long userCode) {
+        deleteUserByUserCode(userCode);
+        return "redirect:/users";
+    }
 
-                Integer totalPoints = user.getTotalPoints();
+    @Override
+    public String openEditUserForm(Long userId, Model model) {
+        Optional<User> user = getUserById(userId);
+        model.addAttribute("user", user);
+        return "edit-user";
+    }
 
-                session.setAttribute("totalPoints", totalPoints);
-                return "redirect:/home";
-            } else {
-                model.addAttribute("errorNotActivated", true);
-                model.addAttribute("error", false);
-                return "login";
-            }
-        } else {
-            model.addAttribute("error", true);
-            model.addAttribute("errorNotActivated", false);
-            return "login";
+    @Override
+    public String activateAccountProcess(String token, RedirectAttributes redirectAttributes) {
+        User user = findByActivationToken(token);
+
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("error", "Вече сте активирали своя профил!");
+            return "redirect:/activated_profile";
         }
+
+        if (user.getTokenExpiry().isBefore(LocalDateTime.now())) {
+            deleteUser(user.getId());
+            redirectAttributes.addFlashAttribute("linkExpired", "Линкът е изтекъл! Изминали са повече от 24 часа от получаването на този email.");
+            return "redirect:/activated_profile";
+        }
+
+        user.setActivated(true);
+        user.setActivationToken(null);
+        user.setTokenExpiry(null);
+        saveUser(user);
+
+        redirectAttributes.addFlashAttribute("success", "Профилът е активиран успешно!");
+        return "redirect:/activated_profile";
+    }
+
+    @Override
+    public String resetPasswordProcess(String token, RedirectAttributes redirectAttributes) {
+        User user = findByResetToken(token);
+
+        if (user == null || user.getTokenExpiry().isBefore(LocalDateTime.now())) {
+            redirectAttributes.addFlashAttribute("error", "Линкът за възстановяване на парола е невалиден или е изтекъл.");
+            return "redirect:/login";
+        }
+
+        redirectAttributes.addFlashAttribute("token", token);
+        return "redirect:/show_reset_password_form";
     }
 
     @Override
@@ -497,6 +509,97 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String loginProcess(String email, String password, Model model, HttpSession session) {
+        User user = getUserByEmail(email);
+        if (user != null && user.getDeletedDate() == null && verifyPassword(user, password)) {
+            if (user.isActivated()) {
+                session.setAttribute("userId", user.getId());
+                session.setAttribute("loggedIn", true);
+                session.setAttribute("userRole", user.getRole());
+
+                Integer totalPoints = user.getTotalPoints();
+
+                session.setAttribute("totalPoints", totalPoints);
+                return "redirect:/home";
+            } else {
+                model.addAttribute("errorNotActivated", true);
+                model.addAttribute("error", false);
+                return "login";
+            }
+        } else {
+            model.addAttribute("error", true);
+            model.addAttribute("errorNotActivated", false);
+            return "login";
+        }
+    }
+
+    @Override
+    public String forgotPasswordProcess(String email, RedirectAttributes redirectAttributes) {
+        User user = getUserByEmail(email);
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("error", "Невалиден email адрес!");
+            return "redirect:/login";
+        }
+
+        String token = UUID.randomUUID().toString();
+        user.setResetToken(token);
+        user.setTokenExpiry(LocalDateTime.now().plusHours(24));
+        saveUser(user);
+
+        try {
+            sendHtmlEmail(user, token);
+            redirectAttributes.addFlashAttribute("message", "Линкът за възстановяване на парола е изпратен на вашия email!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Възникна грешка при изпращането на email.");
+            e.printStackTrace();
+        }
+
+        return "redirect:/login";
+    }
+
+    private void sendHtmlEmail(User user, String token) throws Exception {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+        String activationUrl = "http://localhost:8080/reset_password?token=" + token;
+
+        Resource resource = resourceLoader.getResource("classpath:templates/forgot_password_email.html");
+        String htmlContent = new String(Files.readAllBytes(Paths.get(resource.getURI())));
+
+        htmlContent = htmlContent.replace("${firstName}", user.getFirstName());
+        htmlContent = htmlContent.replace("${lastName}", user.getLastName());
+        htmlContent = htmlContent.replace("${activationUrl}", activationUrl);
+
+        helper.setText(htmlContent, true);
+        helper.setTo(user.getEmail());
+        helper.setSubject("Заявка за актуализиране на паролата");
+        helper.setFrom(Objects.requireNonNull(environment.getProperty("spring.mail.username")));
+
+        mailSender.send(mimeMessage);
+    }
+
+    @Override
+    public String handlePasswordResetProcess(String token, String password, RedirectAttributes redirectAttributes) {
+        User user = findByResetToken(token);
+
+        if (user == null || user.getTokenExpiry().isBefore(LocalDateTime.now())) {
+            redirectAttributes.addFlashAttribute("error", "Линкът за възстановяване на парола е невалиден или е изтекъл.");
+            return "redirect:/login";
+        }
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashedPassword = encoder.encode(password);
+
+        user.setPassword(hashedPassword);
+        user.setResetToken(null);
+        user.setTokenExpiry(null);
+        saveUser(user);
+
+        redirectAttributes.addFlashAttribute("message", "Паролата е възстановена успешно!");
+        return "redirect:/login";
+    }
+
+    @Override
     public ResponseEntity<String> updateProfileProcess(String firstName, String lastName, String email, Integer telephoneNumber, String city, Integer postCode, String street, Integer streetNumber, Integer floor, Integer apartmentNumber, HttpSession session) {
         try {
             Long userId = (Long) session.getAttribute("userId");
@@ -509,16 +612,21 @@ public class UserServiceImpl implements UserService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Моля, попълнете всички полета, маркирани със звездичка, за да актуализирате профила си!");
             }
 
-            Optional<User> currentUser = getUserById(userId);
+            Optional<User> currentUserOptional = getUserById(userId);
+            if (currentUserOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Потребителят не е намерен!");
+            }
+
+            User currentUser = currentUserOptional.get();
 
             // Update user data
-            currentUser.get().setFirstName(firstName);
-            currentUser.get().setLastName(lastName);
-            currentUser.get().setEmail(email);
-            currentUser.get().setPhone(telephoneNumber);
+            currentUser.setFirstName(firstName);
+            currentUser.setLastName(lastName);
+            currentUser.setEmail(email);
+            currentUser.setPhone(telephoneNumber);
 
             // Check if the user has an associated address
-            Address address = currentUser.get().getAddress();
+            Address address = currentUser.getAddress();
             if (address == null) {
                 // If the user doesn't have an address, create a new one
                 address = new Address();
@@ -533,10 +641,10 @@ public class UserServiceImpl implements UserService {
             address.setApartmentNumber(apartmentNumber != null ? apartmentNumber : 0);
 
             // Link the address to the user
-            currentUser.get().setAddress(address);
+            currentUser.setAddress(address);
 
             // Update the user in the database
-            updateUser(currentUser.orElse(null));
+            updateUser(currentUser);
 
             return ResponseEntity.ok("Данните са актуализирани успешно!");
         } catch (Exception e) {
@@ -546,7 +654,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String updateUserProcess(Long userCode, User updatedUser) {
-        User existingUser = getUserByCode(userCode);
+        User existingUser = getUserByUserCode(userCode);
 
         if (updatedUser.getFirstName() != null) {
             existingUser.setFirstName(updatedUser.getFirstName());
@@ -576,108 +684,5 @@ public class UserServiceImpl implements UserService {
         session.invalidate();
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // Prevent caching
         return "redirect:/home";
-    }
-
-    @Override
-    public String activateAccountProcess(String token, RedirectAttributes redirectAttributes) {
-        User user = findByActivationToken(token);
-
-        if (user == null) {
-            redirectAttributes.addFlashAttribute("error", "Вече сте активирали своя профил!");
-            return "redirect:/activated_profile";
-        }
-
-        if (user.getTokenExpiry().isBefore(LocalDateTime.now())) {
-            deleteUser(user.getId());
-            redirectAttributes.addFlashAttribute("linkExpired", "Линкът е изтекъл! Изминали са повече от 24 часа от получаването на този email.");
-            return "redirect:/activated_profile";
-        }
-
-        user.setActivated(true);
-        user.setActivationToken(null);
-        user.setTokenExpiry(null);
-        saveUser(user);
-
-        redirectAttributes.addFlashAttribute("success", "Профилът е активиран успешно!");
-        return "redirect:/activated_profile";
-    }
-
-    @Override
-    public String resetPasswordProcess(String token, RedirectAttributes redirectAttributes) {
-        User user = findByResetToken(token);
-
-        if (user == null || user.getTokenExpiry().isBefore(LocalDateTime.now())) {
-            redirectAttributes.addFlashAttribute("error", "Линкът за възстановяване на парола е невалиден или е изтекъл.");
-            return "redirect:/login";
-        }
-
-        redirectAttributes.addFlashAttribute("token", token);
-        return "redirect:/show_reset_password_form";
-    }
-
-    private void sendHtmlEmail(User user, String token) throws Exception {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-
-        String activationUrl = "http://localhost:8080/reset_password?token=" + token;
-
-        Resource resource = resourceLoader.getResource("classpath:templates/forgot_password_email.html");
-        String htmlContent = new String(Files.readAllBytes(Paths.get(resource.getURI())));
-
-        htmlContent = htmlContent.replace("${firstName}", user.getFirstName());
-        htmlContent = htmlContent.replace("${lastName}", user.getLastName());
-        htmlContent = htmlContent.replace("${activationUrl}", activationUrl);
-
-        helper.setText(htmlContent, true);
-        helper.setTo(user.getEmail());
-        helper.setSubject("Заявка за актуализиране на паролата");
-        helper.setFrom(Objects.requireNonNull(environment.getProperty("spring.mail.username")));
-
-        mailSender.send(mimeMessage);
-    }
-
-    @Override
-    public String forgotPasswordProcess(String email, RedirectAttributes redirectAttributes) {
-        User user = getUserByEmail(email);
-        if (user == null) {
-            redirectAttributes.addFlashAttribute("error", "Невалиден email адрес!");
-            return "redirect:/login";
-        }
-
-        String token = UUID.randomUUID().toString();
-        user.setResetToken(token);
-        user.setTokenExpiry(LocalDateTime.now().plusHours(24));
-        saveUser(user);
-
-        try {
-            sendHtmlEmail(user, token);
-            redirectAttributes.addFlashAttribute("message", "Линкът за възстановяване на парола е изпратен на вашия email!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Възникна грешка при изпращането на email.");
-            e.printStackTrace();
-        }
-
-        return "redirect:/login";
-    }
-
-    @Override
-    public String handlePasswordResetProcess(String token, String password, RedirectAttributes redirectAttributes) {
-        User user = findByResetToken(token);
-
-        if (user == null || user.getTokenExpiry().isBefore(LocalDateTime.now())) {
-            redirectAttributes.addFlashAttribute("error", "Линкът за възстановяване на парола е невалиден или е изтекъл.");
-            return "redirect:/login";
-        }
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String hashedPassword = encoder.encode(password);
-
-        user.setPassword(hashedPassword);
-        user.setResetToken(null);
-        user.setTokenExpiry(null);
-        saveUser(user);
-
-        redirectAttributes.addFlashAttribute("message", "Паролата е възстановена успешно!");
-        return "redirect:/login";
     }
 }

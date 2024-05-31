@@ -12,8 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Optional;
-
 @Controller
 public class UserController {
     private final UserService userService;
@@ -43,7 +41,6 @@ public class UserController {
         return userService.openMyProfile(model, session);
     }
 
-
     @GetMapping("/winners")
     public String showWinners(Model model, HttpSession session) {
         return userService.openWinnersPage(model, session);
@@ -67,15 +64,12 @@ public class UserController {
 
     @GetMapping("/delete/{userCode}")
     public String deleteUser(@PathVariable("userCode") Long userCode) {
-        userService.deleteUserByUserCode(userCode);
-        return "redirect:/users";
+        return userService.deleteUserByCodeProcess(userCode);
     }
 
     @GetMapping("/edit/{userId}")
     public String showEditUserForm(@PathVariable("userId") Long userId, Model model) {
-        Optional<User> user = userService.getUserById(userId);
-        model.addAttribute("user", user);
-        return "edit-user";
+        return userService.openEditUserForm(userId, model);
     }
 
     @GetMapping("/activate")
@@ -98,24 +92,19 @@ public class UserController {
         return userService.resetPasswordProcess(token, redirectAttributes);
     }
 
-    @PostMapping("/login")
-    public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
-        return userService.loginProcess(email, password, model, session);
-    }
-
     @PostMapping("/register")
     public String registerSubmit(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam(required = false) String ageConfirmation, RedirectAttributes redirectAttributes, Model model) {
         return userService.registerProcess(firstName, lastName, email, password, confirmPassword, ageConfirmation, redirectAttributes, model);
     }
 
+    @PostMapping("/login")
+    public String loginSubmit(@RequestParam String email, @RequestParam String password, Model model, HttpSession session) {
+        return userService.loginProcess(email, password, model, session);
+    }
+
     @PostMapping("/forgot_password")
     public String forgotPassword(@RequestParam String email, RedirectAttributes redirectAttributes) {
         return userService.forgotPasswordProcess(email, redirectAttributes);
-    }
-
-    @PostMapping("/logout")
-    public String logout(HttpSession session, HttpServletResponse response) {
-        return userService.logoutProcess(session, response);
     }
 
     @PostMapping("/reset_password")
@@ -133,4 +122,8 @@ public class UserController {
         return userService.updateUserProcess(userCode, updatedUser);
     }
 
+    @PostMapping("/logout")
+    public String logout(HttpSession session, HttpServletResponse response) {
+        return userService.logoutProcess(session, response);
+    }
 }
