@@ -181,8 +181,8 @@ public class UserServiceImpl implements UserService {
                 model.addAttribute("userKgBottles", userKgBottles);
                 model.addAttribute("bottlesCount", bottlesCount);
                 session.setAttribute("bottlesCount", bottlesCount);
-                model.addAttribute("loggedUser", user);
-                session.setAttribute("loggedUser", user);
+                model.addAttribute("loggedUser", user.get());
+                session.setAttribute("loggedUser", user.get());
 
                 Integer totalPoints = user.get().getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
@@ -289,8 +289,8 @@ public class UserServiceImpl implements UserService {
             if (user.isPresent()) {
                 Integer totalPoints = user.get().getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
-                model.addAttribute("loggedUser", user);
-                session.setAttribute("loggedUser", user);
+                model.addAttribute("loggedUser", user.get());
+                session.setAttribute("loggedUser", user.get());
 
                 model.addAttribute("loggedIn", true);
             }
@@ -333,8 +333,8 @@ public class UserServiceImpl implements UserService {
         if (userId != null) {
             Optional<User> user = getUserById(userId);
             if (user.isPresent()) {
-                model.addAttribute("loggedUser", user);
-                session.setAttribute("loggedUser", user);
+                model.addAttribute("loggedUser", user.get());
+                session.setAttribute("loggedUser", user.get());
                 Integer totalPoints = user.get().getTotalPoints();
                 model.addAttribute("totalPoints", totalPoints);
             }
@@ -352,8 +352,8 @@ public class UserServiceImpl implements UserService {
                 if (role != null && role.equals("ADMIN")) {
                     Integer totalPoints = user.get().getTotalPoints();
                     model.addAttribute("totalPoints", totalPoints);
-                    model.addAttribute("loggedUser", user);
-                    session.setAttribute("loggedUser", user);
+                    model.addAttribute("loggedUser", user.get());
+                    session.setAttribute("loggedUser", user.get());
 
                     model.addAttribute("loggedIn", true);
 

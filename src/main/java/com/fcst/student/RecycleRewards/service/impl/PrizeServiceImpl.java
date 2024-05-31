@@ -55,8 +55,8 @@ public class PrizeServiceImpl implements PrizeService {
         if (userId != null) {
             Optional<User> user = userService.getUserById(userId);
             if (user.isPresent()) {
-                session.setAttribute("loggedUser", user);
-                model.addAttribute("loggedUser", user);
+                session.setAttribute("loggedUser", user.get());
+                model.addAttribute("loggedUser", user.get());
 
                 Integer totalPoints = user.get().getTotalPoints();
                 session.setAttribute("totalPoints", totalPoints);
