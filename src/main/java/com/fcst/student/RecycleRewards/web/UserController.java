@@ -62,9 +62,15 @@ public class UserController {
         return userService.openUserAddress(userCode);
     }
 
-    @GetMapping("/delete/{userCode}")
-    public String deleteUser(@PathVariable("userCode") Long userCode) {
-        return userService.deleteUserByCodeProcess(userCode);
+//    @DeleteMapping("/delete/{userCode}")
+//    public String deleteUser(@PathVariable("userCode") Long userCode) {
+//        return userService.deleteUserByCodeProcess(userCode);
+//    }
+
+    @DeleteMapping("/delete/{userCode}")
+    public ResponseEntity<String> deleteUser(@PathVariable("userCode") Long userCode) {
+        String response = userService.deleteUserByCodeProcess(userCode);
+        return ResponseEntity.ok(response); // Return the success message in the response body
     }
 
     @GetMapping("/edit/{userId}")
@@ -112,7 +118,7 @@ public class UserController {
         return userService.handlePasswordResetProcess(token, password, redirectAttributes);
     }
 
-    @PatchMapping("/myProfile")
+    @PutMapping("/myProfile")
     public ResponseEntity<String> updateProfile(@RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName, @RequestParam(required = false) String email, @RequestParam(required = false) Integer telephoneNumber, @RequestParam(required = false) String city, @RequestParam(required = false) Integer postCode, @RequestParam(required = false) String street, @RequestParam(required = false) Integer streetNumber, @RequestParam(required = false) Integer floor, @RequestParam(required = false) Integer apartmentNumber, HttpSession session) {
         return userService.updateProfileProcess(firstName, lastName, email, telephoneNumber, city, postCode, street, streetNumber, floor, apartmentNumber, session);
     }

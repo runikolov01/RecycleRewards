@@ -79,13 +79,6 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Transactional
-    @Override
-    public void deleteUserByUserCode(Long userCode) {
-        User user = userRepository.findByUserCode(userCode);
-        user.setDeletedDate(LocalDateTime.now());
-    }
-
     @Override
     public Optional<User> getUserById(Long userId) {
         return userRepository.findById(userId);
@@ -389,13 +382,24 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Възникна грешка: " + e.getMessage());
         }
     }
+//
+//    @Transactional
+//    @Override
+//    public String deleteUserByCodeProcess(Long userCode) {
+//        User user = userRepository.findByUserCode(userCode);
+//        user.setDeletedDate(LocalDateTime.now());
+//        return "redirect:/users";
+//    }
 
     @Transactional
     @Override
     public String deleteUserByCodeProcess(Long userCode) {
-        deleteUserByUserCode(userCode);
-        return "redirect:/users";
+        User user = userRepository.findByUserCode(userCode);
+        user.setDeletedDate(LocalDateTime.now());
+        userRepository.save(user);
+        return "Потребителят е изтрит успешно!";
     }
+
 
     @Override
     public String openEditUserForm(Long userId, Model model) {

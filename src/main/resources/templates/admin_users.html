@@ -216,27 +216,26 @@
     // Event handler for Delete button
     $(document).on('click', '.delete-btn', function () {
         var $row = $(this).closest('tr');
-
         var userCode = $row.find('td:eq(0) span').text();
 
         $.ajax({
             url: '/delete/' + userCode,
-            type: 'GET',
+            type: 'DELETE',
             success: function (response) {
-                console.log('User deleted successfully');
+                console.log('Response:', response);
                 $('#successMessage').show();
+                $row.remove();
 
-                window.location.reload();
+                setTimeout(function () {
+                    window.location.reload();
+                }, 4000);
             },
             error: function (xhr, status, error) {
-                $('#successMessage').show();
                 console.error('Error deleting user');
             }
         });
-        setTimeout(function () {
-            window.location.reload();
-        }, 4000);
     });
+
 </script>
 
 </body>
