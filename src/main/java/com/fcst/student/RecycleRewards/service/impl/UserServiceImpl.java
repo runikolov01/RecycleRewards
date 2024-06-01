@@ -14,7 +14,6 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
@@ -26,6 +25,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -65,16 +65,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void saveUser(User person) {
         userRepository.save(person);
     }
 
     @Override
+    @Transactional
     public void updateUser(User person) {
         userRepository.save(person);
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
@@ -101,6 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void logout() {
         loggedUser.reset();
     }
@@ -130,6 +134,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Long generateUniqueUserCode() {
         Long userCode;
         do {
@@ -382,14 +387,6 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Възникна грешка: " + e.getMessage());
         }
     }
-//
-//    @Transactional
-//    @Override
-//    public String deleteUserByCodeProcess(Long userCode) {
-//        User user = userRepository.findByUserCode(userCode);
-//        user.setDeletedDate(LocalDateTime.now());
-//        return "redirect:/users";
-//    }
 
     @Transactional
     @Override
@@ -414,6 +411,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String activateAccountProcess(String token, RedirectAttributes redirectAttributes) {
         User user = findByActivationToken(token);
 
@@ -451,6 +449,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String registerProcess(String firstName, String lastName, String email, String password, String confirmPassword, String ageConfirmation, RedirectAttributes redirectAttributes, Model model) {
         if (!password.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("error", "Паролите не съвпадат.");
@@ -543,6 +542,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String forgotPasswordProcess(String email, RedirectAttributes redirectAttributes) {
         User user = getUserByEmail(email);
         if (user == null) {
@@ -588,6 +588,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String handlePasswordResetProcess(String token, String password, RedirectAttributes redirectAttributes) {
         User user = findByResetToken(token);
 
@@ -609,6 +610,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> updateProfileProcess(String firstName, String lastName, String email, Integer telephoneNumber, String city, Integer postCode, String street, Integer streetNumber, Integer floor, Integer apartmentNumber, HttpSession session) {
         try {
             Long userId = (Long) session.getAttribute("userId");
@@ -662,6 +664,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String updateUserProcess(Long userCode, User updatedUser) {
         User existingUser = getUserByUserCode(userCode);
 
@@ -687,6 +690,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String logoutProcess(HttpSession session, HttpServletResponse response) {
         session.removeAttribute("userId");
         this.logout();

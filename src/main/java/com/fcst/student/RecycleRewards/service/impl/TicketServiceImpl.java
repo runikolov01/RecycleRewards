@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.time.LocalDateTime;
@@ -113,6 +114,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Map<String, Object>> setVoucherAttribute(Map<String, Boolean> requestBody, HttpSession session) {
         Boolean isVoucher = requestBody.get("isVoucher");
         session.setAttribute("isVoucher", isVoucher);
@@ -123,6 +125,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public void addBottle(HttpSession session) {
         Integer bottlesCount = getDefaultBottlesCount((Integer) session.getAttribute("bottlesCount"));
         bottlesCount++;
@@ -130,6 +133,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public String exitSession(HttpSession session, Model model) {
         Integer bottlesCount = getDefaultBottlesCount((Integer) session.getAttribute("bottlesCount"));
         String ticketNumber = (String) session.getAttribute("ticketNumber");
@@ -149,6 +153,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> registerTicket(String ticketNumber, HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId != null) {
@@ -216,6 +221,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public void saveTicket(Ticket ticket) {
         ticketRepository.save(ticket);
     }
