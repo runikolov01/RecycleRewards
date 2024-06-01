@@ -395,9 +395,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public String deleteUserByCodeProcess(Long userCode) {
         User user = userRepository.findByUserCode(userCode);
-        user.setDeletedDate(LocalDateTime.now());
-        userRepository.save(user);
-        return "Потребителят е изтрит успешно!";
+
+        if (user != null) {
+
+            user.setDeletedDate(LocalDateTime.now());
+            userRepository.save(user);
+            return "Потребителят е изтрит успешно!";
+        }
+        return "Потребител с този код не съществува!";
     }
 
 

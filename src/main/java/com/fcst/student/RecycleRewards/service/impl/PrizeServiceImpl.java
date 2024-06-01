@@ -221,11 +221,11 @@ public class PrizeServiceImpl implements PrizeService {
                 String role = String.valueOf(user.get().getRole());
                 if (role != null && role.equals("ADMIN")) {
                     Integer totalPoints = user.get().getTotalPoints();
-                    session.setAttribute("loggedUser", user);
+                    session.setAttribute("loggedUser", user.get());
                     session.setAttribute("totalPoints", totalPoints);
 
                     model.addAttribute("totalPoints", totalPoints);
-                    model.addAttribute("loggedUser", user);
+                    model.addAttribute("loggedUser", user.get());
                     model.addAttribute("loggedIn", true);
                     model.addAttribute("prizeTypes", PrizeType.values());
 
@@ -254,15 +254,15 @@ public class PrizeServiceImpl implements PrizeService {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId != null) {
-            Optional<User> userOptional = userService.getUserById(userId);
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-                String role = String.valueOf(user.getRole());
+            Optional<User> user = userService.getUserById(userId);
+            if (user.isPresent()) {
+//                User user = userOptional.get();
+                String role = String.valueOf(user.get().getRole());
                 if (role != null && role.equals("ADMIN")) {
-                    session.setAttribute("loggedUser", user);
-                    model.addAttribute("loggedUser", user);
+                    session.setAttribute("loggedUser", user.get());
+                    model.addAttribute("loggedUser", user.get());
 
-                    Integer totalPoints = user.getTotalPoints();
+                    Integer totalPoints = user.get().getTotalPoints();
                     session.setAttribute("totalPoints", totalPoints);
                     model.addAttribute("totalPoints", totalPoints);
 
@@ -289,8 +289,8 @@ public class PrizeServiceImpl implements PrizeService {
                         } else {
                             model.addAttribute("selectedPrizeId", null);
                         }
-                        return "admin_raffle";
                     }
+                    return "admin_raffle";
                 } else {
                     return "redirect:/home";
                 }

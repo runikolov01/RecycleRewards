@@ -223,15 +223,18 @@
             type: 'DELETE',
             success: function (response) {
                 console.log('Response:', response);
-                $('#successMessage').show();
+                $('#successMessage').show().text('Потребителят е изтрит успешно!');
                 $row.remove();
-
                 setTimeout(function () {
                     window.location.reload();
                 }, 4000);
             },
             error: function (xhr, status, error) {
-                console.error('Error deleting user');
+                if (xhr.status === 404) {
+                    $('#errorMessage').show().text('Потребителят не е намерен! Опитайте с друг номер.');
+                } else {
+                    console.error('Error deleting user:', error);
+                }
             }
         });
     });

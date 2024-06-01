@@ -62,15 +62,10 @@ public class UserController {
         return userService.openUserAddress(userCode);
     }
 
-//    @DeleteMapping("/delete/{userCode}")
-//    public String deleteUser(@PathVariable("userCode") Long userCode) {
-//        return userService.deleteUserByCodeProcess(userCode);
-//    }
-
     @DeleteMapping("/delete/{userCode}")
     public ResponseEntity<String> deleteUser(@PathVariable("userCode") Long userCode) {
         String response = userService.deleteUserByCodeProcess(userCode);
-        return ResponseEntity.ok(response); // Return the success message in the response body
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/edit/{userId}")
