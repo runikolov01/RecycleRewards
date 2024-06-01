@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -38,6 +39,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
+    @Transactional
     public String generateUniquePurchaseWinnerCode() {
         SecureRandom random = new SecureRandom();
         StringBuilder ticketNumberBuilder = new StringBuilder(UNIQUE_CODE_LENGTH);

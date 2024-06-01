@@ -9,6 +9,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
 import java.io.InputStream;
@@ -27,6 +28,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    @Transactional
     public void sendActivationEmail(User user, String token) {
         String subject = "Активирайте Вашия профил";
         String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8);

@@ -5,6 +5,7 @@ import com.fcst.student.RecycleRewards.repository.AddressRepository;
 import com.fcst.student.RecycleRewards.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -16,6 +17,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional
     public void saveAddress(Address address) {
         addressRepository.save(address);
     }
