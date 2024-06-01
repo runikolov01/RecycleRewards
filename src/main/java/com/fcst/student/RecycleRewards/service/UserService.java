@@ -35,7 +35,7 @@ public interface UserService {
 
     List<User> getParticipantsByPrizeId(Long prizeId);
 
-    Integer getTotalBottlesForAllUsers();
+    int getTotalBottlesForAllUsers();
 
     User findByActivationToken(String token);
 

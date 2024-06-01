@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer getTotalBottlesForAllUsers() {
+    public int getTotalBottlesForAllUsers() {
         return userRepository.getTotalBottlesSum();
     }
 
@@ -186,10 +186,7 @@ public class UserServiceImpl implements UserService {
                 model.addAttribute("totalPoints", totalPoints);
             }
         }
-        Integer totalBottles = getTotalBottlesForAllUsers();
-        if (totalBottles == null) {
-            totalBottles = 0;
-        }
+        int totalBottles = getTotalBottlesForAllUsers();
         model.addAttribute("totalBottles", totalBottles);
         Double totalKg = totalBottles * 0.015;
         model.addAttribute("totalKg", totalKg);
