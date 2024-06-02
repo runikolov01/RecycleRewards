@@ -298,7 +298,7 @@
             })
             .then(data => {
                 messageArea.textContent = "Данните са актуализирани успешно!";
-                messageArea.style.color = 'green'; // Set text color to green for success message
+                messageArea.style.color = 'green';
             })
             .catch(error => {
                 if (error.message.includes('400')) {
