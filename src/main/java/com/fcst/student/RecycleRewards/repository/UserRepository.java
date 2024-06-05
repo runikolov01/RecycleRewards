@@ -15,8 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT p.user FROM Purchase p WHERE p.prize.id = :prizeId")
     List<User> findAllByPrizeId(@Param("prizeId") Long prizeId);
 
-    @Query("SELECT SUM(u.totalBottles) FROM User u")
-    Integer getTotalBottlesSum();
+    @Query("SELECT COALESCE(SUM(u.totalBottles), 0) FROM User u")
+    int getTotalBottlesSum();
 
     User findByActivationToken(String activationToken);
 
