@@ -17,7 +17,6 @@ spring:
     init:
       mode: never
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
     properties:
