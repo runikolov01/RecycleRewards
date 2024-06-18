@@ -4,6 +4,7 @@ import com.fcst.student.RecycleRewards.EmailConfiguration;
 import com.fcst.student.RecycleRewards.model.*;
 import com.fcst.student.RecycleRewards.model.enums.Role;
 import com.fcst.student.RecycleRewards.repository.PrizeRepository;
+import com.fcst.student.RecycleRewards.repository.TicketRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
 import com.fcst.student.RecycleRewards.service.AddressService;
 import com.fcst.student.RecycleRewards.service.EmailService;
@@ -48,9 +49,10 @@ public class UserServiceImpl implements UserService {
     private final EmailService emailService;
     private final PrizeRepository prizeRepository;
     private final LoggedUser loggedUser;
+    private final TicketRepository ticketRepository;
 
     @Autowired
-    public UserServiceImpl(JavaMailSender mailSender, Environment environment, ResourceLoader resourceLoader, PasswordEncoder passwordEncoder, AddressService addressService, UserRepository userRepository, PurchaseService purchaseService, EmailConfiguration emailConfiguration, EmailService emailService, PrizeRepository prizeRepository, LoggedUser loggedUser) {
+    public UserServiceImpl(JavaMailSender mailSender, Environment environment, ResourceLoader resourceLoader, PasswordEncoder passwordEncoder, AddressService addressService, UserRepository userRepository, PurchaseService purchaseService, EmailConfiguration emailConfiguration, EmailService emailService, PrizeRepository prizeRepository, LoggedUser loggedUser, TicketRepository ticketRepository) {
         this.mailSender = mailSender;
         this.environment = environment;
         this.resourceLoader = resourceLoader;
@@ -62,6 +64,7 @@ public class UserServiceImpl implements UserService {
         this.emailService = emailService;
         this.prizeRepository = prizeRepository;
         this.loggedUser = loggedUser;
+        this.ticketRepository = ticketRepository;
     }
 
     @Override
@@ -120,7 +123,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int getTotalBottlesForAllUsers() {
-        return userRepository.getTotalBottlesSum();
+        return ticketRepository.getTotalBottlesInSystem();
     }
 
     @Override
