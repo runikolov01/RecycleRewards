@@ -25,7 +25,6 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">№</th>
                     <th scope="col">Име локация</th>
                     <th scope="col">Град</th>
                     <th scope="col">Пощенски код</th>
@@ -35,7 +34,6 @@
                 </thead>
                 <tbody>
                 <tr th:each="machine : ${machines}">
-                    <td><span th:text="${machine.id}"></span></td>
                     <td><span th:text="${machine.locationName}"></span></td>
                     <td><span
                             th:text="${machine.address != null and machine.address.city != null ? machine.address.city : ''}"></span>
