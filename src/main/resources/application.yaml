@@ -36,3 +36,25 @@ spring:
     port: 587
     username: ${GMAIL_USERNAME}
     password: ${GMAIL_PASSWORD}
+
+  security:
+    user:
+      name: admin
+      password: ${ADMIN_PASSWORD:admin}
+bcrypt:
+  strength: 10
+
+security:
+  basic:
+    enabled: true
+  ignored:
+    - /static/**
+    - /css/**
+    - /js/**
+    - /images/**
+    - /favicon.ico
+    - /error
+  authorize-requests:
+    - antMatchers("/admin/**").hasRole("ADMIN")
+    - antMatchers("/client/**").hasRole("CLIENT")
+    - antMatchers("/**").permitAll()
