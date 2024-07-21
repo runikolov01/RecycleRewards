@@ -31,6 +31,11 @@ public class PrizeController {
         return prizeService.openAddPrizesPage(model, session);
     }
 
+//    @GetMapping("/admin_raffle")
+//    public String showRafflePage(Model model, HttpSession session, @RequestParam(value = "prizeId", required = false) Long prizeId) {
+//        return prizeService.openRafflePage(model, session, prizeId);
+//    }
+
     @GetMapping("/admin_raffle")
     public String showRafflePage(Model model, HttpSession session, @RequestParam(value = "prizeId", required = false) Long prizeId) {
         return prizeService.openRafflePage(model, session, prizeId);
