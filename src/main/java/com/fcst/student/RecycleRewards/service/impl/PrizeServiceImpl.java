@@ -14,12 +14,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -245,104 +242,58 @@ public class PrizeServiceImpl implements PrizeService {
         return "redirect:/home";
     }
 
-//    @Override
-//    public String openRafflePage(Model model, HttpSession session, Long prizeId) {
-//        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
-//        if (loggedIn == null) {
-//            loggedIn = false;
-//        }
-//        session.setAttribute("loggedIn", loggedIn);
-//        model.addAttribute("loggedIn", loggedIn);
-//
-//        Long userId = (Long) session.getAttribute("userId");
-//
-//        if (userId != null) {
-//            Optional<User> user = userService.getUserById(userId);
-//            if (user.isPresent()) {
-////                User user = userOptional.get();
-//                String role = String.valueOf(user.get().getRole());
-//                if (role != null && role.equals("ADMIN")) {
-//                    session.setAttribute("loggedUser", user.get());
-//                    model.addAttribute("loggedUser", user.get());
-//
-//                    Integer totalPoints = user.get().getTotalPoints();
-//                    session.setAttribute("totalPoints", totalPoints);
-//                    model.addAttribute("totalPoints", totalPoints);
-//
-//                    List<Prize> prizesWithoutWinners = getPrizesWithoutWinners();
-//                    model.addAttribute("prizes", prizesWithoutWinners);
-//
-//                    if (prizeId != null) {
-//                        Optional<Prize> prizeOptional = getPrizeById(prizeId);
-//                        if (prizeOptional.isPresent()) {
-//                            Prize prize = prizeOptional.get();
-//                            List<Purchase> purchases = purchaseService.getAllPurchasesByPrizeId(prizeId);
-//                            model.addAttribute("purchases", purchases);
-//
-//                            List<User> participants = new ArrayList<>();
-//                            for (Purchase purchase : purchases) {
-//                                User purchaseUser = purchase.getUser();
-//                                participants.add(purchaseUser);
-//                            }
-//                            model.addAttribute("participants", participants);
-//                            model.addAttribute("selectedPrizeId", prizeId);
-//
-//                            int remainingTickets = prize.getRemainedTickets();
-//                            model.addAttribute("remainingTickets", remainingTickets);
-//                        } else {
-//                            model.addAttribute("selectedPrizeId", null);
-//                        }
-//                    }
-//                    return "admin_raffle";
-//                } else {
-//                    return "redirect:/home";
-//                }
-//            }
-//        }
-//        return "redirect:/home";
-//    }
-
     @Override
-    public String openRafflePage(Model model, HttpSession session, @RequestParam(value = "prizeId", required = false) Long prizeId) {
-        // Get the userId from session
+    public String openRafflePage(Model model, HttpSession session, Long prizeId) {
+        Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (loggedIn == null) {
+            loggedIn = false;
+        }
+        session.setAttribute("loggedIn", loggedIn);
+        model.addAttribute("loggedIn", loggedIn);
+
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId != null) {
-            Optional<User> userOptional = userService.getUserById(userId);
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-                session.setAttribute("loggedUser", user);
-                model.addAttribute("loggedUser", user);
+            Optional<User> user = userService.getUserById(userId);
+            if (user.isPresent()) {
+//                User user = userOptional.get();
+                String role = String.valueOf(user.get().getRole());
+                if (role != null && role.equals("ADMIN")) {
+                    session.setAttribute("loggedUser", user.get());
+                    model.addAttribute("loggedUser", user.get());
 
-                Integer totalPoints = user.getTotalPoints();
-                session.setAttribute("totalPoints", totalPoints);
-                model.addAttribute("totalPoints", totalPoints);
+                    Integer totalPoints = user.get().getTotalPoints();
+                    session.setAttribute("totalPoints", totalPoints);
+                    model.addAttribute("totalPoints", totalPoints);
 
-                List<Prize> prizesWithoutWinners = getPrizesWithoutWinners();
-                model.addAttribute("prizes", prizesWithoutWinners);
+                    List<Prize> prizesWithoutWinners = getPrizesWithoutWinners();
+                    model.addAttribute("prizes", prizesWithoutWinners);
 
-                if (prizeId != null) {
-                    Optional<Prize> prizeOptional = getPrizeById(prizeId);
-                    if (prizeOptional.isPresent()) {
-                        Prize prize = prizeOptional.get();
-                        List<Purchase> purchases = purchaseService.getAllPurchasesByPrizeId(prizeId);
-                        model.addAttribute("purchases", purchases);
+                    if (prizeId != null) {
+                        Optional<Prize> prizeOptional = getPrizeById(prizeId);
+                        if (prizeOptional.isPresent()) {
+                            Prize prize = prizeOptional.get();
+                            List<Purchase> purchases = purchaseService.getAllPurchasesByPrizeId(prizeId);
+                            model.addAttribute("purchases", purchases);
 
-                        List<User> participants = new ArrayList<>();
-                        for (Purchase purchase : purchases) {
-                            User purchaseUser = purchase.getUser();
-                            participants.add(purchaseUser);
+                            List<User> participants = new ArrayList<>();
+                            for (Purchase purchase : purchases) {
+                                User purchaseUser = purchase.getUser();
+                                participants.add(purchaseUser);
+                            }
+                            model.addAttribute("participants", participants);
+                            model.addAttribute("selectedPrizeId", prizeId);
+
+                            int remainingTickets = prize.getRemainedTickets();
+                            model.addAttribute("remainingTickets", remainingTickets);
+                        } else {
+                            model.addAttribute("selectedPrizeId", null);
                         }
-                        model.addAttribute("participants", participants);
-                        model.addAttribute("selectedPrizeId", prizeId);
-
-                        int remainingTickets = prize.getRemainedTickets();
-                        model.addAttribute("remainingTickets", remainingTickets);
-                    } else {
-                        model.addAttribute("selectedPrizeId", null);
                     }
+                    return "admin_raffle";
+                } else {
+                    return "redirect:/home";
                 }
-                return "admin_raffle";
             }
         }
         return "redirect:/home";
