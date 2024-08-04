@@ -29,7 +29,7 @@ public class Prize {
     private Integer totalTickets;
 
     @Column(name = "remained_tickets", nullable = false)
-    private Integer remainedTickets;
+    private Integer remainedTickets = 0;
 
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
@@ -45,7 +45,7 @@ public class Prize {
     private PrizeType type;
 
     public Prize() {
-
+        this.remainedTickets = 0;
     }
 
     public Prize(Long id, Long prizeCode, String name, String description, Integer neededPointsToBuy, Integer totalTickets, Integer remainedTickets, LocalDateTime startDate, List<User> participants, PrizeType type) {
@@ -55,7 +55,7 @@ public class Prize {
         this.description = description;
         this.neededPointsToBuy = neededPointsToBuy;
         this.totalTickets = totalTickets;
-        this.remainedTickets = remainedTickets;
+        this.remainedTickets = remainedTickets != null ? remainedTickets : 0;
         this.startDate = startDate;
         this.participants = participants;
         this.type = type;
