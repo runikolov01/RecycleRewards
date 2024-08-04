@@ -1,6 +1,7 @@
 package com.fcst.student.RecycleRewards;
 
 import com.fcst.student.RecycleRewards.model.User;
+import com.fcst.student.RecycleRewards.model.enums.Role;
 import com.fcst.student.RecycleRewards.repository.PrizeRepository;
 import com.fcst.student.RecycleRewards.repository.TicketRepository;
 import com.fcst.student.RecycleRewards.repository.UserRepository;
@@ -9,6 +10,8 @@ import com.fcst.student.RecycleRewards.service.EmailService;
 import com.fcst.student.RecycleRewards.service.PurchaseService;
 import com.fcst.student.RecycleRewards.service.impl.UserServiceImpl;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,16 +19,23 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
-import java.util.Optional;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class UserServiceImplTest {
+
 
     @Mock
     private JavaMailSender mailSender;
@@ -63,8 +73,21 @@ public class UserServiceImplTest {
     @Mock
     private TicketRepository ticketRepository;
 
+    @Mock
+    private HttpSession session;
+
+    @Mock
+    private Model model;
+
     @InjectMocks
     private UserServiceImpl userService;
+
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private RedirectAttributes redirectAttributes;
 
     @BeforeEach
     public void setUp() {
@@ -198,19 +221,6 @@ public class UserServiceImplTest {
         verify(userRepository, times(1)).findByActivationToken(token);
     }
 
-//    @Test
-//    public void testGenerateUniqueUserCode() {
-//        Long uniqueCode = 12345678L;
-//        when(userRepository.existsByUserCode(uniqueCode)).thenReturn(false);
-//        // Ensure generateRandomCode() returns uniqueCode
-//        doReturn(uniqueCode).when(userService).generateRandomCode();
-//
-//        Long result = userService.generateUniqueUserCode();
-//
-//        assertEquals(uniqueCode, result);
-//        verify(userRepository, times(1)).existsByUserCode(uniqueCode);
-//    }
-
     @Test
     public void testGenerateRandomCode() {
         // Call the method directly and check if the generated code is in the expected range
@@ -231,4 +241,372 @@ public class UserServiceImplTest {
         assertEquals(user, result);
         verify(userRepository, times(1)).findByUserCode(userCode);
     }
+
+    @Test
+    public void testOpenHomePageWhenLoggedInIsNull() {
+        when(session.getAttribute("loggedIn")).thenReturn(null);
+        when(session.getAttribute("userId")).thenReturn(null);
+        when(userService.getTotalBottlesForAllUsers()).thenReturn(100);
+
+        String viewName = userService.openHomePage(model, session);
+
+        verify(session).setAttribute("loggedIn", false);
+        verify(model).addAttribute("loggedIn", false);
+        verify(model).addAttribute("totalBottles", 100);
+        verify(model).addAttribute("totalKg", 100 * 0.015);
+        assertEquals("home", viewName);
+    }
+
+    @Test
+    public void testOpenHomePageWhenLoggedInIsTrueAndUserIdIsNotNull() {
+        Long userId = 1L;
+        User user = new User();
+        user.setTotalBottles(200);
+        user.setTotalPoints(50);
+
+        when(session.getAttribute("loggedIn")).thenReturn(true);
+        when(session.getAttribute("userId")).thenReturn(userId);
+        when(userService.getUserById(userId)).thenReturn(Optional.of(user));
+        when(session.getAttribute("bottlesCount")).thenReturn(5);
+        when(userService.getTotalBottlesForAllUsers()).thenReturn(100);
+
+        String viewName = userService.openHomePage(model, session);
+
+        verify(session).setAttribute("loggedIn", true);
+        verify(model).addAttribute("loggedIn", true);
+        verify(model).addAttribute("userTotalBottles", 200);
+        verify(model).addAttribute("userKgBottles", 200 * 0.015);
+        verify(model).addAttribute("bottlesCount", 5);
+        verify(model).addAttribute("loggedUser", user);
+        verify(model).addAttribute("totalPoints", 50);
+        verify(model).addAttribute("totalBottles", 100);
+        verify(model).addAttribute("totalKg", 100 * 0.015);
+        assertEquals("home", viewName);
+    }
+
+
+    @Test
+    public void testOpenRegisterFormWithoutInputFlashMap() {
+        when(RequestContextUtils.getInputFlashMap(request)).thenReturn(null);
+        when(session.getAttribute("loggedIn")).thenReturn(null);
+        when(session.getAttribute("userId")).thenReturn(null);
+
+        String viewName = userService.openRegisterForm(model, session, request);
+
+        verify(model).addAttribute("loggedIn", false);
+        verify(session).setAttribute("loggedIn", false);
+        assertEquals("register", viewName);
+    }
+
+    @Test
+    public void testOpenRegisterFormWhenUserIdNotNull() {
+        when(session.getAttribute("loggedIn")).thenReturn(false);
+        when(session.getAttribute("userId")).thenReturn(1L);
+
+        String viewName = userService.openRegisterForm(model, session, request);
+
+        assertEquals("redirect:/myProfile", viewName);
+    }
+
+    @Test
+    public void testOpenLoginFormWithError() {
+        when(session.getAttribute("loggedIn")).thenReturn(null);
+        when(session.getAttribute("userId")).thenReturn(null);
+
+        String viewName = userService.openLoginForm("error", model, session);
+
+        verify(model).addAttribute("loggedIn", false);
+        verify(model).addAttribute("error", true);
+        assertEquals("login", viewName);
+    }
+
+    @Test
+    public void testOpenLoginFormWithoutError() {
+        when(session.getAttribute("loggedIn")).thenReturn(null);
+        when(session.getAttribute("userId")).thenReturn(null);
+
+        String viewName = userService.openLoginForm(null, model, session);
+
+        verify(model).addAttribute("loggedIn", false);
+        assertEquals("login", viewName);
+    }
+
+    @Test
+    public void testOpenLoginFormWhenUserIdNotNull() {
+        when(session.getAttribute("loggedIn")).thenReturn(true);
+        when(session.getAttribute("userId")).thenReturn(1L);
+
+        String viewName = userService.openLoginForm(null, model, session);
+
+        assertEquals("redirect:/myProfile", viewName);
+    }
+
+    @Test
+    public void testOpenMyProfileWhenUserIdIsNull() {
+        when(session.getAttribute("userId")).thenReturn(null);
+
+        String viewName = userService.openMyProfile(model, session);
+
+        assertEquals("redirect:/login", viewName);
+    }
+
+    @Test
+    public void testOpenMyProfileWhenUserNotFound() {
+        when(session.getAttribute("userId")).thenReturn(1L);
+        when(userService.getUserById(1L)).thenReturn(Optional.empty());
+
+        String viewName = userService.openMyProfile(model, session);
+
+        assertEquals("redirect:/login", viewName);
+    }
+
+    @Test
+    public void testOpenMyProfileWhenUserFound() {
+        Long userId = 1L;
+        User user = new User();
+        user.setTotalPoints(50);
+        when(session.getAttribute("userId")).thenReturn(userId);
+        when(userService.getUserById(userId)).thenReturn(Optional.of(user));
+        when(purchaseService.getPrizeDetailsForUser(userId)).thenReturn(Collections.emptyList());
+        when(purchaseService.getPurchasesByUserId(userId)).thenReturn(Collections.emptyList());
+
+        String viewName = userService.openMyProfile(model, session);
+
+        verify(model).addAttribute("prizeDetails", Collections.emptyList());
+        verify(model).addAttribute("totalPoints", 50);
+        verify(model).addAttribute("loggedUser", user);
+        verify(session).setAttribute("loggedUser", user);
+        verify(model).addAttribute("loggedIn", true);
+        verify(model).addAttribute("purchases", Collections.emptyList());
+        assertEquals("myprofile", viewName);
+    }
+
+    @Test
+    public void testOpenWinnersPageWhenLoggedInIsNull() {
+        when(session.getAttribute("loggedIn")).thenReturn(null);
+        when(session.getAttribute("userId")).thenReturn(null);
+        when(prizeRepository.findAllWonPrizes()).thenReturn(Collections.emptyList());
+
+        String viewName = userService.openWinnersPage(model, session);
+
+        verify(model).addAttribute("loggedIn", false);
+        verify(model).addAttribute("wonPrizes", Collections.emptyList());
+        assertEquals("winners", viewName);
+    }
+
+    @Test
+    public void testOpenAboutPageWhenLoggedInIsNull() {
+        when(session.getAttribute("loggedIn")).thenReturn(null);
+        when(session.getAttribute("userId")).thenReturn(null);
+
+        String viewName = userService.openAboutPage(model, session);
+
+        verify(session).setAttribute("loggedIn", false);
+        verify(model).addAttribute("loggedIn", false);
+        verifyNoMoreInteractions(model);
+        assertEquals("about", viewName);
+    }
+
+    @Test
+    public void testOpenAboutPageWhenUserIdIsNull() {
+        when(session.getAttribute("loggedIn")).thenReturn(true);
+        when(session.getAttribute("userId")).thenReturn(null);
+
+        String viewName = userService.openAboutPage(model, session);
+
+        verify(session).setAttribute("loggedIn", true);
+        verify(model).addAttribute("loggedIn", true);
+        verifyNoMoreInteractions(model);
+        assertEquals("about", viewName);
+    }
+
+    @Test
+    public void testOpenAboutPageWhenUserIdIsNotNullAndUserIsPresent() {
+        Long userId = 1L;
+        User user = new User();
+        user.setTotalPoints(100);
+
+        when(session.getAttribute("loggedIn")).thenReturn(true);
+        when(session.getAttribute("userId")).thenReturn(userId);
+        when(userService.getUserById(userId)).thenReturn(Optional.of(user));
+
+        String viewName = userService.openAboutPage(model, session);
+
+        verify(model).addAttribute("loggedUser", user);
+        verify(model).addAttribute("totalPoints", 100);
+        verify(session).setAttribute("loggedUser", user);
+        assertEquals("about", viewName);
+    }
+
+    @Test
+    public void testOpenUsersPageWhenUserIdIsNull() {
+        when(session.getAttribute("userId")).thenReturn(null);
+
+        String viewName = userService.openUsersPage(model, session);
+
+        assertEquals("redirect:/home", viewName);
+    }
+
+    @Test
+    public void testOpenUsersPageWhenUserNotFound() {
+        Long userId = 1L;
+
+        when(session.getAttribute("userId")).thenReturn(userId);
+        when(userService.getUserById(userId)).thenReturn(Optional.empty());
+
+        String viewName = userService.openUsersPage(model, session);
+
+        assertEquals("redirect:/home", viewName);
+    }
+
+    @Test
+    public void testOpenUsersPageWhenUserRoleIsAdmin() {
+        Long userId = 1L;
+        User user = new User();
+        user.setRole(Role.ADMIN);
+        user.setTotalPoints(100);
+        when(session.getAttribute("userId")).thenReturn(userId);
+        when(userService.getUserById(userId)).thenReturn(Optional.of(user));
+        when(userService.getAllUsers()).thenReturn(Collections.emptyList());
+
+        String viewName = userService.openUsersPage(model, session);
+
+        verify(model).addAttribute("totalPoints", 100);
+        verify(model).addAttribute("loggedUser", user);
+        verify(model).addAttribute("users", Collections.emptyList());
+        assertEquals("admin_users", viewName);
+    }
+
+    @Test
+    public void testOpenUsersPageWhenUserRoleIsNotAdmin() {
+        Long userId = 1L;
+        User user = new User();
+        user.setRole(Role.CLIENT);
+
+        when(session.getAttribute("userId")).thenReturn(userId);
+        when(userService.getUserById(userId)).thenReturn(Optional.of(user));
+
+        String viewName = userService.openUsersPage(model, session);
+
+        assertEquals("redirect:/home", viewName);
+    }
+
+
+    @Test
+    public void testOpenUserAddressWhenUserIsNotFound() {
+        Long userCode = 12345L;
+
+        when(userService.getUserByUserCode(userCode)).thenReturn(null);
+
+        ResponseEntity<String> response = userService.openUserAddress(userCode);
+
+        assertEquals(ResponseEntity.notFound().build(), response);
+    }
+
+    @Test
+    public void testOpenUserAddressWhenAddressIsNotFound() {
+        Long userCode = 12345L;
+        User user = new User();
+
+        when(userService.getUserByUserCode(userCode)).thenReturn(user);
+
+        ResponseEntity<String> response = userService.openUserAddress(userCode);
+
+        assertEquals(ResponseEntity.notFound().build(), response);
+    }
+
+    @Test
+    public void testOpenUserAddressWhenExceptionOccurs() {
+        Long userCode = 12345L;
+        when(userService.getUserByUserCode(userCode)).thenThrow(new RuntimeException("Test Exception"));
+
+        ResponseEntity<String> response = userService.openUserAddress(userCode);
+
+        assertEquals(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Възникна грешка: Test Exception"), response);
+    }
+
+    @Test
+    @Transactional
+    public void testDeleteUserByCodeProcessWhenUserFound() {
+        // Arrange
+        Long userCode = 12345L;
+        User user = new User();
+        when(userRepository.findByUserCode(userCode)).thenReturn(user);
+
+        String result = userService.deleteUserByCodeProcess(userCode);
+
+        verify(userRepository).save(user);
+        assertEquals("Потребителят е изтрит успешно!", result);
+    }
+
+    @Test
+    public void testDeleteUserByCodeProcessWhenUserNotFound() {
+        Long userCode = 12345L;
+        when(userRepository.findByUserCode(userCode)).thenReturn(null);
+
+        String result = userService.deleteUserByCodeProcess(userCode);
+
+        assertEquals("Потребител с този код не съществува!", result);
+    }
+
+    @Test
+    public void testOpenEditUserFormWhenUserFound() {
+        Long userId = 1L;
+        User user = new User();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        String viewName = userService.openEditUserForm(userId, model);
+
+        verify(model).addAttribute("user", Optional.of(user));
+        assertEquals("edit-user", viewName);
+    }
+
+    @Test
+    public void testOpenEditUserFormWhenUserNotFound() {
+        Long userId = 1L;
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        String viewName = userService.openEditUserForm(userId, model);
+
+        verify(model).addAttribute("user", Optional.empty());
+        assertEquals("edit-user", viewName);
+    }
+
+    @Test
+    public void testActivateAccountProcessWhenTokenIsValid() {
+        String token = "validToken";
+        User user = new User();
+        user.setTokenExpiry(LocalDateTime.now().plusHours(1));
+        when(userRepository.findByActivationToken(token)).thenReturn(user);
+
+        String viewName = userService.activateAccountProcess(token, redirectAttributes);
+
+        verify(redirectAttributes).addFlashAttribute("success", "Профилът е активиран успешно!");
+        assertEquals("redirect:/activated_profile", viewName);
+    }
+
+    @Test
+    public void testActivateAccountProcessWhenTokenIsExpired() {
+        String token = "expiredToken";
+        User user = new User();
+        user.setTokenExpiry(LocalDateTime.now().minusHours(1));
+        when(userRepository.findByActivationToken(token)).thenReturn(user);
+
+        String viewName = userService.activateAccountProcess(token, redirectAttributes);
+
+        verify(redirectAttributes).addFlashAttribute("linkExpired", "Линкът е изтекъл! Изминали са повече от 24 часа от получаването на този email.");
+        assertEquals("redirect:/activated_profile", viewName);
+    }
+
+    @Test
+    public void testActivateAccountProcessWhenTokenIsInvalid() {
+        String token = "invalidToken";
+        when(userRepository.findByActivationToken(token)).thenReturn(null);
+
+        String viewName = userService.activateAccountProcess(token, redirectAttributes);
+
+        verify(redirectAttributes).addFlashAttribute("error", "Вече сте активирали своя профил!");
+        assertEquals("redirect:/activated_profile", viewName);
+    }
+
 }
