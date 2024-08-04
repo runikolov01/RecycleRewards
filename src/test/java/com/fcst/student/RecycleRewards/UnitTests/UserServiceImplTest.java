@@ -1,5 +1,6 @@
-package com.fcst.student.RecycleRewards;
+package com.fcst.student.RecycleRewards.UnitTests;
 
+import com.fcst.student.RecycleRewards.EmailConfiguration;
 import com.fcst.student.RecycleRewards.model.User;
 import com.fcst.student.RecycleRewards.model.enums.Role;
 import com.fcst.student.RecycleRewards.repository.PrizeRepository;
@@ -11,6 +12,7 @@ import com.fcst.student.RecycleRewards.service.PurchaseService;
 import com.fcst.student.RecycleRewards.service.impl.UserServiceImpl;
 import com.fcst.student.RecycleRewards.service.session.LoggedUser;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,6 +87,9 @@ public class UserServiceImplTest {
 
     @Mock
     private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
 
     @Mock
     private RedirectAttributes redirectAttributes;
@@ -608,5 +613,342 @@ public class UserServiceImplTest {
         verify(redirectAttributes).addFlashAttribute("error", "Вече сте активирали своя профил!");
         assertEquals("redirect:/activated_profile", viewName);
     }
+
+    // --------------------------
+
+    @Test
+    public void testResetPasswordProcessWhenUserAndTokenAreValid() {
+        String token = "validToken";
+        User user = new User();
+        user.setTokenExpiry(LocalDateTime.now().plusHours(1));
+        when(userService.findByResetToken(token)).thenReturn(user);
+
+        String viewName = userService.resetPasswordProcess(token, redirectAttributes);
+
+        verify(redirectAttributes).addFlashAttribute("token", token);
+        assertEquals("redirect:/show_reset_password_form", viewName);
+    }
+
+    @Test
+    public void testResetPasswordProcessWhenTokenIsExpired() {
+        String token = "expiredToken";
+        User user = new User();
+        user.setTokenExpiry(LocalDateTime.now().minusHours(1));
+        when(userService.findByResetToken(token)).thenReturn(user);
+
+        String viewName = userService.resetPasswordProcess(token, redirectAttributes);
+
+        verify(redirectAttributes).addFlashAttribute("error", "Линкът за възстановяване на парола е невалиден или е изтекъл.");
+        assertEquals("redirect:/login", viewName);
+    }
+
+    @Test
+    public void testResetPasswordProcessWhenUserIsNotFound() {
+        String token = "invalidToken";
+        when(userService.findByResetToken(token)).thenReturn(null);
+
+        String viewName = userService.resetPasswordProcess(token, redirectAttributes);
+
+        verify(redirectAttributes).addFlashAttribute("error", "Линкът за възстановяване на парола е невалиден или е изтекъл.");
+        assertEquals("redirect:/login", viewName);
+    }
+
+    @Test
+    public void testRegisterProcessWhenPasswordsDoNotMatch() {
+        String firstName = "John";
+        String lastName = "Doe";
+        String email = "john.doe@example.com";
+        String password = "password1";
+        String confirmPassword = "password2";
+        String ageConfirmation = "yes";
+
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String viewName = userService.registerProcess(firstName, lastName, email, password, confirmPassword, ageConfirmation, redirectAttributes, null);
+
+        verify(redirectAttributes).addFlashAttribute("error", "Паролите не съвпадат.");
+        verify(redirectAttributes).addFlashAttribute("firstName", firstName);
+        verify(redirectAttributes).addFlashAttribute("lastName", lastName);
+        verify(redirectAttributes).addFlashAttribute("email", email);
+        assertEquals("redirect:/register", viewName);
+    }
+
+    @Test
+    public void testRegisterProcessWhenAgeConfirmationIsNo() {
+        String firstName = "John";
+        String lastName = "Doe";
+        String email = "john.doe@example.com";
+        String password = "password";
+        String confirmPassword = "password";
+        String ageConfirmation = "no";
+
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String viewName = userService.registerProcess(firstName, lastName, email, password, confirmPassword, ageConfirmation, redirectAttributes, null);
+
+        verify(redirectAttributes).addFlashAttribute("error", "Трябва да потвърдите, че имате навършени 18 години. Ако не сте пълнолетен, не можете да се регистрирате.");
+        verify(redirectAttributes).addFlashAttribute("firstName", firstName);
+        verify(redirectAttributes).addFlashAttribute("lastName", lastName);
+        verify(redirectAttributes).addFlashAttribute("email", email);
+        assertEquals("redirect:/register", viewName);
+    }
+
+    @Test
+    public void testRegisterProcessWhenEmailAlreadyExists() {
+        String firstName = "John";
+        String lastName = "Doe";
+        String email = "john.doe@example.com";
+        String password = "password";
+        String confirmPassword = "password";
+        String ageConfirmation = "yes";
+
+        User existingUser = new User();
+        when(userService.findByEmail(email)).thenReturn(existingUser);
+
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        String viewName = userService.registerProcess(firstName, lastName, email, password, confirmPassword, ageConfirmation, redirectAttributes, null);
+
+        verify(redirectAttributes).addFlashAttribute("error", "Вече има регистриран потребител с този email адрес.");
+        verify(redirectAttributes).addFlashAttribute("firstName", firstName);
+        verify(redirectAttributes).addFlashAttribute("lastName", lastName);
+        verify(redirectAttributes).addFlashAttribute("email", email);
+        assertEquals("redirect:/register", viewName);
+    }
+
+//    @Test
+//    public void testRegisterProcessWhenSuccessful() {
+//        String firstName = "John";
+//        String lastName = "Doe";
+//        String email = "john.doe@example.com";
+//        String password = "password";
+//        String confirmPassword = "password";
+//        String ageConfirmation = "yes";
+//
+//        when(userService.findByEmail(email)).thenReturn(null);
+//        when(addressService.saveAddress(any(Address.class))).thenReturn(new Address());
+//        when(passwordEncoder.encode(password)).thenReturn("encodedPassword");
+//        when(userService.generateUniqueUserCode()).thenReturn(12345L);
+//
+//        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+//        Model model = mock(Model.class);
+//        String viewName = userService.registerProcess(firstName, lastName, email, password, confirmPassword, ageConfirmation, redirectAttributes, model);
+//
+//        verify(userService).saveUser(any(User.class));
+//        verify(emailService).sendActivationEmail(any(User.class), anyString());
+//        verify(emailConfiguration).printEmailSettings();
+//        verify(model).addAttribute("success", "За да активирате своя профил, в следващите 24 часа трябва да натиснете върху линка, изпратен на Вашия email адрес.");
+//        assertEquals("register", viewName);
+//    }
+
+//    @Test
+//    public void testLoginProcessWhenUserIsActivated() {
+//        String email = "john.doe@example.com";
+//        String password = "password";
+//        User user = new User();
+//        user.setId(1L);
+//        user.setRole(Role.CLIENT);
+//        user.setTotalPoints(100);
+//        when(userService.getUserByEmail(email)).thenReturn(user);
+//        when(userService.verifyPassword(user, password)).thenReturn(true);
+//
+//        String viewName = userService.loginProcess(email, password, model, session);
+//
+//        verify(session).setAttribute("userId", 1L);
+//        verify(session).setAttribute("loggedIn", true);
+//        verify(session).setAttribute("userRole", "USER");
+//        verify(session).setAttribute("totalPoints", 100);
+//        assertEquals("redirect:/home", viewName);
+//    }
+
+    @Test
+    public void testLoginProcessWhenUserIsNotActivated() {
+        String email = "john.doe@example.com";
+        String password = "password";
+        User user = new User();
+        user.setId(1L);
+        user.setRole(Role.CLIENT);
+        user.setTotalPoints(100);
+        user.setActivated(false);
+        when(userService.getUserByEmail(email)).thenReturn(user);
+        when(userService.verifyPassword(user, password)).thenReturn(true);
+
+        String viewName = userService.loginProcess(email, password, model, session);
+
+        verify(model).addAttribute("errorNotActivated", true);
+        verify(model).addAttribute("error", false);
+        assertEquals("login", viewName);
+    }
+
+    @Test
+    public void testLoginProcessWhenInvalidCredentials() {
+        String email = "john.doe@example.com";
+        String password = "wrongPassword";
+        when(userService.getUserByEmail(email)).thenReturn(null);
+
+        String viewName = userService.loginProcess(email, password, model, session);
+
+        verify(model).addAttribute("error", true);
+        verify(model).addAttribute("errorNotActivated", false);
+        assertEquals("login", viewName);
+    }
+
+    @Test
+    public void testForgotPasswordProcessWhenEmailNotFound() {
+        String email = "unknown@example.com";
+        when(userService.getUserByEmail(email)).thenReturn(null);
+
+        String viewName = userService.forgotPasswordProcess(email, redirectAttributes);
+
+        verify(redirectAttributes).addFlashAttribute("error", "Невалиден email адрес!");
+        assertEquals("redirect:/login", viewName);
+    }
+
+//    @Test
+//    public void testForgotPasswordProcessWhenSuccessful() throws Exception {
+//        String email = "john.doe@example.com";
+//        User user = new User();
+//        when(userService.getUserByEmail(email)).thenReturn(user);
+//        when(userService.saveUser(any(User.class))).thenReturn(user);
+//
+//        String token = UUID.randomUUID().toString();
+//        when(userService.findByResetToken(anyString())).thenReturn(user);
+//
+//        String viewName = userService.forgotPasswordProcess(email, redirectAttributes);
+//
+//        verify(redirectAttributes).addFlashAttribute("message", "Линкът за възстановяване на парола е изпратен на вашия email!");
+//        assertEquals("redirect:/login", viewName);
+//    }
+//
+//    @Test
+//    public void testForgotPasswordProcessWhenEmailSendingFails() throws Exception {
+//        String email = "john.doe@example.com";
+//        User user = new User();
+//        when(userService.getUserByEmail(email)).thenReturn(user);
+//        doThrow(new RuntimeException("Email sending failed")).when(emailService).sendHtmlEmail(user, anyString());
+//
+//        String viewName = userService.forgotPasswordProcess(email, redirectAttributes);
+//
+//        verify(redirectAttributes).addFlashAttribute("error", "Възникна грешка при изпращането на email.");
+//        assertEquals("redirect:/login", viewName);
+//    }
+
+
+//    @Test
+//    public void testHandlePasswordResetProcessWhenTokenIsValid() {
+//        String token = "validToken";
+//        String password = "newPassword";
+//        User user = new User();
+//        user.setTokenExpiry(LocalDateTime.now().plusHours(1));
+//        when(userService.findByResetToken(token)).thenReturn(user);
+//        when(userService.saveUser(any(User.class))).thenReturn(user);
+//
+//        String viewName = userService.handlePasswordResetProcess(token, password, redirectAttributes);
+//
+//        verify(userService).saveUser(any(User.class));
+//        verify(redirectAttributes).addFlashAttribute("message", "Паролата е възстановена успешно!");
+//        assertEquals("redirect:/login", viewName);
+//    }
+
+    @Test
+    public void testHandlePasswordResetProcessWhenTokenIsExpired() {
+        String token = "expiredToken";
+        String password = "newPassword";
+        User user = new User();
+        user.setTokenExpiry(LocalDateTime.now().minusHours(1));
+        when(userService.findByResetToken(token)).thenReturn(user);
+
+        String viewName = userService.handlePasswordResetProcess(token, password, redirectAttributes);
+
+        verify(redirectAttributes).addFlashAttribute("error", "Линкът за възстановяване на парола е невалиден или е изтекъл.");
+        assertEquals("redirect:/login", viewName);
+    }
+
+    @Test
+    public void testHandlePasswordResetProcessWhenTokenIsInvalid() {
+        String token = "invalidToken";
+        String password = "newPassword";
+        when(userService.findByResetToken(token)).thenReturn(null);
+
+        String viewName = userService.handlePasswordResetProcess(token, password, redirectAttributes);
+
+        verify(redirectAttributes).addFlashAttribute("error", "Линкът за възстановяване на парола е невалиден или е изтекъл.");
+        assertEquals("redirect:/login", viewName);
+    }
+
+
+    @Test
+    public void testUpdateProfileProcessWhenUserIdIsNull() {
+        when(session.getAttribute("userId")).thenReturn(null);
+
+        ResponseEntity<String> response = userService.updateProfileProcess("John", "Doe", "john@example.com", 123456789, "City", 1000, "Street", 10, 1, 1, session);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertEquals("Потребителят не е оторизиран!", response.getBody());
+    }
+
+    @Test
+    public void testUpdateProfileProcessWhenRequiredFieldsAreEmpty() {
+        when(session.getAttribute("userId")).thenReturn(1L);
+
+        ResponseEntity<String> response = userService.updateProfileProcess("", "", "", null, "", null, "", null, null, null, session);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Моля, попълнете всички полета, маркирани със звездичка, за да актуализирате профила си!", response.getBody());
+    }
+
+    @Test
+    public void testUpdateProfileProcessWhenUserNotFound() {
+        when(session.getAttribute("userId")).thenReturn(1L);
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        ResponseEntity<String> response = userService.updateProfileProcess("John", "Doe", "john@example.com", 123456789, "City", 1000, "Street", 10, 1, 1, session);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Потребителят не е намерен!", response.getBody());
+    }
+
+    @Test
+    public void testUpdateProfileProcessWhenSuccessful() {
+        when(session.getAttribute("userId")).thenReturn(1L);
+        User user = new User();
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        ResponseEntity<String> response = userService.updateProfileProcess("John", "Doe", "john@example.com", 123456789, "City", 1000, "Street", 10, 1, 1, session);
+
+        verify(userRepository).save(user);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Данните са актуализирани успешно!", response.getBody());
+    }
+
+
+//    @Test
+//    public void testUpdateUserProcess() {
+//        Long userCode = 1L;
+//        User existingUser = new User();
+//        User updatedUser = new User();
+//        updatedUser.setFirstName("John");
+//        updatedUser.setLastName("Doe");
+//        updatedUser.setEmail("john.doe@example.com");
+//        updatedUser.setPhone(123456789);
+//        updatedUser.setRole(Role.CLIENT);
+//
+//        when(userRepository.findById(userCode)).thenReturn(Optional.of(existingUser));
+//
+//        String viewName = userService.updateUserProcess(userCode, updatedUser);
+//
+//        verify(userRepository).save(existingUser);
+//        assertEquals("redirect:/users", viewName);
+//    }
+
+
+    @Test
+    public void testLogoutProcess() {
+        String viewName = userService.logoutProcess(session, response);
+
+        verify(session).removeAttribute("userId");
+        verify(session).invalidate();
+        verify(response).setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        assertEquals("redirect:/home", viewName);
+    }
+
+
 
 }

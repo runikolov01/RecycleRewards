@@ -1,6 +1,5 @@
-package com.fcst.student.RecycleRewards;
+package com.fcst.student.RecycleRewards.UnitTests;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest

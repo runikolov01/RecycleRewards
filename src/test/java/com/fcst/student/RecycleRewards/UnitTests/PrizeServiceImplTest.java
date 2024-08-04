@@ -1,4 +1,4 @@
-package com.fcst.student.RecycleRewards;
+package com.fcst.student.RecycleRewards.UnitTests;
 
 import com.fcst.student.RecycleRewards.model.Prize;
 import com.fcst.student.RecycleRewards.model.Purchase;
@@ -20,12 +20,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 class PrizeServiceImplTest {

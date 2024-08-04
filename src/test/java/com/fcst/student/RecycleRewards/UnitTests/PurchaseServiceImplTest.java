@@ -1,4 +1,4 @@
-package com.fcst.student.RecycleRewards;
+package com.fcst.student.RecycleRewards.UnitTests;
 
 import com.fcst.student.RecycleRewards.model.PrizeDetailsDto;
 import com.fcst.student.RecycleRewards.model.Purchase;
