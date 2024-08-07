@@ -1,3 +1,4 @@
+package com.fcst.student.RecycleRewards.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
