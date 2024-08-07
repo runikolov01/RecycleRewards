@@ -36,3 +36,7 @@ spring:
     port: 587
     username: ${GMAIL_USERNAME}
     password: ${GMAIL_PASSWORD}
+
+  reports:
+    service:
+      url: http://localhost:8081/api/reports
