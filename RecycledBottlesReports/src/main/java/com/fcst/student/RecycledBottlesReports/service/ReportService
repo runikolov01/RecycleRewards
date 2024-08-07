@@ -1,0 +1,15 @@
+package com.fcst.student.RecycledBottlesReports.service;
+
+import com.fcst.student.RecycledBottlesReports.model.RecycledBottlesReport;
+
+import java.util.List;
+
+public interface ReportService {
+    RecycledBottlesReport getReportById(Long id);
+
+    RecycledBottlesReport saveReport(RecycledBottlesReport report);
+
+    void deleteReport(Long id);
+
+    List<RecycledBottlesReport> findAllReports();  // Add this method
+}
