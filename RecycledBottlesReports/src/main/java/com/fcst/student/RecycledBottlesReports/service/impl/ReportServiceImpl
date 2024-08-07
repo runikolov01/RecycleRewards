@@ -1,0 +1,41 @@
+package com.fcst.student.RecycledBottlesReports.service.impl;
+
+import com.fcst.student.RecycledBottlesReports.model.RecycledBottlesReport;
+import com.fcst.student.RecycledBottlesReports.repository.RecycledBottlesReportRepository;
+import com.fcst.student.RecycledBottlesReports.service.ReportService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ReportServiceImpl implements ReportService {
+
+    private final RecycledBottlesReportRepository reportRepository;
+
+    @Autowired
+    public ReportServiceImpl(RecycledBottlesReportRepository reportRepository) {
+        this.reportRepository = reportRepository;
+    }
+
+    @Override
+    public RecycledBottlesReport getReportById(Long id) {
+        return reportRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public RecycledBottlesReport saveReport(RecycledBottlesReport report) {
+        return reportRepository.save(report);
+    }
+
+    @Override
+    public void deleteReport(Long id) {
+        reportRepository.deleteById(id); // Implement the delete operation
+    }
+
+    @Override
+    public List<RecycledBottlesReport> findAllReports() {
+        return reportRepository.findAll(); // Make sure the repository method exists
+    }
+
+}
