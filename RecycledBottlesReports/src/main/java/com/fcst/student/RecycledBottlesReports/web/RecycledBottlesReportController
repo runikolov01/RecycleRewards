@@ -1,0 +1,33 @@
+package com.fcst.student.RecycledBottlesReports.controller;
+
+import com.fcst.student.RecycledBottlesReports.model.RecycledBottlesReport;
+import com.fcst.student.RecycledBottlesReports.service.ReportService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/reports")
+public class RecycledBottlesReportController {
+
+    private final ReportService reportService;
+
+    @Autowired
+    public RecycledBottlesReportController(ReportService reportService) {
+        this.reportService = reportService;
+    }
+
+    @GetMapping
+    public List<RecycledBottlesReport> getAllReports() {
+        return reportService.findAllReports();
+    }
+
+    @GetMapping("/{id}")
+    public RecycledBottlesReport getReportById(@PathVariable Long id) {
+        return reportService.getReportById(id);
+    }
+}
