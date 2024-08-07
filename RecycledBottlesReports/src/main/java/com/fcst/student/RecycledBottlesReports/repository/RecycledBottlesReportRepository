@@ -1,0 +1,10 @@
+package com.fcst.student.RecycledBottlesReports.repository;
+
+import com.fcst.student.RecycledBottlesReports.model.RecycledBottlesReport;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface RecycledBottlesReportRepository extends JpaRepository<RecycledBottlesReport, Long> {
+    List<RecycledBottlesReport> findByUserId(String userId);
+}
